@@ -1,29 +1,34 @@
 // ---- Shared navigation & footer ----
 // Injected on every page via import
 
-const pages = [
-  { href: '/', label: 'Home' },
-  { href: '/interesses.html', label: 'Interesses' },
-  { href: '/sollicitaties.html', label: 'Sollicitaties' },
-  { href: '/over-mij.html', label: 'Over mij' },
+const sections = [
+  { id: 'interesses', label: 'Interesses' },
+  { id: 'sollicitaties', label: 'Sollicitaties' },
+  { id: 'over-mij', label: 'Over mij' },
 ];
 
-function getCurrentPage() {
+function isHomePage() {
   const path = window.location.pathname;
-  if (path === '/' || path === '/index.html') return '/';
-  return path;
+  return path === '/' || path === '/index.html';
 }
 
 export function initNav() {
-  const currentPage = getCurrentPage();
+  const onHome = isHomePage();
 
-  // Build nav links
-  const navLinks = pages
-    .map(
-      (p) =>
-        `<a href="${p.href}" class="nav-link${currentPage === p.href ? ' active' : ''}">${p.label}</a>`
-    )
-    .join('');
+  // Build nav links — on homepage use anchors, on other pages link to /#section
+  const navLinks = [
+    `<a href="/" class="nav-link${onHome ? ' active' : ''}" data-section="home">Home</a>`,
+    ...sections.map(
+      (s) =>
+        `<a href="${onHome ? '#' + s.id : '/#' + s.id}" class="nav-link" data-section="${s.id}">${s.label}</a>`
+    ),
+  ].join('');
+
+  // Build footer links (always use /#section for consistency)
+  const footerLinks = [
+    `<a href="/">Home</a>`,
+    ...sections.map((s) => `<a href="/#${s.id}">${s.label}</a>`),
+  ].join('');
 
   // Inject header
   const header = document.createElement('header');
@@ -42,10 +47,6 @@ export function initNav() {
   document.body.prepend(header);
 
   // Inject footer
-  const footerLinks = pages
-    .map((p) => `<a href="${p.href}">${p.label}</a>`)
-    .join('');
-
   const footer = document.createElement('footer');
   footer.className = 'footer';
   footer.innerHTML = `
@@ -56,7 +57,7 @@ export function initNav() {
           ${footerLinks}
         </div>
       </div>
-      <div class="footer-bottom">
+<div class="footer-bottom">
         <p>&copy; 2026 Janus van Koolwijk</p>
       </div>
     </div>
@@ -79,4 +80,31 @@ export function initNav() {
       }
     });
   });
+
+  // Active nav highlighting on scroll (homepage only)
+  if (onHome) {
+    const sectionEls = sections
+      .map((s) => ({ id: s.id, el: document.getElementById(s.id) }))
+      .filter((s) => s.el);
+
+    const navLinkEls = document.querySelectorAll('.nav-link[data-section]');
+
+    function updateActiveNav() {
+      const scrollY = window.scrollY + 100; // offset for topbar
+      let activeId = 'home';
+
+      for (const s of sectionEls) {
+        if (s.el.offsetTop <= scrollY) {
+          activeId = s.id;
+        }
+      }
+
+      navLinkEls.forEach((link) => {
+        link.classList.toggle('active', link.dataset.section === activeId);
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveNav, { passive: true });
+    updateActiveNav();
+  }
 }

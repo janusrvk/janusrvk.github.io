@@ -1,7 +1,4 @@
-// ---- Interesses page: nav + Last.fm, Letterboxd, Goodreads ----
-import { initNav } from './nav.js';
-
-initNav();
+// ---- Interesses: Last.fm, Letterboxd, Goodreads ----
 
 // ---- Last.fm integration ----
 const LASTFM_USER = 'janusrvk';
