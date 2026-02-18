@@ -6,10 +6,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        interesses: resolve(__dirname, 'interesses.html'),
-        sollicitaties: resolve(__dirname, 'sollicitaties.html'),
+        'artikel-fincher': resolve(__dirname, 'artikel-fincher.html'),
+        'artikel-breitner': resolve(__dirname, 'artikel-breitner.html'),
+        'artikel-groenteman': resolve(__dirname, 'artikel-groenteman.html'),
+        'artikel-thesis': resolve(__dirname, 'artikel-thesis.html'),
         'sollicitatie-vpro': resolve(__dirname, 'sollicitatie-vpro.html'),
-        'over-mij': resolve(__dirname, 'over-mij.html'),
+        'aanbevelingen': resolve(__dirname, 'aanbevelingen.html'),
       },
     },
   },

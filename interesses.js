@@ -1,5 +1,8 @@
 // ---- Interesses: Last.fm, Letterboxd, Goodreads ----
 
+// CORS proxy voor RSS feeds (niet nodig voor Last.fm want die API staat CORS toe)
+const CORS_PROXY = 'https://corsproxy.io/?url=';
+
 // ---- Last.fm integration ----
 const LASTFM_USER = 'janusrvk';
 const LASTFM_API_KEY = '74f09a6e65ddc20949e95f2a014cd3ee';
@@ -27,11 +30,11 @@ async function fetchLastFm() {
       const url = track.url;
 
       return `
-        <a href="${url}" target="_blank" rel="noopener" class="lastfm-track${isNowPlaying ? ' now-playing' : ''}">
-          ${image ? `<img src="${image}" alt="${name}" class="lastfm-art" />` : '<div class="lastfm-art lastfm-art-empty"></div>'}
-          <div class="lastfm-info">
-            <span class="lastfm-name">${name}</span>
-            <span class="lastfm-artist">${artist}${album ? ` — ${album}` : ''}</span>
+        <a href="${url}" target="_blank" rel="noopener" class="feed-item${isNowPlaying ? ' now-playing' : ''}">
+          ${image ? `<img src="${image}" alt="${name}" class="feed-art feed-art-music" />` : '<div class="feed-art feed-art-music feed-art-empty"></div>'}
+          <div class="feed-info">
+            <span class="feed-title">${name}</span>
+            <span class="feed-meta">${artist}${album ? ` — ${album}` : ''}</span>
           </div>
           ${isNowPlaying ? '<span class="lastfm-live">Nu aan het luisteren</span>' : ''}
         </a>
@@ -53,7 +56,7 @@ const LETTERBOXD_USER = 'janusrvk';
 async function fetchLetterboxd() {
   const container = document.getElementById('letterboxd-content');
   try {
-    const res = await fetch(`/api/letterboxd/${LETTERBOXD_USER}/rss/`);
+    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://letterboxd.com/${LETTERBOXD_USER}/rss/`)}`);
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
@@ -105,14 +108,14 @@ const GOODREADS_USER_ID = '161530834';
 async function fetchGoodreads() {
   const container = document.getElementById('goodreads-content');
   try {
-    const res = await fetch(`/api/goodreads/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`);
+    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`)}`);
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
     const items = Array.from(xml.querySelectorAll('item')).slice(0, 5);
 
     if (items.length === 0) {
-      const res2 = await fetch(`/api/goodreads/review/list_rss/${GOODREADS_USER_ID}?shelf=read`);
+      const res2 = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
       const text2 = await res2.text();
       const xml2 = parser.parseFromString(text2, 'text/xml');
       const items2 = Array.from(xml2.querySelectorAll('item')).slice(0, 5);
