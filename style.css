@@ -227,6 +227,11 @@ img {
   font-size: 1.05rem;
 }
 
+.section-subtitle-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
 /* ---- Home Hero ---- */
 .home-hero {
   position: relative;
@@ -575,6 +580,65 @@ img {
   padding: 0.75rem 1.25rem;
 }
 
+/* ---- Interest expand (uitklapbaar) ---- */
+.interest-expand {
+  border-top: 1px solid var(--border);
+}
+
+.interest-expand summary.interest-expand-trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.65rem 1.25rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color var(--transition);
+}
+
+.interest-expand summary.interest-expand-trigger:hover {
+  color: var(--text);
+}
+
+.interest-expand summary.interest-expand-trigger::-webkit-details-marker {
+  display: none;
+}
+
+.interest-expand-icon {
+  font-size: 1rem;
+  color: var(--accent);
+  transition: transform var(--transition);
+}
+
+.interest-expand[open] .interest-expand-icon {
+  transform: rotate(45deg);
+}
+
+.interest-expand-body {
+  padding: 0 1.25rem 1rem;
+}
+
+.spotify-playlists {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.spotify-profile-link {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.spotify-profile-link:hover {
+  color: var(--accent-hover);
+}
+
 .interest-placeholder {
   font-size: 0.9rem;
   color: var(--text-muted);
@@ -755,6 +819,96 @@ img {
   border-color: var(--accent);
   background: rgba(255, 103, 25, 0.05);
   color: var(--accent);
+}
+
+/* ---- Archief kaarten ---- */
+.archief-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.archief-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+
+.archief-card-month {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 0.75rem;
+}
+
+.archief-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.archief-card-list li {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  border-top: 1px solid var(--border);
+}
+
+.archief-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.15rem;
+}
+
+.archief-value {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.archief-artist {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--text-secondary);
+  transition: color 0.2s;
+}
+
+a.archief-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 0.35rem 0.5rem;
+  margin: 0.1rem -0.5rem 0;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+}
+
+a.archief-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+a.archief-link:hover,
+a.archief-link:hover .archief-artist {
+  color: var(--accent);
+}
+
+a.archief-link .archief-artist {
+  background: none;
+}
+
+@media (max-width: 768px) {
+  .archief-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 /* ---- Sollicitaties overview cards ---- */
