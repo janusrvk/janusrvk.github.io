@@ -3,13 +3,44 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Janus van Koolwijk</title>
+  <title>Janus van Koolwijk — Redacteur &amp; Schrijver</title>
+  <meta name="description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
+  <link rel="canonical" href="https://janusrvk.github.io/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Janus van Koolwijk — Redacteur & Schrijver" />
+  <meta property="og:description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
+  <meta property="og:url" content="https://janusrvk.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://janusrvk.github.io/assets/GEZICHT-CWi8Adf6.png" />
+  <meta property="og:locale" content="nl_NL" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Janus van Koolwijk — Redacteur & Schrijver" />
+  <meta name="twitter:description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
-  <script type="module" crossorigin src="/assets/main-nYvpCXyL.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/main-_2U3sEls.js">
-  <link rel="stylesheet" crossorigin href="/assets/main-gAPnN2ig.css">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Janus van Koolwijk",
+    "url": "https://janusrvk.github.io",
+    "jobTitle": "Freelance Redacteur",
+    "worksFor": { "@type": "Organization", "name": "VARAgids" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universiteit van Amsterdam" },
+    "knowsAbout": ["Redactie", "Journalistiek", "European Studies"]
+  }
+  </script>
+  <script type="module" crossorigin src="/assets/main-ObqWDVbn.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/main-BPkS1OeY.js">
+  <link rel="stylesheet" crossorigin href="/assets/main-B9T9LNf9.css">
 </head>
 <body>
   <main class="main">
@@ -100,37 +131,129 @@
     <section class="section" id="interesses">
       <div class="section-wide">
         <h2 class="section-title">Interesses</h2>
-        <p class="section-subtitle">De laatste vijf nummers, films en boeken waar ik mee bezig ben.</p>
+        <p class="section-subtitle">Wat ik luister, kijk en lees. Live bijgehouden via Spotify, Letterboxd en Goodreads.</p>
 
         <div class="interests-grid">
           <div class="interest-card" id="card-music">
             <div class="interest-card-header">
               <h3>Muziek</h3>
-              <a href="https://www.last.fm/user/janusrvk" target="_blank" rel="noopener" class="interest-source">Last.fm — janusrvk</a>
+              <a href="https://open.spotify.com/user/11133675526" target="_blank" rel="noopener" class="interest-source">Spotify</a>
             </div>
             <div class="interest-card-body" id="lastfm-content">
               <p class="interest-placeholder">Laden...</p>
+            </div>
+            <div class="interest-card-stat">
+              <span class="stats-number" id="stat-scrobbles">—</span>
+              <span class="stats-label">nummers dit jaar</span>
             </div>
           </div>
 
           <div class="interest-card" id="card-movies">
             <div class="interest-card-header">
               <h3>Films</h3>
-              <a href="https://letterboxd.com/janusrvk/" target="_blank" rel="noopener" class="interest-source">Letterboxd — janusrvk</a>
+              <a href="https://letterboxd.com/janusrvk/" target="_blank" rel="noopener" class="interest-source">Letterboxd</a>
             </div>
             <div class="interest-card-body" id="letterboxd-content">
               <p class="interest-placeholder">Laden...</p>
+            </div>
+            <div class="interest-card-stat">
+              <span class="stats-number" id="stat-films">—</span>
+              <span class="stats-label">films dit jaar</span>
             </div>
           </div>
 
           <div class="interest-card" id="card-books">
             <div class="interest-card-header">
               <h3>Boeken</h3>
-              <a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener" class="interest-source">Goodreads — janusrvk</a>
+              <a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener" class="interest-source">Goodreads</a>
             </div>
             <div class="interest-card-body" id="goodreads-content">
               <p class="interest-placeholder">Laden...</p>
             </div>
+            <div class="interest-card-stat">
+              <span class="stats-number" id="stat-books">—</span>
+              <span class="stats-label">boeken dit jaar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Archief -->
+    <section class="section" id="archief">
+      <div class="section-wide">
+        <h2 class="section-title">Archief</h2>
+        <p class="section-subtitle">Elke maand mijn favoriete ontdekkingen.</p>
+
+        <div class="archief-cards">
+          <div class="archief-card">
+            <h3 class="archief-card-month">Januari 2026</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Lean%20Charlotte%20Day%20Wilson" target="_blank" rel="noopener" class="archief-value archief-link">Lean<span class="archief-artist">Charlotte Day Wilson</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/The%20Lighthouse%20Tessa%20Rose%20Jackson" target="_blank" rel="noopener" class="archief-value archief-link">The Lighthouse<span class="archief-artist">Tessa Rose Jackson</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Juno/" target="_blank" rel="noopener" class="archief-value archief-link">Juno<span class="archief-artist">Jason Reitman</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Moon%20Palace%20Paul%20Auster" target="_blank" rel="noopener" class="archief-value archief-link">Moon Palace<span class="archief-artist">Paul Auster</span></a></li>
+            </ul>
+          </div>
+
+          <div class="archief-card">
+            <h3 class="archief-card-month">December 2025</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Thorn%20Keo" target="_blank" rel="noopener" class="archief-value archief-link">Thorn<span class="archief-artist">Keo</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/What%20Color%20is%20Love%20Terry%20Callier" target="_blank" rel="noopener" class="archief-value archief-link">What Color is Love<span class="archief-artist">Terry Callier</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Sentimental%20Value/" target="_blank" rel="noopener" class="archief-value archief-link">Sentimental Value<span class="archief-artist">Joachim Trier</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Tonio%20A.F.Th.%20van%20der%20Heijden" target="_blank" rel="noopener" class="archief-value archief-link">Tonio<span class="archief-artist">A.F.Th. van der Heijden</span></a></li>
+            </ul>
+          </div>
+
+          <div class="archief-card">
+            <h3 class="archief-card-month">November 2025</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/The%20Sea%20Morcheeba" target="_blank" rel="noopener" class="archief-value archief-link">The Sea<span class="archief-artist">Morcheeba</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/FEMME%20FATALE%20Mon%20Laferte" target="_blank" rel="noopener" class="archief-value archief-link">FEMME FATALE<span class="archief-artist">Mon Laferte</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/A%20Man%20Escaped/" target="_blank" rel="noopener" class="archief-value archief-link">A Man Escaped<span class="archief-artist">Robert Bresson</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=De%20helaasheid%20der%20dingen%20Dimitri%20Verhulst" target="_blank" rel="noopener" class="archief-value archief-link">De helaasheid der dingen<span class="archief-artist">Dimitri Verhulst</span></a></li>
+            </ul>
+          </div>
+
+          <div class="archief-card">
+            <h3 class="archief-card-month">Oktober 2025</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/The%20Watershed%20Mark%20Hollis" target="_blank" rel="noopener" class="archief-value archief-link">The Watershed<span class="archief-artist">Mark Hollis</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Mark%20Hollis%20Mark%20Hollis" target="_blank" rel="noopener" class="archief-value archief-link">Mark Hollis<span class="archief-artist">Mark Hollis</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/La%20Promesse/" target="_blank" rel="noopener" class="archief-value archief-link">La Promesse<span class="archief-artist">Jean-Pierre &amp; Luc Dardenne</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Imperium%20Robert%20Harris" target="_blank" rel="noopener" class="archief-value archief-link">Imperium<span class="archief-artist">Robert Harris</span></a></li>
+            </ul>
+          </div>
+
+          <div class="archief-card">
+            <h3 class="archief-card-month">September 2025</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Als%20Het%20Donker%20Wordt%20Pip%20Lieke%20Lucas" target="_blank" rel="noopener" class="archief-value archief-link">Als Het Donker Wordt<span class="archief-artist">Pip Lieke Lucas</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Lieve%20Monsters%20Sef" target="_blank" rel="noopener" class="archief-value archief-link">Lieve Monsters<span class="archief-artist">Sef</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/One%20Battle%20After%20Another/" target="_blank" rel="noopener" class="archief-value archief-link">One Battle After Another<span class="archief-artist">Paul Thomas Anderson</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Rituelen%20Cees%20Nooteboom" target="_blank" rel="noopener" class="archief-value archief-link">Rituelen<span class="archief-artist">Cees Nooteboom</span></a></li>
+            </ul>
+          </div>
+
+          <div class="archief-card">
+            <h3 class="archief-card-month">Augustus 2025</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Fun%20Deki%20Alem" target="_blank" rel="noopener" class="archief-value archief-link">Fun<span class="archief-artist">Deki Alem</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Stanley%20Road%20Paul%20Weller" target="_blank" rel="noopener" class="archief-value archief-link">Stanley Road<span class="archief-artist">Paul Weller</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/The%20Big%20Sleep/" target="_blank" rel="noopener" class="archief-value archief-link">The Big Sleep<span class="archief-artist">Howard Hawks</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Grand%20Hotel%20Europa%20Ilja%20Leonard%20Pfeijffer" target="_blank" rel="noopener" class="archief-value archief-link">Grand Hotel Europa<span class="archief-artist">Ilja Leonard Pfeijffer</span></a></li>
+            </ul>
+          </div>
+
+          <div class="archief-card">
+            <h3 class="archief-card-month">Juli 2025</h3>
+            <ul class="archief-card-list">
+              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Kneel%20Nil%C3%BCfer%20Yanya" target="_blank" rel="noopener" class="archief-value archief-link">Kneel<span class="archief-artist">Nil&uuml;fer Yanya</span></a></li>
+              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Jazzmatazz%20Volume%20II%20Guru" target="_blank" rel="noopener" class="archief-value archief-link">Jazzmatazz: Volume II<span class="archief-artist">Guru</span></a></li>
+              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Judgment%20at%20Nuremberg/" target="_blank" rel="noopener" class="archief-value archief-link">Judgment at Nuremberg<span class="archief-artist">Stanley Kramer</span></a></li>
+              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Het%20uur%20van%20de%20wolven%20Giuliano%20Da%20Empoli" target="_blank" rel="noopener" class="archief-value archief-link">Het uur van de wolven<span class="archief-artist">Giuliano Da Empoli</span></a></li>
+            </ul>
           </div>
         </div>
       </div>

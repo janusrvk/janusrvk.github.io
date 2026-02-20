@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+Disallow: /sollicitatie-vpro.html
+
+Sitemap: https://janusrvk.github.io/sitemap.xml

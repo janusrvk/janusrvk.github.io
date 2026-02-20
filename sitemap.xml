@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://janusrvk.github.io/</loc>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://janusrvk.github.io/artikel-breitner.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://janusrvk.github.io/artikel-fincher.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://janusrvk.github.io/artikel-groenteman.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://janusrvk.github.io/artikel-thesis.html</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://janusrvk.github.io/aanbevelingen.html</loc>
+    <priority>0.6</priority>
+  </url>
+</urlset>
