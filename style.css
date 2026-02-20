@@ -911,6 +911,31 @@ a.archief-link .archief-artist {
   }
 }
 
+/* ---- Statistieken per card ---- */
+.interest-card-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.stats-number {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.stats-label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+
+
 /* ---- Sollicitaties overview cards ---- */
 .sollicitaties-grid {
   display: grid;

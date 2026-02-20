@@ -3,11 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Janus van Koolwijk</title>
+  <title>Janus van Koolwijk — Redacteur &amp; Schrijver</title>
+  <meta name="description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
+  <link rel="canonical" href="https://janusrvk.github.io/" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Janus van Koolwijk — Redacteur & Schrijver" />
+  <meta property="og:description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
+  <meta property="og:url" content="https://janusrvk.github.io/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://janusrvk.github.io/assets/GEZICHT-CWi8Adf6.png" />
+  <meta property="og:locale" content="nl_NL" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Janus van Koolwijk — Redacteur & Schrijver" />
+  <meta name="twitter:description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/style.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Janus van Koolwijk",
+    "url": "https://janusrvk.github.io",
+    "jobTitle": "Freelance Redacteur",
+    "worksFor": { "@type": "Organization", "name": "VARAgids" },
+    "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universiteit van Amsterdam" },
+    "knowsAbout": ["Redactie", "Journalistiek", "European Studies"]
+  }
+  </script>
 </head>
 <body>
   <main class="main">
@@ -109,6 +140,10 @@
             <div class="interest-card-body" id="lastfm-content">
               <p class="interest-placeholder">Laden...</p>
             </div>
+            <div class="interest-card-stat">
+              <span class="stats-number" id="stat-scrobbles">—</span>
+              <span class="stats-label">nummers dit jaar</span>
+            </div>
           </div>
 
           <div class="interest-card" id="card-movies">
@@ -119,6 +154,10 @@
             <div class="interest-card-body" id="letterboxd-content">
               <p class="interest-placeholder">Laden...</p>
             </div>
+            <div class="interest-card-stat">
+              <span class="stats-number" id="stat-films">—</span>
+              <span class="stats-label">films dit jaar</span>
+            </div>
           </div>
 
           <div class="interest-card" id="card-books">
@@ -128,6 +167,10 @@
             </div>
             <div class="interest-card-body" id="goodreads-content">
               <p class="interest-placeholder">Laden...</p>
+            </div>
+            <div class="interest-card-stat">
+              <span class="stats-number" id="stat-books">—</span>
+              <span class="stats-label">boeken dit jaar</span>
             </div>
           </div>
         </div>

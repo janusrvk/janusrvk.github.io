@@ -3,6 +3,7 @@
 
 const sections = [
   { id: 'interesses', label: 'Interesses' },
+  { id: 'archief', label: 'Archief' },
   { id: 'over-mij', label: 'Over mij' },
 ];
 

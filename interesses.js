@@ -14,7 +14,7 @@ async function fetchLastFm() {
       `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=5`
     );
     const data = await res.json();
-    const tracks = data.recenttracks?.track;
+    const tracks = data.recenttracks?.track?.slice(0, 5);
 
     if (!tracks || tracks.length === 0) {
       container.innerHTML = '<p class="interest-placeholder">Geen recente tracks gevonden.</p>';
@@ -23,7 +23,9 @@ async function fetchLastFm() {
 
     const html = tracks.map((track) => {
       const isNowPlaying = track['@attr']?.nowplaying === 'true';
-      const image = track.image?.find((img) => img.size === 'medium')?.['#text'];
+      const image = track.image?.find((img) => img.size === 'extralarge')?.['#text']
+        || track.image?.find((img) => img.size === 'large')?.['#text']
+        || track.image?.find((img) => img.size === 'medium')?.['#text'];
       const artist = track.artist?.['#text'] || track.artist;
       const name = track.name;
       const album = track.album?.['#text'];
@@ -161,3 +163,82 @@ function renderBooks(container, items, parser, shelfLabel) {
 }
 
 fetchGoodreads();
+
+
+// ---- Statistieken Dashboard ----
+function formatNumber(n) {
+  return new Intl.NumberFormat('nl-NL').format(n);
+}
+
+async function fetchScrobbleCount() {
+  // Scrobbles sinds 14 februari (start Last.fm koppeling), geëxtrapoleerd naar 1 januari
+  const scrobbleStart = new Date(2026, 1, 14); // 14 feb 2026
+  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
+  const now = new Date();
+
+  const fromTimestamp = Math.floor(scrobbleStart.getTime() / 1000);
+  const res = await fetch(
+    `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&from=${fromTimestamp}&limit=1`
+  );
+  const data = await res.json();
+  const actual = parseInt(data.recenttracks?.['@attr']?.total || '0', 10);
+
+  // Extrapoleer: daggemiddelde × dagen sinds 1 jan
+  const daysSinceScrobbleStart = (now - scrobbleStart) / (1000 * 60 * 60 * 24);
+  const daysSinceYearStart = (now - startOfYear) / (1000 * 60 * 60 * 24);
+
+  if (daysSinceScrobbleStart < 1) return actual;
+  const dailyAvg = actual / daysSinceScrobbleStart;
+  return Math.round(dailyAvg * daysSinceYearStart);
+}
+
+
+async function fetchFilmCount() {
+  const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://letterboxd.com/${LETTERBOXD_USER}/rss/`)}`);
+  const text = await res.text();
+  const doc = new DOMParser().parseFromString(text, 'text/xml');
+  const currentYear = new Date().getFullYear();
+  const items = Array.from(doc.querySelectorAll('item')).filter((item) => {
+    // Letterboxd RSS heeft letterboxd:watchedDate of pubDate
+    const watchedDate = item.getElementsByTagName('letterboxd:watchedDate')[0]?.textContent;
+    const pubDate = item.querySelector('pubDate')?.textContent;
+    const dateStr = watchedDate || pubDate || '';
+    return new Date(dateStr).getFullYear() === currentYear;
+  });
+  return items.length;
+}
+
+async function fetchBookCount() {
+  const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
+  const text = await res.text();
+  const doc = new DOMParser().parseFromString(text, 'text/xml');
+  const currentYear = new Date().getFullYear();
+  const items = Array.from(doc.querySelectorAll('item')).filter((item) => {
+    // Goodreads RSS heeft user_read_at of pubDate
+    const readAt = item.querySelector('user_read_at')?.textContent;
+    const pubDate = item.querySelector('pubDate')?.textContent;
+    const dateStr = readAt || pubDate || '';
+    return dateStr && new Date(dateStr).getFullYear() === currentYear;
+  });
+  return items.length;
+}
+
+async function fetchStats() {
+  const [scrobbles, films, books] = await Promise.allSettled([
+    fetchScrobbleCount(),
+    fetchFilmCount(),
+    fetchBookCount(),
+  ]);
+
+  const elScrobbles = document.getElementById('stat-scrobbles');
+  const elFilms = document.getElementById('stat-films');
+  const elBooks = document.getElementById('stat-books');
+
+  elScrobbles.textContent = scrobbles.status === 'fulfilled' ? formatNumber(scrobbles.value) : '?';
+  elFilms.textContent = films.status === 'fulfilled' ? formatNumber(films.value) : '?';
+  elBooks.textContent = books.status === 'fulfilled' ? formatNumber(books.value) : '?';
+}
+
+if (document.getElementById('stat-scrobbles')) {
+  fetchStats();
+}
