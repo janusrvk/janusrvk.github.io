@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CV — Janus van Koolwijk</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lora', Georgia, 'Times New Roman', serif;
+      font-size: 9.5pt;
+      line-height: 1.5;
+      color: #1a1a1a;
+      background: #fff;
+    }
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 0 40px 36px;
+      border-top: 4px solid #2a4365;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-top: 28px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #ddd;
+      margin-bottom: 20px;
+    }
+
+    .header-name {
+      font-family: 'Cardo', Georgia, serif;
+      font-size: 22pt;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .header-contact {
+      text-align: right;
+      font-size: 8.5pt;
+      color: #444;
+      line-height: 1.6;
+    }
+
+    .header-contact a {
+      color: #444;
+      text-decoration: none;
+    }
+
+    /* Profile */
+    .profile {
+      margin-bottom: 20px;
+      font-size: 9.5pt;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    /* Two-column layout */
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 200px;
+      gap: 32px;
+    }
+
+    .main-col {}
+    .side-col {
+      background: #f7f8fa;
+      border-radius: 6px;
+      padding: 16px;
+      align-self: start;
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #2a4365;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+      margin-bottom: 12px;
+    }
+
+    .section + .section {
+      margin-top: 20px;
+    }
+
+    /* Experience items */
+    .item {
+      margin-bottom: 14px;
+    }
+
+    .item:last-child {
+      margin-bottom: 0;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .item-org {
+      font-weight: 700;
+      font-size: 10pt;
+    }
+
+    .item-date {
+      font-size: 8pt;
+      color: #666;
+      white-space: nowrap;
+    }
+
+    .item-role {
+      font-weight: 600;
+      font-size: 9pt;
+      color: #444;
+      margin-top: 1px;
+    }
+
+    .item-desc {
+      margin-top: 4px;
+      color: #444;
+      font-size: 9pt;
+      line-height: 1.55;
+    }
+
+    .item-bullets {
+      margin-top: 4px;
+      padding-left: 1.1em;
+      color: #444;
+      font-size: 9pt;
+      line-height: 1.55;
+    }
+
+    .item-bullets li {
+      margin-bottom: 2px;
+    }
+
+    .item-bullets li::marker {
+      color: #2a4365;
+    }
+
+    /* Education - compact */
+    .edu-item {
+      margin-bottom: 10px;
+    }
+
+    .edu-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .edu-detail {
+      font-size: 8.5pt;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* Sidebar items */
+    .side-section + .side-section {
+      margin-top: 20px;
+    }
+
+    .side-title {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #2a4365;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+    }
+
+    .side-list {
+      list-style: none;
+    }
+
+    .side-list li {
+      font-size: 9pt;
+      color: #333;
+      padding: 2px 0;
+    }
+
+    .side-list li .level {
+      font-size: 8pt;
+      color: #888;
+    }
+
+    .side-list a {
+      color: #333;
+      text-decoration: none;
+    }
+
+    /* Print */
+    @media print {
+      body { background: none; }
+      .page { padding: 0; max-width: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <div class="header">
+      <div>
+        <div class="header-name">Janus van Koolwijk</div>
+      </div>
+      <div class="header-contact">
+        <a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a><br>
+        <a href="tel:+31657807612">06-57807612</a><br>
+        Amsterdam<br>
+        <a href="https://janusrvk.github.io">janusrvk.github.io</a>
+      </div>
+    </div>
+
+    <!-- Profiel -->
+    <div class="profile">
+      Redacteur en schrijver met ervaring in het maken van artikelen, interviews en redactionele content onder strakke deadlines. Achtergrond in European Studies (UvA) met een scherp oog voor taal, structuur en actualiteit.
+    </div>
+
+    <!-- Columns -->
+    <div class="columns">
+      <!-- Main column -->
+      <div class="main-col">
+        <div class="section">
+          <div class="section-title">Werkervaring</div>
+
+          <div class="item">
+            <div class="item-header">
+              <span class="item-org">VARAgids</span>
+              <span class="item-date">feb 2025 — heden</span>
+            </div>
+            <div class="item-role">Freelance Redacteur</div>
+            <div class="item-desc">Na een succesvolle stage doorgestroomd als freelance redacteur met voortzetting van redactionele werkzaamheden. Zelfstandig uitvoeren van schrijfopdrachten, interviews en onderzoekstaken voor de wekelijkse televisiegids.</div>
+          </div>
+
+          <div class="item">
+            <div class="item-header">
+              <span class="item-org">VARAgids</span>
+              <span class="item-date">nov 2024 — feb 2025</span>
+            </div>
+            <div class="item-role">Stage</div>
+            <div class="item-desc">Telefonische interviews met BN'ers en programmamakers, onderzoek naar actuele programma-informatie, schrijven van wekelijkse programmatoelichtingen en artikelen, en samenstellen van overzichten van opvallende televisiemomenten.</div>
+          </div>
+
+          <div class="item">
+            <div class="item-header">
+              <span class="item-org">Buurman &amp; Buurman</span>
+              <span class="item-date">feb 2024 — heden</span>
+            </div>
+            <div class="item-role">Pizzabakker / Mise en Place Chef</div>
+          </div>
+
+          <div class="item">
+            <div class="item-header">
+              <span class="item-org">Berghauser Pont</span>
+              <span class="item-date">nov 2022 — jun 2023</span>
+            </div>
+            <div class="item-role">Junior Vakredacteur</div>
+            <div class="item-desc">Ontwikkelen en beheren van online leeractiviteiten en het creëren van unieke content voor themadossiers binnen de fysieke leefomgeving. Begeleiden van auteurs en docenten.</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title">Opleiding</div>
+
+          <div class="edu-item">
+            <div class="item-header">
+              <span class="item-org">Universiteit van Amsterdam</span>
+              <span class="item-date">2023 — 2024</span>
+            </div>
+            <div class="item-role">Master European Studies</div>
+            <div class="edu-detail">Identity and Integration</div>
+          </div>
+
+          <div class="edu-item">
+            <div class="item-header">
+              <span class="item-org">Universiteit van Amsterdam</span>
+              <span class="item-date">2019 — 2022</span>
+            </div>
+            <div class="item-role">Bachelor European Studies</div>
+            <div class="edu-detail">Major European Economics</div>
+          </div>
+
+          <div class="edu-item">
+            <div class="item-header">
+              <span class="item-org">Mollerlyceum Bergen op Zoom</span>
+              <span class="item-date">2013 — 2019</span>
+            </div>
+            <div class="item-role">VWO Cultuur en Maatschappij</div>
+            <div class="edu-detail">Certificaat Europese Leerroute</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="side-col">
+        <div class="side-section">
+          <div class="side-title">Talen</div>
+          <ul class="side-list">
+            <li>Nederlands <span class="level">— moedertaal</span></li>
+            <li>Engels <span class="level">— vloeiend</span></li>
+          </ul>
+        </div>
+
+        <div class="side-section">
+          <div class="side-title">Vaardigheden</div>
+          <ul class="side-list">
+            <li>Redactie & redigeren</li>
+            <li>Interviewen</li>
+            <li>Onderzoeksjournalistiek</li>
+            <li>Werken onder deadlines</li>
+            <li>Contentcreatie</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
