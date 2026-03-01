@@ -319,6 +319,7 @@ img {
   object-fit: cover;
   object-position: center;
   display: block;
+  filter: saturate(0.82) contrast(1.05) brightness(0.95);
 }
 
 .home-hero-article-overlay {
@@ -828,6 +829,36 @@ img {
   gap: 1.25rem;
 }
 
+.archief-cards-hidden {
+  display: none;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.archief-cards-hidden.archief-cards-visible {
+  display: grid;
+}
+
+.archief-toggle {
+  grid-column: 1 / -1;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.6rem 1.5rem;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: 0.25rem;
+}
+
+.archief-toggle:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
 .archief-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -907,6 +938,9 @@ a.archief-link .archief-artist {
 
 @media (max-width: 768px) {
   .archief-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .archief-cards-hidden {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1553,6 +1587,9 @@ body.substack-post {
   width: 100%;
   border-radius: var(--radius);
   margin-bottom: 2rem;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.05) brightness(0.95);
 }
 
 .post-inline-image {

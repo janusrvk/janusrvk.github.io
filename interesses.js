@@ -54,6 +54,18 @@ setInterval(fetchLastFm, 30000);
 
 // ---- Letterboxd integration (RSS) ----
 const LETTERBOXD_USER = 'janusrvk';
+const TMDB_KEY = 'b1d6bd7b009c1dcc3e3561c6c0ef383a';
+
+async function fetchDirector(tmdbId) {
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/credits?api_key=${TMDB_KEY}`);
+    const data = await res.json();
+    const director = data.crew?.find((c) => c.job === 'Director');
+    return director?.name || '';
+  } catch {
+    return '';
+  }
+}
 
 async function fetchLetterboxd() {
   const container = document.getElementById('letterboxd-content');
@@ -69,7 +81,7 @@ async function fetchLetterboxd() {
       return;
     }
 
-    const html = items.map((item) => {
+    const filmData = await Promise.all(items.map(async (item) => {
       const title = item.querySelector('title')?.textContent || '';
       const link = item.querySelector('link')?.textContent || '#';
       const description = item.querySelector('description')?.textContent || '';
@@ -85,16 +97,21 @@ async function fetchLetterboxd() {
       const yearMatch = title.match(/,\s*(\d{4})/);
       const year = yearMatch ? yearMatch[1] : '';
 
-      return `
-        <a href="${link}" target="_blank" rel="noopener" class="feed-item">
-          ${posterSrc ? `<img src="${posterSrc}" alt="${cleanTitle}" class="feed-art" />` : '<div class="feed-art feed-art-empty"></div>'}
-          <div class="feed-info">
-            <span class="feed-title">${cleanTitle}${year ? ` (${year})` : ''}</span>
-            ${rating ? `<span class="feed-meta">${rating}</span>` : ''}
-          </div>
-        </a>
-      `;
-    }).join('');
+      const tmdbId = item.getElementsByTagName('tmdb:movieId')[0]?.textContent || '';
+      const director = tmdbId ? await fetchDirector(tmdbId) : '';
+
+      return { cleanTitle, year, link, posterSrc, rating, director };
+    }));
+
+    const html = filmData.map((f) => `
+      <a href="${f.link}" target="_blank" rel="noopener" class="feed-item">
+        ${f.posterSrc ? `<img src="${f.posterSrc}" alt="${f.cleanTitle}" class="feed-art" />` : '<div class="feed-art feed-art-empty"></div>'}
+        <div class="feed-info">
+          <span class="feed-title">${f.cleanTitle}${f.year ? ` (${f.year})` : ''}</span>
+          <span class="feed-meta">${f.director}${f.rating ? (f.director ? ' — ' : '') + f.rating : ''}</span>
+        </div>
+      </a>
+    `).join('');
 
     container.innerHTML = html;
   } catch (err) {
@@ -208,19 +225,21 @@ async function fetchFilmCount() {
   return items.length;
 }
 
+// Correctie: RSS telde 10 op 20 feb 2026, werkelijk aantal was 9
+const BOOK_COUNT_OFFSET = -1;
+
 async function fetchBookCount() {
   const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
   const text = await res.text();
   const doc = new DOMParser().parseFromString(text, 'text/xml');
   const currentYear = new Date().getFullYear();
   const items = Array.from(doc.querySelectorAll('item')).filter((item) => {
-    // Goodreads RSS heeft user_read_at of pubDate
     const readAt = item.querySelector('user_read_at')?.textContent;
     const pubDate = item.querySelector('pubDate')?.textContent;
     const dateStr = readAt || pubDate || '';
     return dateStr && new Date(dateStr).getFullYear() === currentYear;
   });
-  return items.length;
+  return Math.max(0, items.length + BOOK_COUNT_OFFSET);
 }
 
 async function fetchStats() {

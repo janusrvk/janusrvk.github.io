@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 — Janus van Koolwijk</title>
+  <meta name="robots" content="noindex" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lora', Georgia, serif;
+      background: #0f0f0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .container {
+      max-width: 480px;
+    }
+
+    .error-code {
+      font-family: 'Cardo', Georgia, serif;
+      font-size: 6rem;
+      font-weight: 700;
+      color: #d4a574;
+      line-height: 1;
+      margin-bottom: 1rem;
+    }
+
+    .error-message {
+      font-size: 1.2rem;
+      color: #999;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: #d4a574;
+      text-decoration: none;
+      font-size: 1rem;
+      border: 1px solid #d4a574;
+      padding: 0.6rem 1.5rem;
+      border-radius: 6px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .back-link:hover {
+      background: #d4a574;
+      color: #0f0f0f;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="error-code">404</div>
+    <p class="error-message">Deze pagina bestaat niet of is verplaatst.</p>
+    <a href="/" class="back-link">&larr; Terug naar home</a>
+  </div>
+</body>
+</html>
