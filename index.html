@@ -38,9 +38,9 @@
     "knowsAbout": ["Redactie", "Journalistiek", "European Studies"]
   }
   </script>
-  <script type="module" crossorigin src="/assets/main-CC9BeaIg.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/main-BL7lYEtr.js">
-  <link rel="stylesheet" crossorigin href="/assets/main-DPAA6-BV.css">
+  <script type="module" crossorigin src="/assets/main-vsT60gHL.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/main-wGEYT5LY.js">
+  <link rel="stylesheet" crossorigin href="/assets/main-gVQURfhH.css">
 </head>
 <body>
   <main class="main">
@@ -226,6 +226,7 @@
             </ul>
           </div>
 
+          <div class="archief-cards-hidden" id="archief-hidden">
           <div class="archief-card">
             <h3 class="archief-card-month">Oktober 2025</h3>
             <ul class="archief-card-list">
@@ -325,6 +326,9 @@
               <li><span class="archief-label">Boek</span><span class="archief-value">&mdash;</span></li>
             </ul>
           </div>
+          </div>
+
+          <button class="archief-toggle" id="archief-toggle" onclick="document.getElementById('archief-hidden').classList.toggle('archief-cards-visible'); this.textContent = this.textContent === 'Toon meer' ? 'Toon minder' : 'Toon meer'">Toon meer</button>
         </div>
       </div>
     </section>
