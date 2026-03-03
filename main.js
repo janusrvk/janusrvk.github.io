@@ -3,34 +3,26 @@ import { initNav } from './nav.js';
 
 initNav();
 
-// ---- Avatar scroll-naar-topbar effect ----
-// Verwijder dit blok om het effect ongedaan te maken
-(function initAvatarScroll() {
-  const heroAvatar = document.querySelector('.hero-avatar');
-  const brand = document.querySelector('.topbar-brand');
-  if (!heroAvatar || !brand) return;
 
-  // Maak topbar avatar element aan (begint verborgen)
-  const topbarAvatar = document.createElement('img');
-  topbarAvatar.src = heroAvatar.src;
-  topbarAvatar.alt = heroAvatar.alt;
-  topbarAvatar.className = 'topbar-avatar-scroll';
-  brand.prepend(topbarAvatar);
+// Brand-naam scrollanimatie — verschijnt in topbar zodra de mastheadnaam voorbijscrolt
+(function initBrandScroll() {
+  const mastheadName = document.querySelector('.masthead-name');
+  if (!mastheadName) return;
+  const brandText = document.querySelector('.topbar-brand-text');
+  if (!brandText) return;
 
-  let visible = false;
+  brandText.classList.add('brand-hidden');
+  let nameVisible = false;
 
   window.addEventListener('scroll', () => {
-    const rect = heroAvatar.getBoundingClientRect();
-    const shouldShow = rect.top <= 56; // topbar hoogte
-
-    if (shouldShow && !visible) {
-      visible = true;
-      topbarAvatar.classList.add('visible');
-      heroAvatar.style.opacity = '0';
-    } else if (!shouldShow && visible) {
-      visible = false;
-      topbarAvatar.classList.remove('visible');
-      heroAvatar.style.opacity = '1';
+    const shouldShow = mastheadName.getBoundingClientRect().bottom <= 56;
+    if (shouldShow && !nameVisible) {
+      nameVisible = true;
+      brandText.classList.remove('brand-hidden');
+    } else if (!shouldShow && nameVisible) {
+      nameVisible = false;
+      brandText.classList.add('brand-hidden');
     }
   }, { passive: true });
 })();
+

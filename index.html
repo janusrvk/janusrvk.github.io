@@ -22,7 +22,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap" rel="stylesheet" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/style.css" />
 
@@ -43,12 +43,24 @@
 <body>
   <main class="main">
     <section class="home-hero">
-      <div class="home-hero-layout">
-        <div class="home-hero-content">
-          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="hero-avatar" />
-          <p class="home-hero-tag">Persoonlijke website</p>
-          <h1 class="home-hero-title">Janus<br>van Koolwijk</h1>
-          <!-- Mini-bio kaartje -->
+
+      <!-- Masthead -->
+      <div class="masthead">
+        <div class="masthead-inner">
+          <div class="masthead-eyebrow">Redacteur &amp; Schrijver &ensp;&middot;&ensp; Amsterdam</div>
+          <h1 class="masthead-name">Janus van Koolwijk</h1>
+          <div class="masthead-subline">
+            <span>Persoonlijke website</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Drie kolommen zoals een krantenpagina -->
+      <div class="newspaper-columns">
+
+        <!-- Kolom 1: Bio -->
+        <aside class="newspaper-col newspaper-col-bio">
+          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="hero-avatar newspaper-avatar" />
           <div class="mini-bio-card">
             <div class="mini-bio-row">
               <span class="mini-bio-label">Functie</span>
@@ -68,379 +80,259 @@
             </div>
             <div class="mini-bio-row">
               <span class="mini-bio-label">Contact</span>
-              <span class="mini-bio-value"><a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a><br><a href="tel:+31657807612">06-57807612</a></span>
+              <span class="mini-bio-value"><a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a></span>
             </div>
             <a href="/cv.pdf" target="_blank" class="mini-bio-cv btn-primary">Download CV</a>
           </div>
-        </div>
+        </aside>
 
-        <div class="home-hero-schrijfwerk">
-          <h2 class="home-hero-schrijfwerk-title">Schrijfwerk</h2>
-          <div class="home-hero-articles">
-            <a href="/artikel-fincher.html" class="home-hero-article">
-              <div class="home-hero-article-cover">
-                <img src="/brand_assets/panic room .webp" alt="David Fincher: Staat van Perfectie" class="home-hero-article-img" loading="lazy" />
-                <div class="home-hero-article-overlay">
-                  <span class="home-hero-article-cover-title">Staat van<br>Perfectie</span>
-                </div>
-              </div>
-              <span class="home-hero-article-label">VARAgids nr. 3, 2025</span>
-              <p class="home-hero-article-desc">Over het obsessieve perfectionisme van regisseur David Fincher en hoe hij zelfs het neerzetten van een tas tot kunst verheft.</p>
-            </a>
-
-            <a href="/artikel-breitner.html" class="home-hero-article">
-              <div class="home-hero-article-cover">
-                <img src="/brand_assets/volledige breitner.jpg" alt="750 jaar Amsterdam: Breitner" class="home-hero-article-img" loading="lazy" />
-                <div class="home-hero-article-overlay">
-                  <span class="home-hero-article-cover-title">Door Lens<br>& Penseel</span>
-                </div>
-              </div>
-              <span class="home-hero-article-label">VARAgids nr. 7, 2025</span>
-              <p class="home-hero-article-desc">Hoe George Hendrik Breitner met camera en penseel het Amsterdam van 1900 vastlegde.</p>
-            </a>
-
-            <a href="/artikel-groenteman.html" class="home-hero-article">
-              <div class="home-hero-article-cover">
-                <img src="/brand_assets/een buitengewoon gesprek.jpg" alt="Hanneke Groenteman" class="home-hero-article-img" loading="lazy" />
-                <div class="home-hero-article-overlay">
-                  <span class="home-hero-article-cover-title">Bellen met&hellip;<br>Groenteman</span>
-                </div>
-              </div>
-              <span class="home-hero-article-label">VARAgids nr. 18, 2025</span>
-              <p class="home-hero-article-desc">Interview met Hanneke Groenteman over geïnterviewd worden bij Een buitengewoon gesprek.</p>
-            </a>
-
-            <a href="/artikel-thesis.html" class="home-hero-article">
-              <div class="home-hero-article-cover">
-                <img src="/brand_assets/thesis-library.jpg" alt="Master Thesis" class="home-hero-article-img" loading="lazy" />
-                <div class="home-hero-article-overlay">
-                  <span class="home-hero-article-cover-title">Left<br>Nationalism</span>
-                </div>
-              </div>
-              <span class="home-hero-article-label">MA Thesis, 2024</span>
-              <p class="home-hero-article-desc">Over links nationalisme als tegenkracht tegen extreemrechts, met Sahra Wagenknecht en Lilian Marijnissen als casestudies.</p>
-            </a>
+        <!-- Kolom 2: Colofon + Schrijfwerk -->
+        <div class="newspaper-col newspaper-col-aside">
+          <div>
+            <div class="newspaper-col-label">Colofon</div>
+            <p class="editor-intro">Een persoonlijke website met een archief van schrijfwerk en een maandelijks overzicht van wat ik lees, kijk en luister.</p>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Interesses -->
-    <section class="section" id="interesses">
-      <div class="section-wide">
-        <h2 class="section-title">Interesses</h2>
-        <p class="section-subtitle">Wat ik luister, kijk en lees. Live bijgehouden via Spotify, Letterboxd en Goodreads.</p>
-
-        <div class="interests-grid">
-          <div class="interest-card" id="card-music">
-            <div class="interest-card-header">
-              <h3>Muziek</h3>
-              <a href="https://open.spotify.com/user/11133675526" target="_blank" rel="noopener" class="interest-source">Spotify</a>
-            </div>
-            <div class="interest-card-body" id="lastfm-content">
-              <p class="interest-placeholder">Laden...</p>
-            </div>
-            <div class="interest-card-stat">
-              <span class="stats-number" id="stat-scrobbles">—</span>
-              <span class="stats-label">nummers dit jaar</span>
-            </div>
-          </div>
-
-          <div class="interest-card" id="card-movies">
-            <div class="interest-card-header">
-              <h3>Films</h3>
-              <a href="https://letterboxd.com/janusrvk/" target="_blank" rel="noopener" class="interest-source">Letterboxd</a>
-            </div>
-            <div class="interest-card-body" id="letterboxd-content">
-              <p class="interest-placeholder">Laden...</p>
-            </div>
-            <div class="interest-card-stat">
-              <span class="stats-number" id="stat-films">—</span>
-              <span class="stats-label">films dit jaar</span>
-            </div>
-          </div>
-
-          <div class="interest-card" id="card-books">
-            <div class="interest-card-header">
-              <h3>Boeken</h3>
-              <a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener" class="interest-source">Goodreads</a>
-            </div>
-            <div class="interest-card-body" id="goodreads-content">
-              <p class="interest-placeholder">Laden...</p>
-            </div>
-            <div class="interest-card-stat">
-              <span class="stats-number" id="stat-books">—</span>
-              <span class="stats-label">boeken dit jaar</span>
+          <hr class="newspaper-rule" />
+          <div>
+            <div class="newspaper-col-label">Schrijfwerk</div>
+            <div class="article-covers">
+            <a href="/artikel-fincher.html" class="article-cover">
+              <img src="/brand_assets/panic room .webp" alt="Staat van Perfectie" loading="lazy" />
+              <div class="article-cover-overlay">
+                <span class="article-cover-byline">VARAgids nr. 3, 2025</span>
+                <span class="article-cover-title">Staat van Perfectie</span>
+              </div>
+            </a>
+            <a href="/artikel-breitner.html" class="article-cover">
+              <img src="/brand_assets/volledige breitner.jpg" alt="Door Lens &amp; Penseel" loading="lazy" />
+              <div class="article-cover-overlay">
+                <span class="article-cover-byline">VARAgids nr. 7, 2025</span>
+                <span class="article-cover-title">Door Lens &amp; Penseel</span>
+              </div>
+            </a>
+            <a href="/artikel-groenteman.html" class="article-cover">
+              <img src="/brand_assets/een buitengewoon gesprek.jpg" alt="Bellen met Groenteman" loading="lazy" />
+              <div class="article-cover-overlay">
+                <span class="article-cover-byline">VARAgids nr. 18, 2025</span>
+                <span class="article-cover-title">Bellen met&hellip; Groenteman</span>
+              </div>
+            </a>
+            <a href="/artikel-thesis.html" class="article-cover">
+              <img src="/brand_assets/thesis-library.jpg" alt="Left Nationalism" loading="lazy" />
+              <div class="article-cover-overlay">
+                <span class="article-cover-byline">MA Thesis, 2024</span>
+                <span class="article-cover-title">Left Nationalism</span>
+              </div>
+            </a>
             </div>
           </div>
         </div>
+
+        <!-- Kolom 3: Geluisterd / Gekeken / Gelezen + dit jaar -->
+        <div class="newspaper-col newspaper-col-center">
+          <div class="sidebar-live">
+            <div class="sidebar-live-item">
+              <div class="sidebar-live-header">
+                <span class="sidebar-live-label">Geluisterd</span>
+                <a href="https://open.spotify.com/user/11133675526" target="_blank" rel="noopener" class="sidebar-live-icon-link">Spotify</a>
+              </div>
+              <div id="strip-music"><p class="interest-placeholder">Laden...</p></div>
+              <p class="sidebar-live-stat"><span id="stat-scrobbles">—</span> nummers dit jaar</p>
+            </div>
+            <div class="sidebar-live-item">
+              <div class="sidebar-live-header">
+                <span class="sidebar-live-label">Gekeken</span>
+                <a href="https://letterboxd.com/janusrvk" target="_blank" rel="noopener" class="sidebar-live-icon-link">Letterboxd</a>
+              </div>
+              <div id="strip-film"><p class="interest-placeholder">Laden...</p></div>
+              <p class="sidebar-live-stat"><span id="stat-films">—</span> films dit jaar</p>
+            </div>
+            <div class="sidebar-live-item">
+              <div class="sidebar-live-header">
+                <span class="sidebar-live-label">Gelezen</span>
+                <a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener" class="sidebar-live-icon-link">Goodreads</a>
+              </div>
+              <div id="strip-book"><p class="interest-placeholder">Laden...</p></div>
+              <p class="sidebar-live-stat"><span id="stat-books">—</span> boeken dit jaar</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
     <!-- Archief -->
     <section class="section" id="archief">
       <div class="section-wide">
-        <h2 class="section-title">Archief</h2>
-        <p class="section-subtitle">Elke maand mijn favoriete ontdekkingen.</p>
-
-        <div class="archief-cards">
-          <div class="archief-card">
-            <h3 class="archief-card-month">Februari 2026</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/On%20peut%20comme%20%C3%A7a" target="_blank" rel="noopener" class="archief-value archief-link">On peut comme &ccedil;a<span class="archief-artist">Zaz</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/IJsland%202%20IJsland%20Abel%20Sef" target="_blank" rel="noopener" class="archief-value archief-link">IJsland 2<span class="archief-artist">IJsland, Abel &amp; Sef</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Marty%20Supreme/" target="_blank" rel="noopener" class="archief-value archief-link">Marty Supreme<span class="archief-artist">Josh Safdie</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Levels%20of%20Life%20Julian%20Barnes" target="_blank" rel="noopener" class="archief-value archief-link">Levels of Life<span class="archief-artist">Julian Barnes</span></a></li>
-            </ul>
+        <div class="archief-krantbalk">
+          <div class="archief-krantbalk-regel"></div>
+          <div class="archief-krantbalk-midden">
+            <span class="archief-krantbalk-label">Maandelijks logboek</span>
+            <h2 class="archief-krantbalk-titel">Archief</h2>
+            <span class="archief-krantbalk-sub">Elke maand mijn favoriete ontdekkingen &mdash; klik op een rij voor meer details</span>
           </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Januari 2026</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Lean%20Charlotte%20Day%20Wilson" target="_blank" rel="noopener" class="archief-value archief-link">Lean<span class="archief-artist">Charlotte Day Wilson</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/The%20Lighthouse%20Tessa%20Rose%20Jackson" target="_blank" rel="noopener" class="archief-value archief-link">The Lighthouse<span class="archief-artist">Tessa Rose Jackson</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Juno/" target="_blank" rel="noopener" class="archief-value archief-link">Juno<span class="archief-artist">Jason Reitman</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Moon%20Palace%20Paul%20Auster" target="_blank" rel="noopener" class="archief-value archief-link">Moon Palace<span class="archief-artist">Paul Auster</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">December 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Thorn%20Keo" target="_blank" rel="noopener" class="archief-value archief-link">Thorn<span class="archief-artist">Keo</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/What%20Color%20is%20Love%20Terry%20Callier" target="_blank" rel="noopener" class="archief-value archief-link">What Color is Love<span class="archief-artist">Terry Callier</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Sentimental%20Value/" target="_blank" rel="noopener" class="archief-value archief-link">Sentimental Value<span class="archief-artist">Joachim Trier</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Tonio%20A.F.Th.%20van%20der%20Heijden" target="_blank" rel="noopener" class="archief-value archief-link">Tonio<span class="archief-artist">A.F.Th. van der Heijden</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">November 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/The%20Sea%20Morcheeba" target="_blank" rel="noopener" class="archief-value archief-link">The Sea<span class="archief-artist">Morcheeba</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/FEMME%20FATALE%20Mon%20Laferte" target="_blank" rel="noopener" class="archief-value archief-link">FEMME FATALE<span class="archief-artist">Mon Laferte</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/A%20Man%20Escaped/" target="_blank" rel="noopener" class="archief-value archief-link">A Man Escaped<span class="archief-artist">Robert Bresson</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=De%20helaasheid%20der%20dingen%20Dimitri%20Verhulst" target="_blank" rel="noopener" class="archief-value archief-link">De helaasheid der dingen<span class="archief-artist">Dimitri Verhulst</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-cards-hidden" id="archief-hidden">
-          <div class="archief-card">
-            <h3 class="archief-card-month">Oktober 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/The%20Watershed%20Mark%20Hollis" target="_blank" rel="noopener" class="archief-value archief-link">The Watershed<span class="archief-artist">Mark Hollis</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Mark%20Hollis%20Mark%20Hollis" target="_blank" rel="noopener" class="archief-value archief-link">Mark Hollis<span class="archief-artist">Mark Hollis</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/La%20Promesse/" target="_blank" rel="noopener" class="archief-value archief-link">La Promesse<span class="archief-artist">Jean-Pierre &amp; Luc Dardenne</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Imperium%20Robert%20Harris" target="_blank" rel="noopener" class="archief-value archief-link">Imperium<span class="archief-artist">Robert Harris</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">September 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Als%20Het%20Donker%20Wordt%20Pip%20Lieke%20Lucas" target="_blank" rel="noopener" class="archief-value archief-link">Als Het Donker Wordt<span class="archief-artist">Pip Lieke Lucas</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Lieve%20Monsters%20Sef" target="_blank" rel="noopener" class="archief-value archief-link">Lieve Monsters<span class="archief-artist">Sef</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/One%20Battle%20After%20Another/" target="_blank" rel="noopener" class="archief-value archief-link">One Battle After Another<span class="archief-artist">Paul Thomas Anderson</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Rituelen%20Cees%20Nooteboom" target="_blank" rel="noopener" class="archief-value archief-link">Rituelen<span class="archief-artist">Cees Nooteboom</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Augustus 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Fun%20Deki%20Alem" target="_blank" rel="noopener" class="archief-value archief-link">Fun<span class="archief-artist">Deki Alem</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Stanley%20Road%20Paul%20Weller" target="_blank" rel="noopener" class="archief-value archief-link">Stanley Road<span class="archief-artist">Paul Weller</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/The%20Big%20Sleep/" target="_blank" rel="noopener" class="archief-value archief-link">The Big Sleep<span class="archief-artist">Howard Hawks</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Grand%20Hotel%20Europa%20Ilja%20Leonard%20Pfeijffer" target="_blank" rel="noopener" class="archief-value archief-link">Grand Hotel Europa<span class="archief-artist">Ilja Leonard Pfeijffer</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Juli 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Kneel%20Nil%C3%BCfer%20Yanya" target="_blank" rel="noopener" class="archief-value archief-link">Kneel<span class="archief-artist">Nil&uuml;fer Yanya</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Jazzmatazz%20Volume%20II%20Guru" target="_blank" rel="noopener" class="archief-value archief-link">Jazzmatazz: Volume II<span class="archief-artist">Guru</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Judgment%20at%20Nuremberg/" target="_blank" rel="noopener" class="archief-value archief-link">Judgment at Nuremberg<span class="archief-artist">Stanley Kramer</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Het%20uur%20van%20de%20wolven%20Giuliano%20Da%20Empoli" target="_blank" rel="noopener" class="archief-value archief-link">Het uur van de wolven<span class="archief-artist">Giuliano Da Empoli</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Juni 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Overflow%20Annahstasia" target="_blank" rel="noopener" class="archief-value archief-link">Overflow<span class="archief-artist">Annahstasia</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Tether%20Annahstasia" target="_blank" rel="noopener" class="archief-value archief-link">Tether<span class="archief-artist">Annahstasia</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/The%20Last%20Days%20of%20Disco/" target="_blank" rel="noopener" class="archief-value archief-link">The Last Days of Disco<span class="archief-artist">Whit Stillman</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Nooit%20meer%20slapen%20W.F.%20Hermans" target="_blank" rel="noopener" class="archief-value archief-link">Nooit meer slapen<span class="archief-artist">W.F. Hermans</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Mei 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Wild%20Wood%20Paul%20Weller" target="_blank" rel="noopener" class="archief-value archief-link">Wild Wood<span class="archief-artist">Paul Weller</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Cancionera%20Natalia%20Lafourcade" target="_blank" rel="noopener" class="archief-value archief-link">Cancionera<span class="archief-artist">Natalia Lafourcade</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/In%20a%20Lonely%20Place/" target="_blank" rel="noopener" class="archief-value archief-link">In a Lonely Place<span class="archief-artist">Nicholas Ray</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Het%20lied%20van%20de%20ooievaar%20en%20de%20dromedaris%20Anjet%20Daanje" target="_blank" rel="noopener" class="archief-value archief-link">Het lied van de ooievaar en de dromedaris<span class="archief-artist">Anjet Daanje</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">April 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Ze%20is%20pas%20net%20begonnen" target="_blank" rel="noopener" class="archief-value archief-link">Ze is pas net begonnen<span class="archief-artist">De Jeugd van Tegenwoordig</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Da%20Storm%20O.G.C." target="_blank" rel="noopener" class="archief-value archief-link">Da Storm<span class="archief-artist">O.G.C.</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Jules%20and%20Jim/" target="_blank" rel="noopener" class="archief-value archief-link">Jules and Jim<span class="archief-artist">Fran&ccedil;ois Truffaut</span></a></li>
-              <li><span class="archief-label">Boek</span><span class="archief-value">&mdash;</span></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Maart 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Can%27t%20Feel%20Too%20Much%20Michael%20Ekow" target="_blank" rel="noopener" class="archief-value archief-link">Can&rsquo;t Feel Too Much<span class="archief-artist">Michael Ekow</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Blonde%20on%20Blonde%20Bob%20Dylan" target="_blank" rel="noopener" class="archief-value archief-link">Blonde on Blonde<span class="archief-artist">Bob Dylan</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/I%27m%20Still%20Here/" target="_blank" rel="noopener" class="archief-value archief-link">I&rsquo;m Still Here<span class="archief-artist">Walter Salles</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Kafka%20on%20the%20Shore%20Haruki%20Murakami" target="_blank" rel="noopener" class="archief-value archief-link">Kafka on the Shore<span class="archief-artist">Haruki Murakami</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Februari 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Woes%20of%20the%20World%20Saba" target="_blank" rel="noopener" class="archief-value archief-link">Woes of the World<span class="archief-artist">Saba</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Eusexua%20FKA%20Twigs" target="_blank" rel="noopener" class="archief-value archief-link">Eusexua<span class="archief-artist">FKA Twigs</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/The%20Brutalist/" target="_blank" rel="noopener" class="archief-value archief-link">The Brutalist<span class="archief-artist">Brady Corbet</span></a></li>
-              <li><span class="archief-label">Boek</span><a href="https://www.goodreads.com/search?q=Oroppa%20Safae%20el%20Khannoussi" target="_blank" rel="noopener" class="archief-value archief-link">Oroppa<span class="archief-artist">Safae el Khannoussi</span></a></li>
-            </ul>
-          </div>
-
-          <div class="archief-card">
-            <h3 class="archief-card-month">Januari 2025</h3>
-            <ul class="archief-card-list">
-              <li><span class="archief-label">Nummer</span><a href="https://open.spotify.com/search/Family%20and%20Friends%20Oklou" target="_blank" rel="noopener" class="archief-value archief-link">Family and Friends<span class="archief-artist">Oklou</span></a></li>
-              <li><span class="archief-label">Album</span><a href="https://open.spotify.com/search/Breath%20from%20Another%20Esthero" target="_blank" rel="noopener" class="archief-value archief-link">Breath from Another<span class="archief-artist">Esthero</span></a></li>
-              <li><span class="archief-label">Film</span><a href="https://letterboxd.com/search/Hoop%20Dreams/" target="_blank" rel="noopener" class="archief-value archief-link">Hoop Dreams<span class="archief-artist">Steve James</span></a></li>
-              <li><span class="archief-label">Boek</span><span class="archief-value">&mdash;</span></li>
-            </ul>
-          </div>
-          </div>
-
-          <button class="archief-toggle" id="archief-toggle" onclick="document.getElementById('archief-hidden').classList.toggle('archief-cards-visible'); this.textContent = this.textContent === 'Toon meer' ? 'Toon minder' : 'Toon meer'">Toon meer</button>
+          <div class="archief-krantbalk-regel"></div>
         </div>
+
+        <div class="archief-table-wrap">
+          <table class="archief-table">
+            <thead>
+              <tr>
+                <th class="archief-th-maand">Maand</th>
+                <th>Nummer</th>
+                <th>Album</th>
+                <th>Film</th>
+                <th>Boek</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="archief-row"><td class="archief-row-month">Februari 2026</td><td class="archief-row-cell"><span class="archief-row-link">On peut comme &ccedil;a</span><span class="archief-row-sub">Zaz</span></td><td class="archief-row-cell"><span class="archief-row-link">IJsland 2</span><span class="archief-row-sub">IJsland, Abel &amp; Sef</span></td><td class="archief-row-cell"><span class="archief-row-link">Marty Supreme</span><span class="archief-row-sub">Josh Safdie</span></td><td class="archief-row-cell"><span class="archief-row-link">Levels of Life</span><span class="archief-row-sub">Julian Barnes</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Januari 2026</td><td class="archief-row-cell"><span class="archief-row-link">Lean</span><span class="archief-row-sub">Charlotte Day Wilson</span></td><td class="archief-row-cell"><span class="archief-row-link">The Lighthouse</span><span class="archief-row-sub">Tessa Rose Jackson</span></td><td class="archief-row-cell"><span class="archief-row-link">Juno</span><span class="archief-row-sub">Jason Reitman</span></td><td class="archief-row-cell"><span class="archief-row-link">Moon Palace</span><span class="archief-row-sub">Paul Auster</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">December 2025</td><td class="archief-row-cell"><span class="archief-row-link">Thorn</span><span class="archief-row-sub">Keo</span></td><td class="archief-row-cell"><span class="archief-row-link">What Color is Love</span><span class="archief-row-sub">Terry Callier</span></td><td class="archief-row-cell"><span class="archief-row-link">Sentimental Value</span><span class="archief-row-sub">Joachim Trier</span></td><td class="archief-row-cell"><span class="archief-row-link">Tonio</span><span class="archief-row-sub">A.F.Th. van der Heijden</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">November 2025</td><td class="archief-row-cell"><span class="archief-row-link">The Sea</span><span class="archief-row-sub">Morcheeba</span></td><td class="archief-row-cell"><span class="archief-row-link">FEMME FATALE</span><span class="archief-row-sub">Mon Laferte</span></td><td class="archief-row-cell"><span class="archief-row-link">A Man Escaped</span><span class="archief-row-sub">Robert Bresson</span></td><td class="archief-row-cell"><span class="archief-row-link">De helaasheid der dingen</span><span class="archief-row-sub">Dimitri Verhulst</span></td></tr>
+            </tbody>
+            <tbody id="archief-hidden" class="archief-hidden">
+              <tr class="archief-row"><td class="archief-row-month">Oktober 2025</td><td class="archief-row-cell"><span class="archief-row-link">The Watershed</span><span class="archief-row-sub">Mark Hollis</span></td><td class="archief-row-cell"><span class="archief-row-link">Mark Hollis</span><span class="archief-row-sub">Mark Hollis</span></td><td class="archief-row-cell"><span class="archief-row-link">La Promesse</span><span class="archief-row-sub">Jean-Pierre &amp; Luc Dardenne</span></td><td class="archief-row-cell"><span class="archief-row-link">Imperium</span><span class="archief-row-sub">Robert Harris</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">September 2025</td><td class="archief-row-cell"><span class="archief-row-link">Als Het Donker Wordt</span><span class="archief-row-sub">Pip Lieke Lucas</span></td><td class="archief-row-cell"><span class="archief-row-link">Lieve Monsters</span><span class="archief-row-sub">Sef</span></td><td class="archief-row-cell"><span class="archief-row-link">One Battle After Another</span><span class="archief-row-sub">Paul Thomas Anderson</span></td><td class="archief-row-cell"><span class="archief-row-link">Rituelen</span><span class="archief-row-sub">Cees Nooteboom</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Augustus 2025</td><td class="archief-row-cell"><span class="archief-row-link">Fun</span><span class="archief-row-sub">Deki Alem</span></td><td class="archief-row-cell"><span class="archief-row-link">Stanley Road</span><span class="archief-row-sub">Paul Weller</span></td><td class="archief-row-cell"><span class="archief-row-link">The Big Sleep</span><span class="archief-row-sub">Howard Hawks</span></td><td class="archief-row-cell"><span class="archief-row-link">Grand Hotel Europa</span><span class="archief-row-sub">Ilja Leonard Pfeijffer</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Juli 2025</td><td class="archief-row-cell"><span class="archief-row-link">Kneel</span><span class="archief-row-sub">Nil&uuml;fer Yanya</span></td><td class="archief-row-cell"><span class="archief-row-link">Jazzmatazz: Volume II</span><span class="archief-row-sub">Guru</span></td><td class="archief-row-cell"><span class="archief-row-link">Judgment at Nuremberg</span><span class="archief-row-sub">Stanley Kramer</span></td><td class="archief-row-cell"><span class="archief-row-link">Het uur van de wolven</span><span class="archief-row-sub">Giuliano Da Empoli</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Juni 2025</td><td class="archief-row-cell"><span class="archief-row-link">Overflow</span><span class="archief-row-sub">Annahstasia</span></td><td class="archief-row-cell"><span class="archief-row-link">Tether</span><span class="archief-row-sub">Annahstasia</span></td><td class="archief-row-cell"><span class="archief-row-link">The Last Days of Disco</span><span class="archief-row-sub">Whit Stillman</span></td><td class="archief-row-cell"><span class="archief-row-link">Nooit meer slapen</span><span class="archief-row-sub">W.F. Hermans</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Mei 2025</td><td class="archief-row-cell"><span class="archief-row-link">Wild Wood</span><span class="archief-row-sub">Paul Weller</span></td><td class="archief-row-cell"><span class="archief-row-link">Cancionera</span><span class="archief-row-sub">Natalia Lafourcade</span></td><td class="archief-row-cell"><span class="archief-row-link">In a Lonely Place</span><span class="archief-row-sub">Nicholas Ray</span></td><td class="archief-row-cell"><span class="archief-row-link">Het lied van de ooievaar en de dromedaris</span><span class="archief-row-sub">Anjet Daanje</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">April 2025</td><td class="archief-row-cell"><span class="archief-row-link">Ze is pas net begonnen</span><span class="archief-row-sub">De Jeugd van Tegenwoordig</span></td><td class="archief-row-cell"><span class="archief-row-link">Da Storm</span><span class="archief-row-sub">O.G.C.</span></td><td class="archief-row-cell"><span class="archief-row-link">Jules and Jim</span><span class="archief-row-sub">Fran&ccedil;ois Truffaut</span></td><td class="archief-row-cell archief-row-empty">&mdash;</td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Maart 2025</td><td class="archief-row-cell"><span class="archief-row-link">Can&rsquo;t Feel Too Much</span><span class="archief-row-sub">Michael Ekow</span></td><td class="archief-row-cell"><span class="archief-row-link">Blonde on Blonde</span><span class="archief-row-sub">Bob Dylan</span></td><td class="archief-row-cell"><span class="archief-row-link">I&rsquo;m Still Here</span><span class="archief-row-sub">Walter Salles</span></td><td class="archief-row-cell"><span class="archief-row-link">Kafka on the Shore</span><span class="archief-row-sub">Haruki Murakami</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Februari 2025</td><td class="archief-row-cell"><span class="archief-row-link">Woes of the World</span><span class="archief-row-sub">Saba</span></td><td class="archief-row-cell"><span class="archief-row-link">EUSEXUA</span><span class="archief-row-sub">FKA Twigs</span></td><td class="archief-row-cell"><span class="archief-row-link">The Brutalist</span><span class="archief-row-sub">Brady Corbet</span></td><td class="archief-row-cell"><span class="archief-row-link">Oroppa</span><span class="archief-row-sub">Safae el Khannoussi</span></td></tr>
+              <tr class="archief-row"><td class="archief-row-month">Januari 2025</td><td class="archief-row-cell"><span class="archief-row-link">Family and Friends</span><span class="archief-row-sub">Oklou</span></td><td class="archief-row-cell"><span class="archief-row-link">Breath from Another</span><span class="archief-row-sub">Esthero</span></td><td class="archief-row-cell"><span class="archief-row-link">Hoop Dreams</span><span class="archief-row-sub">Steve James</span></td><td class="archief-row-cell archief-row-empty">&mdash;</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <button class="archief-toggle" id="archief-toggle" onclick="const h=document.getElementById('archief-hidden'); const opening=!h.classList.contains('archief-visible'); h.classList.toggle('archief-visible'); this.textContent=opening?'Toon minder':'Toon meer'; if(!opening){document.getElementById('archief').scrollIntoView({behavior:'smooth'})}">Toon meer</button>
+
       </div>
     </section>
 
     <!-- Over mij -->
     <section class="section" id="over-mij">
-      <div class="section-inner">
-        <h2 class="section-title">Over mij</h2>
-        <div class="about-avatar-wrapper">
-          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="about-avatar" loading="lazy" />
-        </div>
-        <div class="about-content">
-          <p>
-            Ik ben Janus van Koolwijk, redacteur en pizzabakker uit Amsterdam. Ik studeerde European Studies aan de Universiteit van Amsterdam (bachelor en master) en werk momenteel als freelance redacteur bij de VARAgids en als pizzabakker bij Buurman & Buurman. Daarvoor werkte ik fulltime als junior vakredacteur bij Berghauser Pont. Ik ben nieuwsgierig, zorgvuldig en gewend om zelfstandig te werken binnen een redactie.
-          </p>
 
-          <h3 class="cv-section-title">Werkervaring</h3>
-          <div class="cv-timeline">
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">VARAgids</span>
-                  <span class="cv-item-role">Freelance Redacteur</span>
-                </div>
-                <span class="cv-item-date">feb 2025 — heden</span>
-              </div>
-              <p class="cv-item-desc">Na een succesvolle stage doorgestroomd als freelance redacteur. Zelfstandig uitvoeren van schrijfopdrachten, interviews en onderzoekstaken voor de wekelijkse televisiegids.</p>
-            </div>
-
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">VARAgids</span>
-                  <span class="cv-item-role">Stage</span>
-                </div>
-                <span class="cv-item-date">nov 2024 — feb 2025</span>
-              </div>
-              <p class="cv-item-desc">Telefonische interviews met BN'ers en programmamakers, onderzoek naar actuele programma-informatie, schrijven van wekelijkse programmatoelichtingen en artikelen, en samenstellen van overzichten van opvallende televisiemomenten.</p>
-            </div>
-
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">Buurman & Buurman</span>
-                  <span class="cv-item-role">Pizzabakker / Mise en Place Chef</span>
-                </div>
-                <span class="cv-item-date">feb 2024 — heden</span>
-              </div>
-            </div>
-
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">Berghauser Pont</span>
-                  <span class="cv-item-role">Junior Vakredacteur (fulltime)</span>
-                </div>
-                <span class="cv-item-date">nov 2022 — jun 2023</span>
-              </div>
-              <p class="cv-item-desc">Ontwikkelen en beheren van online leeractiviteiten en het creëren van unieke content voor themadossiers binnen de fysieke leefomgeving. Begeleiden van auteurs en docenten.</p>
-            </div>
+      <!-- Krantbalk-kop -->
+      <div class="about-section-krantbalk">
+        <div class="archief-krantbalk">
+          <div class="archief-krantbalk-regel"></div>
+          <div class="archief-krantbalk-midden">
+            <h2 class="archief-krantbalk-titel about-krantbalk-titel">Over mij</h2>
           </div>
-
-          <h3 class="cv-section-title">Opleiding</h3>
-          <div class="cv-timeline">
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">Universiteit van Amsterdam</span>
-                  <span class="cv-item-role">Master European Studies</span>
-                </div>
-                <span class="cv-item-date">2023 — 2024</span>
-              </div>
-              <p class="cv-item-desc"><em>Identity and Integration</em></p>
-            </div>
-
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">Universiteit van Amsterdam</span>
-                  <span class="cv-item-role">Bachelor European Studies</span>
-                </div>
-                <span class="cv-item-date">2019 — 2022</span>
-              </div>
-              <p class="cv-item-desc"><em>Major European Economics</em></p>
-            </div>
-
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <div>
-                  <span class="cv-item-org">Mollerlyceum Bergen op Zoom</span>
-                  <span class="cv-item-role">VWO Cultuur en Maatschappij</span>
-                </div>
-                <span class="cv-item-date">2013 — 2019</span>
-              </div>
-              <p class="cv-item-desc"><em>Certificaat Europese Leerroute</em></p>
-            </div>
-          </div>
-
-          <p style="margin-top: 2rem;">
-            <a href="/cv.pdf" target="_blank" class="btn-primary">Download CV (PDF)</a>
-          </p>
-
-          <h3 class="cv-section-title">Contact</h3>
-          <p style="margin-top: 0.75rem;">
-            <a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a><br>
-            <a href="tel:+31657807612">06-57807612</a>
-          </p>
+          <div class="archief-krantbalk-regel"></div>
         </div>
       </div>
+
+      <!-- Avatar links, bio rechts -->
+      <div class="about-hero-grid">
+
+        <!-- Links: avatar -->
+        <div class="about-portrait-col">
+          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="about-portrait-img" loading="lazy" />
+        </div>
+
+        <!-- Rechts: bio -->
+        <div class="about-intro-col">
+          <p class="about-intro-bio">
+            Ik ben Janus van Koolwijk, redacteur en schrijver uit Amsterdam. Ik studeerde European Studies aan de Universiteit van Amsterdam (bachelor en master) en werk als freelance redacteur bij de VARAgids en als pizzabakker bij Buurman &amp; Buurman. Daarvoor werkte ik als junior vakredacteur bij Berghauser Pont. Ik ben nieuwsgierig, zorgvuldig en gewend om zelfstandig te werken binnen een redactie.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Loopbaan + Opleiding -->
+      <div class="about-cv-inner">
+        <div class="about-cv-columns">
+
+          <!-- Loopbaan -->
+          <div class="about-cv-col">
+            <div class="archief-krantbalk about-krantbalk">
+              <div class="archief-krantbalk-regel"></div>
+              <div class="archief-krantbalk-midden">
+                <h3 class="archief-krantbalk-titel about-krantbalk-titel">Loopbaan</h3>
+              </div>
+              <div class="archief-krantbalk-regel"></div>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">VARAgids</span>
+                <span class="cv-item-date">feb 2025 — heden</span>
+              </div>
+              <div class="cv-item-role">Freelance Redacteur</div>
+              <p class="cv-item-desc">Na een succesvolle stage doorgestroomd als freelance redacteur. Zelfstandig uitvoeren van schrijfopdrachten, interviews en onderzoekstaken voor de wekelijkse televisiegids.</p>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">VARAgids</span>
+                <span class="cv-item-date">nov 2024 — feb 2025</span>
+              </div>
+              <div class="cv-item-role">Stage</div>
+              <p class="cv-item-desc">Telefonische interviews met BN'ers en programmamakers, schrijven van wekelijkse programmatoelichtingen en artikelen, samenstellen van overzichten van opvallende televisiemomenten.</p>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Buurman &amp; Buurman</span>
+                <span class="cv-item-date">feb 2024 — heden</span>
+              </div>
+              <div class="cv-item-role">Pizzabakker / Mise en Place Chef</div>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Berghauser Pont</span>
+                <span class="cv-item-date">nov 2022 — jun 2023</span>
+              </div>
+              <div class="cv-item-role">Junior Vakredacteur</div>
+              <p class="cv-item-desc">Ontwikkelen en beheren van online leeractiviteiten en content voor themadossiers. Begeleiden van auteurs en docenten.</p>
+            </div>
+          </div>
+
+          <!-- Opleiding -->
+          <div class="about-cv-col">
+            <div class="archief-krantbalk about-krantbalk">
+              <div class="archief-krantbalk-regel"></div>
+              <div class="archief-krantbalk-midden">
+                <h3 class="archief-krantbalk-titel about-krantbalk-titel">Opleiding</h3>
+              </div>
+              <div class="archief-krantbalk-regel"></div>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Universiteit van Amsterdam</span>
+                <span class="cv-item-date">2023 — 2024</span>
+              </div>
+              <div class="cv-item-role">Master European Studies</div>
+              <p class="cv-item-desc">Identity and Integration</p>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Universiteit van Amsterdam</span>
+                <span class="cv-item-date">2019 — 2022</span>
+              </div>
+              <div class="cv-item-role">Bachelor European Studies</div>
+              <p class="cv-item-desc">Major European Economics</p>
+            </div>
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Mollerlyceum Bergen op Zoom</span>
+                <span class="cv-item-date">2013 — 2019</span>
+              </div>
+              <div class="cv-item-role">VWO Cultuur en Maatschappij</div>
+              <p class="cv-item-desc">Certificaat Europese Leerroute</p>
+            </div>
+            <a href="/cv.pdf" target="_blank" class="btn-primary about-cv-btn">Download CV</a>
+          </div>
+
+        </div>
+      </div>
+
     </section>
   </main>
 
   <script type="module" src="/main.js"></script>
   <script type="module" src="/interesses.js"></script>
+  <script src="/archief-maand.js"></script>
   <script data-goatcounter="https://janusrvk.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
