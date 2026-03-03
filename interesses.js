@@ -8,13 +8,13 @@ const LASTFM_USER = 'janusrvk';
 const LASTFM_API_KEY = '74f09a6e65ddc20949e95f2a014cd3ee';
 
 async function fetchLastFm() {
-  const container = document.getElementById('lastfm-content');
+  const container = document.getElementById('strip-music');
   try {
     const res = await fetch(
-      `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=5`
+      `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&limit=2`
     );
     const data = await res.json();
-    const tracks = data.recenttracks?.track?.slice(0, 5);
+    const tracks = data.recenttracks?.track?.slice(0, 1);
 
     if (!tracks || tracks.length === 0) {
       container.innerHTML = '<p class="interest-placeholder">Geen recente tracks gevonden.</p>';
@@ -68,13 +68,13 @@ async function fetchDirector(tmdbId) {
 }
 
 async function fetchLetterboxd() {
-  const container = document.getElementById('letterboxd-content');
+  const container = document.getElementById('strip-film');
   try {
     const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://letterboxd.com/${LETTERBOXD_USER}/rss/`)}`);
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
-    const items = Array.from(xml.querySelectorAll('item')).slice(0, 5);
+    const items = Array.from(xml.querySelectorAll('item')).slice(0, 1);
 
     if (items.length === 0) {
       container.innerHTML = '<p class="interest-placeholder">Geen recente films gevonden.</p>';
@@ -125,19 +125,19 @@ fetchLetterboxd();
 const GOODREADS_USER_ID = '161530834';
 
 async function fetchGoodreads() {
-  const container = document.getElementById('goodreads-content');
+  const container = document.getElementById('strip-book');
   try {
     const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`)}`);
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
-    const items = Array.from(xml.querySelectorAll('item')).slice(0, 5);
+    const items = Array.from(xml.querySelectorAll('item')).slice(0, 1);
 
     if (items.length === 0) {
       const res2 = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
       const text2 = await res2.text();
       const xml2 = parser.parseFromString(text2, 'text/xml');
-      const items2 = Array.from(xml2.querySelectorAll('item')).slice(0, 5);
+      const items2 = Array.from(xml2.querySelectorAll('item')).slice(0, 1);
 
       if (items2.length === 0) {
         container.innerHTML = '<p class="interest-placeholder">Geen boeken gevonden.</p>';
@@ -188,25 +188,22 @@ function formatNumber(n) {
 }
 
 async function fetchScrobbleCount() {
-  // Scrobbles sinds 14 februari (start Last.fm koppeling), geëxtrapoleerd naar 1 januari
-  const scrobbleStart = new Date(2026, 1, 14); // 14 feb 2026
-  const startOfYear = new Date(new Date().getFullYear(), 0, 1);
-  const now = new Date();
+  // Spotify (jan 1 – feb 14 2026) + Last.fm (feb 14 2026 – nu)
+  const lastfmCutoff = new Date(2026, 1, 14); // 14 feb 2026
+  const fromTimestamp = Math.floor(lastfmCutoff.getTime() / 1000);
 
-  const fromTimestamp = Math.floor(scrobbleStart.getTime() / 1000);
-  const res = await fetch(
-    `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&from=${fromTimestamp}&limit=1`
-  );
-  const data = await res.json();
-  const actual = parseInt(data.recenttracks?.['@attr']?.total || '0', 10);
+  const [statsRes, lastfmRes] = await Promise.all([
+    fetch('/spotify-stats.json'),
+    fetch(`https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&from=${fromTimestamp}&limit=1`),
+  ]);
 
-  // Extrapoleer: daggemiddelde × dagen sinds 1 jan
-  const daysSinceScrobbleStart = (now - scrobbleStart) / (1000 * 60 * 60 * 24);
-  const daysSinceYearStart = (now - startOfYear) / (1000 * 60 * 60 * 24);
+  const stats = await statsRes.json();
+  const spotifyCount = stats.spotify2026PreLastfm || 0;
 
-  if (daysSinceScrobbleStart < 1) return actual;
-  const dailyAvg = actual / daysSinceScrobbleStart;
-  return Math.round(dailyAvg * daysSinceYearStart);
+  const lastfmData = await lastfmRes.json();
+  const lastfmCount = parseInt(lastfmData.recenttracks?.['@attr']?.total || '0', 10);
+
+  return spotifyCount + lastfmCount;
 }
 
 

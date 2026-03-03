@@ -6,34 +6,152 @@
   <title>Over mij — Janus van Koolwijk</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <main class="main">
-    <section class="section">
-      <div class="section-inner">
-        <div class="about-avatar-wrapper">
-          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="about-avatar" />
+
+    <!-- Portret-hero: foto links, intro rechts -->
+    <div class="about-hero-wrap">
+      <div class="about-hero-grid">
+
+        <!-- Links: portretfoto -->
+        <div class="about-portrait-col">
+          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="about-portrait-img" />
         </div>
-        <h1 class="section-title">Over mij</h1>
-        <div class="about-content">
-          <p>
-            Ik ben Janus van Koolwijk, redacteur en pizzabakker uit Amsterdam. Ik studeerde European Studies aan de Universiteit van Amsterdam (bachelor en master) en werk momenteel als freelance redacteur bij de VARAgids en als pizzabakker bij Buurman & Buurman. Daarvoor werkte ik als junior vakredacteur bij Berghauser Pont. Ik ben nieuwsgierig, zorgvuldig en gewend om zelfstandig te werken binnen een redactie.
-          </p>
 
-          <h2 class="section-title" style="margin-top: 2.5rem;">Curriculum vitae</h2>
-          <p style="margin-top: 0.75rem;">
-            <a href="/cv.pdf" target="_blank" class="btn-primary">Download CV (PDF)</a>
+        <!-- Rechts: naam, bio, meta -->
+        <div class="about-intro-col">
+          <div class="about-intro-eyebrow">Redacteur &amp; Schrijver &ensp;&middot;&ensp; Amsterdam</div>
+          <h1 class="about-intro-name">Janus van Koolwijk</h1>
+          <p class="about-intro-bio">
+            Ik ben Janus van Koolwijk, redacteur en schrijver uit Amsterdam. Ik studeerde European Studies aan de Universiteit van Amsterdam (bachelor en master) en werk als freelance redacteur bij de VARAgids en als pizzabakker bij Buurman &amp; Buurman. Daarvoor werkte ik als junior vakredacteur bij Berghauser Pont. Ik ben nieuwsgierig, zorgvuldig en gewend om zelfstandig te werken binnen een redactie.
           </p>
+          <div class="about-intro-meta">
+            <div class="about-intro-meta-row">
+              <span class="about-intro-meta-label">Functie</span>
+              <span class="about-intro-meta-value">Freelance redacteur</span>
+            </div>
+            <div class="about-intro-meta-row">
+              <span class="about-intro-meta-label">Werkgever</span>
+              <span class="about-intro-meta-value">VARAgids</span>
+            </div>
+            <div class="about-intro-meta-row">
+              <span class="about-intro-meta-label">Opleiding</span>
+              <span class="about-intro-meta-value">MA European Studies, UvA</span>
+            </div>
+            <div class="about-intro-meta-row">
+              <span class="about-intro-meta-label">Gevestigd</span>
+              <span class="about-intro-meta-value">Amsterdam</span>
+            </div>
+            <div class="about-intro-meta-row">
+              <span class="about-intro-meta-label">Contact</span>
+              <span class="about-intro-meta-value">
+                <a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a>
+              </span>
+            </div>
+          </div>
+          <a href="/cv.pdf" target="_blank" class="btn-primary">Download CV</a>
+        </div>
 
-          <h2 class="section-title" style="margin-top: 2.5rem;">Contact</h2>
-          <p style="margin-top: 0.75rem;">
-            <a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a>
-          </p>
+      </div>
+    </div>
+
+    <!-- Loopbaan + Opleiding -->
+    <div class="about-cv-wrap">
+      <div class="about-cv-inner">
+        <div class="about-cv-columns">
+
+          <!-- Loopbaan -->
+          <div class="about-cv-col">
+            <div class="archief-krantbalk about-krantbalk">
+              <div class="archief-krantbalk-regel"></div>
+              <div class="archief-krantbalk-midden">
+                <h2 class="archief-krantbalk-titel about-krantbalk-titel">Loopbaan</h2>
+              </div>
+              <div class="archief-krantbalk-regel"></div>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">VARAgids</span>
+                <span class="cv-item-date">feb 2025 — heden</span>
+              </div>
+              <div class="cv-item-role">Freelance Redacteur</div>
+              <p class="cv-item-desc">Na een succesvolle stage doorgestroomd als freelance redacteur. Zelfstandig uitvoeren van schrijfopdrachten, interviews en onderzoekstaken voor de wekelijkse televisiegids.</p>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">VARAgids</span>
+                <span class="cv-item-date">nov 2024 — feb 2025</span>
+              </div>
+              <div class="cv-item-role">Stage</div>
+              <p class="cv-item-desc">Telefonische interviews met BN'ers en programmamakers, schrijven van wekelijkse programmatoelichtingen en artikelen, samenstellen van overzichten van opvallende televisiemomenten.</p>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Buurman &amp; Buurman</span>
+                <span class="cv-item-date">feb 2024 — heden</span>
+              </div>
+              <div class="cv-item-role">Pizzabakker / Mise en Place Chef</div>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Berghauser Pont</span>
+                <span class="cv-item-date">nov 2022 — jun 2023</span>
+              </div>
+              <div class="cv-item-role">Junior Vakredacteur</div>
+              <p class="cv-item-desc">Ontwikkelen en beheren van online leeractiviteiten en content voor themadossiers. Begeleiden van auteurs en docenten.</p>
+            </div>
+          </div>
+
+          <!-- Opleiding -->
+          <div class="about-cv-col">
+            <div class="archief-krantbalk about-krantbalk">
+              <div class="archief-krantbalk-regel"></div>
+              <div class="archief-krantbalk-midden">
+                <h2 class="archief-krantbalk-titel about-krantbalk-titel">Opleiding</h2>
+              </div>
+              <div class="archief-krantbalk-regel"></div>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Universiteit van Amsterdam</span>
+                <span class="cv-item-date">2023 — 2024</span>
+              </div>
+              <div class="cv-item-role">Master European Studies</div>
+              <p class="cv-item-desc">Identity and Integration</p>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Universiteit van Amsterdam</span>
+                <span class="cv-item-date">2019 — 2022</span>
+              </div>
+              <div class="cv-item-role">Bachelor European Studies</div>
+              <p class="cv-item-desc">Major European Economics</p>
+            </div>
+
+            <div class="cv-item">
+              <div class="cv-item-header">
+                <span class="cv-item-org">Mollerlyceum Bergen op Zoom</span>
+                <span class="cv-item-date">2013 — 2019</span>
+              </div>
+              <div class="cv-item-role">VWO Cultuur en Maatschappij</div>
+              <p class="cv-item-desc">Certificaat Europese Leerroute</p>
+            </div>
+          </div>
+
         </div>
       </div>
-    </section>
+    </div>
+
   </main>
 
   <script type="module" src="/main.js"></script>

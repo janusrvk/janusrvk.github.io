@@ -2,7 +2,6 @@
 // Injected on every page via import
 
 const sections = [
-  { id: 'interesses', label: 'Interesses' },
   { id: 'archief', label: 'Archief' },
   { id: 'over-mij', label: 'Over mij' },
 ];
@@ -35,7 +34,7 @@ export function initNav() {
   header.className = 'topbar';
   header.innerHTML = `
     <div class="topbar-inner">
-      <a href="/" class="topbar-brand">Janus van Koolwijk</a>
+      <a href="/" class="topbar-brand"><span class="topbar-brand-text">Janus van Koolwijk</span></a>
       <nav class="topbar-nav" id="topbar-nav">
         ${navLinks}
       </nav>
