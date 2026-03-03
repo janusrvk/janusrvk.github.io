@@ -32,19 +32,19 @@ function parseMonthTitle(text) {
   return null;
 }
 
-// ---- Spotify history cache ----
-let spotifyCache = null;
+// ---- Spotify albums cache (compact pre-processed summary) ----
+let spotifyAlbumsCache = null;
 
-async function getSpotifyHistory() {
-  if (spotifyCache !== null) return spotifyCache;
+async function getSpotifyAlbums() {
+  if (spotifyAlbumsCache !== null) return spotifyAlbumsCache;
   try {
-    const res = await fetch('/spotify-history.json');
-    if (!res.ok) { spotifyCache = []; return []; }
-    spotifyCache = await res.json();
-    return spotifyCache;
+    const res = await fetch('/spotify-albums.json');
+    if (!res.ok) { spotifyAlbumsCache = {}; return {}; }
+    spotifyAlbumsCache = await res.json();
+    return spotifyAlbumsCache;
   } catch {
-    spotifyCache = [];
-    return [];
+    spotifyAlbumsCache = {};
+    return {};
   }
 }
 
@@ -69,42 +69,11 @@ async function fetchAlbumArt(artist, album) {
   }
 }
 
-// ---- Album detectie uit Spotify history ----
-// Spotify extended history formaat:
-// { ts, master_metadata_track_name, master_metadata_album_artist_name, master_metadata_album_album_name, ms_played, ... }
-function detectAlbumsFromSpotify(history, monthStart, monthEnd) {
-  const albumMap = new Map();
-
-  for (const entry of history) {
-    const ts = new Date(entry.ts);
-    if (ts < monthStart || ts >= monthEnd) continue;
-    // Filter: minstens 30 seconden geluisterd
-    if ((entry.ms_played || 0) < 30000) continue;
-
-    const album = entry.master_metadata_album_album_name;
-    const artist = entry.master_metadata_album_artist_name;
-    const track = entry.master_metadata_track_name;
-    if (!album || !artist || !track) continue;
-
-    const key = `${artist}|||${album}`;
-    if (!albumMap.has(key)) {
-      albumMap.set(key, { album, artist, trackNames: new Set(), msPlayed: 0 });
-    }
-    const e = albumMap.get(key);
-    e.trackNames.add(track);
-    e.msPlayed += entry.ms_played || 0;
-  }
-
-  const MIN_UNIQUE_TRACKS = 5;
-  const MIN_MINUTES = 15;
-  const albums = [];
-  for (const e of albumMap.values()) {
-    if (e.trackNames.size >= MIN_UNIQUE_TRACKS && e.msPlayed >= MIN_MINUTES * 60 * 1000) {
-      albums.push({ album: e.album, artist: e.artist, image: '', msPlayed: e.msPlayed });
-    }
-  }
-  albums.sort((a, b) => b.msPlayed - a.msPlayed);
-  return albums.slice(0, 10);
+// ---- Album opzoeken uit pre-processed Spotify summary ----
+function monthKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
 }
 
 // ---- Album detectie uit Last.fm ----
@@ -170,16 +139,17 @@ async function renderAlbums(container, monthStart, monthEnd) {
       const tracks = await fetchLastfmScrobbles(fromTs, toTs);
       albums = detectAlbumsFromLastfm(tracks);
     } else {
-      // Spotify export
-      const history = await getSpotifyHistory();
-      if (history.length === 0) {
-        container.innerHTML = '<p class="interest-placeholder">Spotify-export nog niet beschikbaar. Plaats je <code>spotify-history.json</code> in de <code>public/</code> map.</p>';
+      // Spotify pre-processed summary
+      const allAlbums = await getSpotifyAlbums();
+      const key = monthKey(monthStart);
+      const raw = allAlbums[key] || [];
+      if (raw.length === 0) {
+        container.innerHTML = '<p class="interest-placeholder">Geen albums gevonden.</p>';
         return;
       }
-      albums = detectAlbumsFromSpotify(history, monthStart, monthEnd);
-      // Album art ophalen via Last.fm
-      albums = await Promise.all(albums.map(async (a) => ({
-        ...a,
+      albums = await Promise.all(raw.map(async (a) => ({
+        album: a.album,
+        artist: a.artist,
         image: await fetchAlbumArt(a.artist, a.album),
       })));
     }
