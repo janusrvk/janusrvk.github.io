@@ -1428,26 +1428,31 @@ img {
 }
 
 /* Detail uitklap-rij */
-.archief-detail-row td { padding: 0; border-top: none; }
-
-.archief-detail-inner {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s ease;
-}
-
-.archief-detail-row.open .archief-detail-inner { max-height: 3000px; }
-
-.archief-detail-content {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem 2rem;
-  padding: 1.25rem 0.75rem 1.5rem;
-  border-top: 1px solid var(--border);
+.archief-detail-td {
+  padding: 0;
+  border-top: none;
+  vertical-align: top;
   background: var(--bg-alt);
 }
 
-.archief-detail-content h4 {
+.archief-detail-td--month {
+  border-top: 1px solid var(--border);
+}
+
+.archief-detail-cell-inner {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+  padding: 0 0.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.archief-detail-row.open .archief-detail-cell-inner {
+  max-height: 2000px;
+  padding: 1rem 0.5rem 1.25rem;
+}
+
+.archief-detail-td h4 {
   font-family: var(--font-ui);
   font-size: 0.6rem;
   font-weight: 700;
@@ -1455,6 +1460,33 @@ img {
   letter-spacing: 0.1em;
   color: var(--accent);
   margin-bottom: 0.75rem;
+}
+
+.archief-detail-td .feed-art-music {
+  width: 36px;
+  height: 36px;
+}
+
+.archief-detail-td .feed-art {
+  width: 28px;
+  height: 42px;
+}
+
+.archief-detail-td .feed-art-book {
+  width: 28px;
+  height: 42px;
+}
+
+.archief-detail-td .feed-item {
+  gap: 0.5rem;
+}
+
+.archief-detail-td .feed-title {
+  font-size: 0.8rem;
+}
+
+.archief-detail-td .feed-meta {
+  font-size: 0.7rem;
 }
 
 .archief-hidden { display: none; }
@@ -1602,7 +1634,7 @@ img {
     align-self: start;
   }
 
-  .archief-detail-content { grid-template-columns: 1fr; }
+  /* detail-rij hidden op mobiel, modal wordt gebruikt */
 }
 
 /* ---- Bottom sheet modal (mobiel) ---- */

@@ -85,6 +85,61 @@ async function fetchAlbumArt(artist, album) {
   }
 }
 
+// ---- Instrumental filter via Last.fm tags ----
+const instrumentalTagCache = new Map();
+const artistTagCache = new Map();
+// Tags die op TRACK-niveau filteren (breed)
+const TRACK_INSTRUMENTAL_TAGS = [
+  'instrumental', 'ambient', 'classical', 'new age', 'new-age',
+  'nature sounds', 'no vocals', 'wordless', 'background music',
+  'lo-fi', 'lofi', 'lo fi', 'drone', 'post-classical',
+  'white noise', 'binaural', 'meditation', 'sleep music',
+];
+
+// Tags die op ARTIEST-niveau filteren (alleen heel specifiek instrumentaal)
+const ARTIST_INSTRUMENTAL_TAGS = [
+  'instrumental', 'ambient', 'classical', 'new age', 'new-age',
+  'nature sounds', 'drone', 'post-classical', 'white noise',
+];
+
+async function getArtistTags(artist) {
+  if (artistTagCache.has(artist)) return artistTagCache.get(artist);
+  try {
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=artist.getTopTags&artist=${encodeURIComponent(artist)}&api_key=${LASTFM_API_KEY}&format=json`
+    );
+    const data = await res.json();
+    // Alleen de top 5 tags meenemen om te brede matching te voorkomen
+    const tags = (data.toptags?.tag || []).slice(0, 5).map((t) => t.name.toLowerCase());
+    artistTagCache.set(artist, tags);
+    return tags;
+  } catch {
+    artistTagCache.set(artist, []);
+    return [];
+  }
+}
+
+async function isInstrumental(artist, track) {
+  const key = `${artist}|||${track}`;
+  if (instrumentalTagCache.has(key)) return instrumentalTagCache.get(key);
+  try {
+    const [trackRes, artistTags] = await Promise.all([
+      fetch(`https://ws.audioscrobbler.com/2.0/?method=track.getTopTags&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(track)}&api_key=${LASTFM_API_KEY}&format=json`),
+      getArtistTags(artist),
+    ]);
+    const trackData = await trackRes.json();
+    const trackTags = (trackData.toptags?.tag || []).map((t) => t.name.toLowerCase());
+    const trackMatch = trackTags.some((tag) => TRACK_INSTRUMENTAL_TAGS.some((it) => tag.includes(it)));
+    const artistMatch = artistTags.some((tag) => ARTIST_INSTRUMENTAL_TAGS.some((it) => tag.includes(it)));
+    const result = trackMatch || artistMatch;
+    instrumentalTagCache.set(key, result);
+    return result;
+  } catch {
+    instrumentalTagCache.set(key, false);
+    return false;
+  }
+}
+
 // ---- Album opzoeken uit pre-processed Spotify summary ----
 function monthKey(date) {
   const y = date.getFullYear();
@@ -214,7 +269,7 @@ async function renderTracks(container, monthStart, monthEnd) {
         if (seen.has(albumKey)) continue;
         seen.add(albumKey);
         tracks.push(t);
-        if (tracks.length === 10) break;
+        if (tracks.length === 100) break;
       }
     } else {
       // Spotify pre-processed
@@ -227,9 +282,24 @@ async function renderTracks(container, monthStart, monthEnd) {
       return;
     }
 
-    container.innerHTML = tracks.map((t, i) => `
+    // Filter instrumentale nummers, daarna eerste 10 bewaren
+    const instrumentalFlags = await Promise.all(tracks.map((t) => isInstrumental(t.artist, t.track || t.name)));
+    tracks = tracks.filter((_, i) => !instrumentalFlags[i]).slice(0, 10);
+
+    if (tracks.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen nummers gevonden.</p>';
+      return;
+    }
+
+    // Album art ophalen in parallel
+    const tracksWithArt = await Promise.all(tracks.map(async (t) => ({
+      ...t,
+      image: t.album ? await fetchAlbumArt(t.artist, t.album) : '',
+    })));
+
+    container.innerHTML = tracksWithArt.map((t, i) => `
       <div class="feed-item" style="cursor:default">
-        <span class="track-rank">${i + 1}</span>
+        ${t.image ? `<img src="${t.image}" alt="${t.track}" class="feed-art feed-art-music" />` : '<div class="feed-art feed-art-music feed-art-empty"></div>'}
         <div class="feed-info">
           <span class="feed-title">${t.track}</span>
           <span class="feed-meta">${t.artist}${t.album ? ` — ${t.album}` : ''}</span>
@@ -367,8 +437,6 @@ function closeDetail() {
   if (activeRow) {
     const detailRow = activeRow.nextElementSibling;
     if (detailRow?.classList.contains('archief-detail-row')) {
-      const inner = detailRow.querySelector('.archief-detail-inner');
-      if (inner) inner.style.maxHeight = '0';
       detailRow.classList.remove('open');
     }
     activeRow.classList.remove('active');
@@ -404,7 +472,7 @@ function openMobileModal(monthLabel, parsed) {
       </div>
       <div class="archief-modal-content">
         <div class="archief-detail-section">
-          <h4>Top 10 nummers</h4>
+          <h4>Meest geluisterde nummers</h4>
           <div class="detail-tracks"><p class="interest-placeholder">Laden&hellip;</p></div>
         </div>
         <div class="archief-detail-section">
@@ -467,43 +535,41 @@ function initArchiefCards() {
         detailRow = document.createElement('tr');
         detailRow.className = 'archief-detail-row';
         detailRow.innerHTML = `
-          <td colspan="5">
-            <div class="archief-detail-inner">
-              <div class="archief-detail-content">
-                <div class="archief-detail-section">
-                  <h4>Top 10 nummers</h4>
-                  <div class="detail-tracks"><p class="interest-placeholder">Laden...</p></div>
-                </div>
-                <div class="archief-detail-section">
-                  <h4>Meest geluisterde albums</h4>
-                  <div class="detail-albums"><p class="interest-placeholder">Laden...</p></div>
-                </div>
-                <div class="archief-detail-section">
-                  <h4>Films gekeken</h4>
-                  <div class="detail-films"><p class="interest-placeholder">Laden...</p></div>
-                </div>
-                <div class="archief-detail-section">
-                  <h4>Boeken gelezen</h4>
-                  <div class="detail-books"><p class="interest-placeholder">Laden...</p></div>
-                </div>
-              </div>
+          <td class="archief-detail-td archief-detail-td--month"></td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Meest geluisterde nummers</h4>
+              <div class="detail-tracks"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Meest geluisterde albums</h4>
+              <div class="detail-albums"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Films gekeken</h4>
+              <div class="detail-films"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Boeken gelezen</h4>
+              <div class="detail-books"><p class="interest-placeholder">Laden...</p></div>
             </div>
           </td>
         `;
         row.after(detailRow);
-        const inner = detailRow.querySelector('.archief-detail-inner');
         Promise.all([
           renderTracks(detailRow.querySelector('.detail-tracks'), monthStart, monthEnd),
           renderAlbums(detailRow.querySelector('.detail-albums'), monthStart, monthEnd),
           renderFilms(detailRow.querySelector('.detail-films'), monthStart, monthEnd),
           renderBooks(detailRow.querySelector('.detail-books'), monthStart, monthEnd),
-        ]).then(() => {
-          if (inner) inner.style.maxHeight = inner.scrollHeight + 'px';
-        });
+        ]);
       }
 
-      const inner = detailRow.querySelector('.archief-detail-inner');
-      if (inner) inner.style.maxHeight = '';
       requestAnimationFrame(() => detailRow.classList.add('open'));
       row.classList.add('active');
       activeRow = row;
