@@ -48,6 +48,22 @@ async function getSpotifyAlbums() {
   }
 }
 
+// ---- Spotify tracks cache ----
+let spotifyTracksCache = null;
+
+async function getSpotifyTracks() {
+  if (spotifyTracksCache !== null) return spotifyTracksCache;
+  try {
+    const res = await fetch('/spotify-tracks.json');
+    if (!res.ok) { spotifyTracksCache = {}; return {}; }
+    spotifyTracksCache = await res.json();
+    return spotifyTracksCache;
+  } catch {
+    spotifyTracksCache = {};
+    return {};
+  }
+}
+
 // ---- Album art via Last.fm ----
 const albumArtCache = new Map();
 
@@ -169,6 +185,59 @@ async function renderAlbums(container, monthStart, monthEnd) {
     `).join('');
   } catch {
     container.innerHTML = '<p class="interest-placeholder">Kon albums niet laden.</p>';
+  }
+}
+
+// ---- Nummers ----
+async function renderTracks(container, monthStart, monthEnd) {
+  try {
+    let tracks;
+
+    if (monthStart >= LASTFM_CUTOFF) {
+      // Last.fm
+      const fromTs = Math.floor(monthStart.getTime() / 1000);
+      const toTs = Math.floor(monthEnd.getTime() / 1000);
+      const scrobbles = await fetchLastfmScrobbles(fromTs, toTs);
+
+      // Tel per track, één per album
+      const trackMap = new Map();
+      for (const t of scrobbles) {
+        const key = (t.artist || '') + '|||' + (t.name || '');
+        if (!trackMap.has(key)) trackMap.set(key, { track: t.name, artist: t.artist, album: t.album, count: 0 });
+        trackMap.get(key).count++;
+      }
+      const sorted = [...trackMap.values()].sort((a, b) => b.count - a.count);
+      const seen = new Set();
+      tracks = [];
+      for (const t of sorted) {
+        const albumKey = t.artist + '|||' + (t.album || t.track);
+        if (seen.has(albumKey)) continue;
+        seen.add(albumKey);
+        tracks.push(t);
+        if (tracks.length === 10) break;
+      }
+    } else {
+      // Spotify pre-processed
+      const all = await getSpotifyTracks();
+      tracks = all[monthKey(monthStart)] || [];
+    }
+
+    if (tracks.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen nummers gevonden.</p>';
+      return;
+    }
+
+    container.innerHTML = tracks.map((t, i) => `
+      <div class="feed-item" style="cursor:default">
+        <span class="track-rank">${i + 1}</span>
+        <div class="feed-info">
+          <span class="feed-title">${t.track}</span>
+          <span class="feed-meta">${t.artist}${t.album ? ` — ${t.album}` : ''}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch {
+    container.innerHTML = '<p class="interest-placeholder">Kon nummers niet laden.</p>';
   }
 }
 
@@ -335,6 +404,10 @@ function openMobileModal(monthLabel, parsed) {
       </div>
       <div class="archief-modal-content">
         <div class="archief-detail-section">
+          <h4>Top 10 nummers</h4>
+          <div class="detail-tracks"><p class="interest-placeholder">Laden&hellip;</p></div>
+        </div>
+        <div class="archief-detail-section">
           <h4>Meest geluisterde albums</h4>
           <div class="detail-albums"><p class="interest-placeholder">Laden&hellip;</p></div>
         </div>
@@ -357,6 +430,7 @@ function openMobileModal(monthLabel, parsed) {
   overlay.querySelector('.archief-modal-close').addEventListener('click', closeMobileModal);
 
   Promise.all([
+    renderTracks(overlay.querySelector('.detail-tracks'), monthStart, monthEnd),
     renderAlbums(overlay.querySelector('.detail-albums'), monthStart, monthEnd),
     renderFilms(overlay.querySelector('.detail-films'), monthStart, monthEnd),
     renderBooks(overlay.querySelector('.detail-books'), monthStart, monthEnd),
@@ -397,6 +471,10 @@ function initArchiefCards() {
             <div class="archief-detail-inner">
               <div class="archief-detail-content">
                 <div class="archief-detail-section">
+                  <h4>Top 10 nummers</h4>
+                  <div class="detail-tracks"><p class="interest-placeholder">Laden...</p></div>
+                </div>
+                <div class="archief-detail-section">
                   <h4>Meest geluisterde albums</h4>
                   <div class="detail-albums"><p class="interest-placeholder">Laden...</p></div>
                 </div>
@@ -415,6 +493,7 @@ function initArchiefCards() {
         row.after(detailRow);
         const inner = detailRow.querySelector('.archief-detail-inner');
         Promise.all([
+          renderTracks(detailRow.querySelector('.detail-tracks'), monthStart, monthEnd),
           renderAlbums(detailRow.querySelector('.detail-albums'), monthStart, monthEnd),
           renderFilms(detailRow.querySelector('.detail-films'), monthStart, monthEnd),
           renderBooks(detailRow.querySelector('.detail-books'), monthStart, monthEnd),
