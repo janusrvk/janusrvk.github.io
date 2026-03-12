@@ -1,7 +1,7 @@
 // ---- Interesses: Last.fm, Letterboxd, Goodreads ----
 
 // CORS proxy voor RSS feeds (niet nodig voor Last.fm want die API staat CORS toe)
-const CORS_PROXY = 'https://corsproxy.io/?url=';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 
 // ---- Last.fm integration ----
 const LASTFM_USER = 'janusrvk';
