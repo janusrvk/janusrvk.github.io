@@ -123,18 +123,19 @@ fetchLetterboxd();
 
 // ---- Goodreads integration (RSS) ----
 const GOODREADS_USER_ID = '161530834';
+const GOODREADS_PROXY = 'https://goodreads-proxy.janusrvk.workers.dev';
 
 async function fetchGoodreads() {
   const container = document.getElementById('strip-book');
   try {
-    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=currently-reading`)}`);
+    const res = await fetch(`${GOODREADS_PROXY}?shelf=currently-reading`);
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
     const items = Array.from(xml.querySelectorAll('item')).slice(0, 1);
 
     if (items.length === 0) {
-      const res2 = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
+      const res2 = await fetch(`${GOODREADS_PROXY}?shelf=read`);
       const text2 = await res2.text();
       const xml2 = parser.parseFromString(text2, 'text/xml');
       const items2 = Array.from(xml2.querySelectorAll('item')).slice(0, 1);
@@ -226,7 +227,7 @@ async function fetchFilmCount() {
 const BOOK_COUNT_OFFSET = -1;
 
 async function fetchBookCount() {
-  const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
+  const res = await fetch(`${GOODREADS_PROXY}?shelf=read`);
   const text = await res.text();
   const doc = new DOMParser().parseFromString(text, 'text/xml');
   const currentYear = new Date().getFullYear();

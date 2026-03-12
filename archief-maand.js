@@ -384,10 +384,12 @@ async function renderFilms(container, monthStart, monthEnd) {
   }
 }
 
+const GOODREADS_PROXY = 'https://goodreads-proxy.janusrvk.workers.dev';
+
 // ---- Boeken via Goodreads ----
 async function renderBooks(container, monthStart, monthEnd) {
   try {
-    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=read`)}`);
+    const res = await fetch(`${GOODREADS_PROXY}?shelf=read`);
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
