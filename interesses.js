@@ -149,7 +149,7 @@ async function fetchGoodreads() {
 
     renderBooks(container, items, parser, 'Aan het lezen');
   } catch (err) {
-    container.innerHTML = '<p class="interest-placeholder">Kon Goodreads niet laden.</p>';
+    container.innerHTML = '<p class="interest-placeholder"><a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener">Bekijk op Goodreads →</a></p>';
   }
 }
 

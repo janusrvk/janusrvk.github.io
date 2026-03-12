@@ -3,7 +3,7 @@
 // Films: Letterboxd RSS
 // Boeken: Goodreads RSS
 
-const CORS_PROXY = 'https://corsproxy.io/?url=';
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
 const LASTFM_USER = 'janusrvk';
 const LASTFM_API_KEY = '74f09a6e65ddc20949e95f2a014cd3ee';
 const LETTERBOXD_USER = 'janusrvk';
@@ -426,7 +426,7 @@ async function renderBooks(container, monthStart, monthEnd) {
       `;
     }).join('');
   } catch {
-    container.innerHTML = '<p class="interest-placeholder">Kon boeken niet laden.</p>';
+    container.innerHTML = '<p class="interest-placeholder"><a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener">Bekijk op Goodreads →</a></p>';
   }
 }
 
