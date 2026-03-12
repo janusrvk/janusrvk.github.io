@@ -70,7 +70,7 @@ async function fetchDirector(tmdbId) {
 async function fetchLetterboxd() {
   const container = document.getElementById('strip-film');
   try {
-    const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://letterboxd.com/${LETTERBOXD_USER}/rss/`)}`);
+    const res = await fetch('https://goodreads-proxy.janusrvk.workers.dev/letterboxd');
     const text = await res.text();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
@@ -209,7 +209,7 @@ async function fetchScrobbleCount() {
 
 
 async function fetchFilmCount() {
-  const res = await fetch(`${CORS_PROXY}${encodeURIComponent(`https://letterboxd.com/${LETTERBOXD_USER}/rss/`)}`);
+  const res = await fetch('https://goodreads-proxy.janusrvk.workers.dev/letterboxd');
   const text = await res.text();
   const doc = new DOMParser().parseFromString(text, 'text/xml');
   const currentYear = new Date().getFullYear();
