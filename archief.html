@@ -414,6 +414,7 @@
   function checkPin() {
     if (document.getElementById('pinInput').value === '7666') {
       document.getElementById('lockScreen').style.display = 'none';
+      fetchLiveData();
     } else {
       document.getElementById('pinError').textContent = 'Onjuist wachtwoord';
       document.getElementById('pinInput').value = '';
@@ -641,6 +642,319 @@ function openMostRecentYear() {
       toggleYear(el);
       break;
     }
+  }
+}
+
+// ── Live Last.fm fetching ──
+const LASTFM_USER = 'janusrvk';
+const LASTFM_API_KEY = '974614701f13a7e6fb111bd6da0fd124';
+const LASTFM_BASE = 'https://ws.audioscrobbler.com/2.0/';
+
+function monthToRange(yearStr, monthStr) {
+  const y = parseInt(yearStr, 10);
+  const m = parseInt(monthStr, 10);
+  const from = Math.floor(Date.UTC(y, m - 1, 1) / 1000);
+  // Last moment of month
+  const nextMonth = new Date(Date.UTC(y, m, 1));
+  const to = Math.floor((nextMonth.getTime() - 1) / 1000);
+  return { from, to };
+}
+
+async function fetchLastfmPage(from, to, page) {
+  const url = `${LASTFM_BASE}?method=user.getRecentTracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&from=${from}&to=${to}&limit=200&page=${page}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  return resp.json();
+}
+
+async function fetchMonthData(yearStr, monthStr) {
+  const { from, to } = monthToRange(yearStr, monthStr);
+  let page = 1;
+  let totalPages = 1;
+  const trackCounts = {};
+  const albumCounts = {};
+  let totalScrobbles = 0;
+
+  do {
+    const data = await fetchLastfmPage(from, to, page);
+    const rt = data.recenttracks;
+    if (!rt || !rt.track) break;
+    totalPages = parseInt(rt['@attr'].totalPages, 10) || 1;
+    const total = parseInt(rt['@attr'].total, 10) || 0;
+    if (page === 1) totalScrobbles = total;
+
+    const tracks = Array.isArray(rt.track) ? rt.track : [rt.track];
+    for (const t of tracks) {
+      // Skip nowplaying
+      if (t['@attr'] && t['@attr'].nowplaying === 'true') continue;
+      const trackName = t.name || '';
+      const artistName = (t.artist && t.artist['#text']) || '';
+      const albumName = (t.album && t.album['#text']) || '';
+      const trackKey = trackName + '\x00' + artistName;
+      if (!trackCounts[trackKey]) {
+        trackCounts[trackKey] = { track: trackName, artist: artistName, album: albumName, count: 0 };
+      }
+      trackCounts[trackKey].count++;
+      const albumKey = albumName + '\x00' + artistName;
+      if (albumName) {
+        if (!albumCounts[albumKey]) {
+          albumCounts[albumKey] = { album: albumName, artist: artistName, trackCount: 0 };
+        }
+        albumCounts[albumKey].trackCount++;
+      }
+    }
+    page++;
+  } while (page <= totalPages);
+
+  // Top 10 tracks
+  const topTracks = Object.values(trackCounts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10)
+    .map(({ track, artist, album }) => ({ track, artist, album }));
+
+  // Top 10 albums
+  const topAlbums = Object.values(albumCounts)
+    .sort((a, b) => b.trackCount - a.trackCount)
+    .slice(0, 10)
+    .map(({ album, artist, trackCount }) => ({ album, artist, trackCount }));
+
+  return { topTracks, topAlbums, totalScrobbles };
+}
+
+function rerenderYearBlock(yearStr) {
+  const container = document.getElementById('yearsSection');
+  const existing = document.getElementById('year-' + yearStr);
+  const wasOpen = existing && existing.classList.contains('open');
+
+  // Remove old block
+  if (existing) existing.remove();
+
+  const byYear = STATS.byYear;
+  const allMonths = Object.keys(MONTH_COUNTS).sort().reverse();
+  const months = allMonths.filter(m => m.startsWith(yearStr + '-'));
+  if (months.length === 0) return;
+
+  const plays = byYear[yearStr] || 0;
+  const block = document.createElement('div');
+  block.className = 'year-block';
+  block.id = 'year-' + yearStr;
+
+  let monthsHTML = '';
+  months.forEach(monthKey => {
+    const [y, mIdx] = monthKey.split('-');
+    const monthName = DUTCH_MONTHS[parseInt(mIdx, 10) - 1];
+    const count = MONTH_COUNTS[monthKey] || 0;
+    const trackData = TRACKS[monthKey] || [];
+    const albumData = ALBUMS[monthKey] || [];
+
+    let tracksHTML = '';
+    if (trackData.length > 0) {
+      const items = trackData.map((t, i) => `
+        <li class="track-item">
+          <span class="track-num">${i + 1}</span>
+          <span class="track-info">
+            <span class="track-name">${escHtml(t.track)}</span>
+            <span class="track-artist">${escHtml(t.artist)}</span>
+          </span>
+        </li>`).join('');
+      tracksHTML = `<div>
+        <div class="list-section-title">Top tracks</div>
+        <ul class="track-list">${items}</ul>
+      </div>`;
+    }
+
+    let albumsHTML = '';
+    if (albumData.length > 0) {
+      const items = albumData.map((a, i) => {
+        let meta = '';
+        if (a.msPlayed) {
+          meta = `<span class="album-meta">${msToMinutes(a.msPlayed)} min</span>`;
+        } else if (a.trackCount) {
+          meta = `<span class="album-meta">${a.trackCount} nummers</span>`;
+        }
+        return `<li class="album-item">
+          <span class="album-num">${i + 1}</span>
+          <span class="album-info">
+            <span class="album-name">${escHtml(a.album)}</span>
+            <span class="album-artist">${escHtml(a.artist)}</span>
+            ${meta}
+          </span>
+        </li>`;
+      }).join('');
+      albumsHTML = `<div>
+        <div class="list-section-title">Top albums</div>
+        <ul class="album-list">${items}</ul>
+      </div>`;
+    }
+
+    monthsHTML += `
+      <div class="month-block" id="month-${monthKey}">
+        <div class="month-header" onclick="toggleMonth(this.closest('.month-block'))">
+          <div class="month-header-left">
+            <span class="month-name">${monthName}</span>
+            <span class="month-count">${count} nummers</span>
+          </div>
+          <svg class="month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+        <div class="month-body">
+          <div class="month-body-inner">
+            ${tracksHTML}
+            ${albumsHTML}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  block.innerHTML = `
+    <div class="year-header" onclick="toggleYear(this.closest('.year-block'))">
+      <div class="year-header-left">
+        <span class="year-title">${yearStr}</span>
+        <span class="year-plays">${formatPlays(plays)} afspeelbeurten</span>
+      </div>
+      <svg class="year-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+    <div class="year-body">
+      <div class="year-body-inner">
+        ${monthsHTML}
+      </div>
+    </div>`;
+
+  // Insert in correct position (sorted descending by year)
+  const allYearBlocks = Array.from(container.querySelectorAll('.year-block'));
+  let inserted = false;
+  for (const yb of allYearBlocks) {
+    const ybYear = yb.id.replace('year-', '');
+    if (yearStr > ybYear) {
+      container.insertBefore(block, yb);
+      inserted = true;
+      break;
+    }
+  }
+  if (!inserted) container.appendChild(block);
+
+  if (wasOpen) toggleYear(block);
+}
+
+function rebuildBarChart() {
+  const byYear = STATS.byYear;
+  const years = Object.keys(byYear).sort();
+  const max = Math.max(...Object.values(byYear));
+  const container = document.getElementById('barChart');
+  container.innerHTML = '';
+  years.forEach(year => {
+    const plays = byYear[year];
+    const pct = (plays / max) * 100;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.setAttribute('data-year', year);
+    row.innerHTML = `
+      <span class="bar-year-label">${year}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct.toFixed(2)}%"></div>
+      </div>
+      <span class="bar-count">${formatPlays(plays)}</span>
+    `;
+    row.addEventListener('click', () => scrollToYear(year));
+    container.appendChild(row);
+  });
+}
+
+async function fetchLiveData() {
+  // Snapshot the original byYear totals so we can correctly compute deltas
+  const originalByYear = Object.assign({}, STATS.byYear);
+
+  const now = new Date();
+  const currentYear = now.getUTCFullYear();
+  const currentMonth = now.getUTCMonth() + 1; // 1-based
+  const currentKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+
+  // Months already in static data
+  const staticMonths = new Set(Object.keys(MONTH_COUNTS));
+
+  // Build list of months to fetch:
+  // - Any month after the last static month up to currentKey (new months)
+  // - Always re-fetch currentKey for freshness even if already in static data
+  const sortedStatic = Object.keys(MONTH_COUNTS).sort();
+  const lastStaticKey = sortedStatic[sortedStatic.length - 1];
+
+  const monthsToFetch = [];
+  let iter = lastStaticKey;
+  while (true) {
+    const [iy, im] = iter.split('-').map(Number);
+    let ny = iy, nm = im + 1;
+    if (nm > 12) { ny++; nm = 1; }
+    iter = `${ny}-${String(nm).padStart(2, '0')}`;
+    if (iter > currentKey) break;
+    monthsToFetch.push(iter);
+  }
+  // Always include currentKey (re-fetch for fresh data)
+  if (!monthsToFetch.includes(currentKey)) {
+    monthsToFetch.push(currentKey);
+  }
+
+  if (monthsToFetch.length === 0) return;
+
+  // Show loading indicator
+  const loadingEl = document.createElement('div');
+  loadingEl.id = 'liveLoadingIndicator';
+  loadingEl.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid #2c2c2c;border-radius:8px;padding:10px 16px;color:#1DB954;font-size:13px;font-family:Inter,sans-serif;z-index:8888;';
+  loadingEl.textContent = 'Nieuwe maanden ophalen...';
+  document.body.appendChild(loadingEl);
+
+  try {
+    // liveMonthTotals: actual scrobble count per fetched month
+    const liveMonthTotals = {};
+    const affectedYears = new Set();
+
+    for (const monthKey of monthsToFetch) {
+      const [yearStr, monthStr] = monthKey.split('-');
+      try {
+        const { topTracks, topAlbums, totalScrobbles } = await fetchMonthData(yearStr, monthStr);
+
+        TRACKS[monthKey] = topTracks;
+        ALBUMS[monthKey] = topAlbums;
+        // MONTH_COUNTS stores the display count (total scrobbles for live months)
+        MONTH_COUNTS[monthKey] = totalScrobbles;
+        liveMonthTotals[monthKey] = totalScrobbles;
+
+        affectedYears.add(yearStr);
+      } catch (err) {
+        console.warn('Last.fm fetch failed for', monthKey, err);
+      }
+    }
+
+    // Update STATS.byYear for affected years.
+    // Strategy: for each affected year, start from the original byYear total,
+    // then for each live-fetched month in that year:
+    //   - if it was a NEW month (not in original static data): add its scrobble total
+    //   - if it was already in static data (re-fetched for freshness, e.g. current month):
+    //     leave the year total unchanged (the original already accounts for it)
+    for (const yearStr of affectedYears) {
+      let delta = 0;
+      for (const [monthKey, scrobbles] of Object.entries(liveMonthTotals)) {
+        if (!monthKey.startsWith(yearStr + '-')) continue;
+        if (!staticMonths.has(monthKey)) {
+          // Genuinely new month — add its scrobbles to the year total
+          delta += scrobbles;
+        }
+        // If it was in staticMonths, the original byYear already includes its contribution
+      }
+      STATS.byYear[yearStr] = (originalByYear[yearStr] || 0) + delta;
+    }
+
+    // Re-render bar chart and affected year blocks
+    rebuildBarChart();
+    for (const yearStr of affectedYears) {
+      rerenderYearBlock(yearStr);
+    }
+  } catch (err) {
+    console.warn('fetchLiveData error:', err);
+  } finally {
+    loadingEl.remove();
   }
 }
 
