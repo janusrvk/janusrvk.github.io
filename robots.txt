@@ -3,4 +3,4 @@ Allow: /
 
 Disallow: /sollicitatie-vpro.html
 
-Sitemap: https://janusrvk.github.io/sitemap.xml
+Sitemap: https://janusrvk.com/sitemap.xml
