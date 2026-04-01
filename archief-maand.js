@@ -196,7 +196,7 @@ function detectAlbumsFromLastfm(tracks) {
     }
   }
   albums.sort((a, b) => b.playCount - a.playCount);
-  return albums;
+  return albums.slice(0, 10);
 }
 
 // ---- Render albums ----
