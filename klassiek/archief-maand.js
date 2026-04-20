@@ -1,0 +1,591 @@
+// ---- Archief maanddetail: klikbaar paneel voor elke maand ----
+// Albums: Spotify JSON export voor maanden vóór maart 2026, Last.fm vanaf maart 2026
+// Films: Letterboxd RSS
+// Boeken: Goodreads RSS
+
+const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+const LASTFM_USER = 'janusrvk';
+const LASTFM_API_KEY = '74f09a6e65ddc20949e95f2a014cd3ee';
+const LETTERBOXD_USER = 'janusrvk';
+const GOODREADS_USER_ID = '161530834';
+const TMDB_KEY = 'b1d6bd7b009c1dcc3e3561c6c0ef383a';
+
+// Grens: vanaf maart 2026 gebruiken we Last.fm, daarvoor Spotify export
+const LASTFM_CUTOFF = new Date(2026, 2, 1); // 1 maart 2026
+
+// ---- Maandnaam parsing ----
+const MAANDEN = {
+  'januari': 0, 'februari': 1, 'maart': 2, 'april': 3, 'mei': 4, 'juni': 5,
+  'juli': 6, 'augustus': 7, 'september': 8, 'oktober': 9, 'november': 10, 'december': 11
+};
+
+function parseMonthTitle(text) {
+  const clean = text.trim().toLowerCase();
+  for (const [naam, idx] of Object.entries(MAANDEN)) {
+    if (clean.startsWith(naam)) {
+      const yearMatch = clean.match(/\d{4}/);
+      if (yearMatch) {
+        return { month: idx, year: parseInt(yearMatch[0], 10) };
+      }
+    }
+  }
+  return null;
+}
+
+// ---- Spotify albums cache (compact pre-processed summary) ----
+let spotifyAlbumsCache = null;
+
+async function getSpotifyAlbums() {
+  if (spotifyAlbumsCache !== null) return spotifyAlbumsCache;
+  try {
+    const res = await fetch('/spotify-albums.json');
+    if (!res.ok) { spotifyAlbumsCache = {}; return {}; }
+    spotifyAlbumsCache = await res.json();
+    return spotifyAlbumsCache;
+  } catch {
+    spotifyAlbumsCache = {};
+    return {};
+  }
+}
+
+// ---- Spotify tracks cache ----
+let spotifyTracksCache = null;
+
+async function getSpotifyTracks() {
+  if (spotifyTracksCache !== null) return spotifyTracksCache;
+  try {
+    const res = await fetch('/spotify-tracks.json');
+    if (!res.ok) { spotifyTracksCache = {}; return {}; }
+    spotifyTracksCache = await res.json();
+    return spotifyTracksCache;
+  } catch {
+    spotifyTracksCache = {};
+    return {};
+  }
+}
+
+// ---- Album art via Last.fm ----
+const albumArtCache = new Map();
+
+async function fetchAlbumArt(artist, album) {
+  const key = `${artist}|||${album}`;
+  if (albumArtCache.has(key)) return albumArtCache.get(key);
+  try {
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=album.getinfo&artist=${encodeURIComponent(artist)}&album=${encodeURIComponent(album)}&api_key=${LASTFM_API_KEY}&format=json`
+    );
+    const data = await res.json();
+    const image = data.album?.image?.find((img) => img.size === 'extralarge')?.['#text']
+      || data.album?.image?.find((img) => img.size === 'large')?.['#text'] || '';
+    albumArtCache.set(key, image);
+    return image;
+  } catch {
+    albumArtCache.set(key, '');
+    return '';
+  }
+}
+
+// ---- Instrumental filter via Last.fm tags ----
+const instrumentalTagCache = new Map();
+const artistTagCache = new Map();
+// Tags die op TRACK-niveau filteren (breed)
+const TRACK_INSTRUMENTAL_TAGS = [
+  'instrumental', 'ambient', 'classical', 'new age', 'new-age',
+  'nature sounds', 'no vocals', 'wordless', 'background music',
+  'lo-fi', 'lofi', 'lo fi', 'drone', 'post-classical',
+  'white noise', 'binaural', 'meditation', 'sleep music',
+];
+
+// Tags die op ARTIEST-niveau filteren (alleen heel specifiek instrumentaal)
+const ARTIST_INSTRUMENTAL_TAGS = [
+  'instrumental', 'ambient', 'classical', 'new age', 'new-age',
+  'nature sounds', 'drone', 'post-classical', 'white noise',
+];
+
+async function getArtistTags(artist) {
+  if (artistTagCache.has(artist)) return artistTagCache.get(artist);
+  try {
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=artist.getTopTags&artist=${encodeURIComponent(artist)}&api_key=${LASTFM_API_KEY}&format=json`
+    );
+    const data = await res.json();
+    // Alleen de top 5 tags meenemen om te brede matching te voorkomen
+    const tags = (data.toptags?.tag || []).slice(0, 5).map((t) => t.name.toLowerCase());
+    artistTagCache.set(artist, tags);
+    return tags;
+  } catch {
+    artistTagCache.set(artist, []);
+    return [];
+  }
+}
+
+async function isInstrumental(artist, track) {
+  const key = `${artist}|||${track}`;
+  if (instrumentalTagCache.has(key)) return instrumentalTagCache.get(key);
+  try {
+    const [trackRes, artistTags] = await Promise.all([
+      fetch(`https://ws.audioscrobbler.com/2.0/?method=track.getTopTags&artist=${encodeURIComponent(artist)}&track=${encodeURIComponent(track)}&api_key=${LASTFM_API_KEY}&format=json`),
+      getArtistTags(artist),
+    ]);
+    const trackData = await trackRes.json();
+    const trackTags = (trackData.toptags?.tag || []).map((t) => t.name.toLowerCase());
+    const trackMatch = trackTags.some((tag) => TRACK_INSTRUMENTAL_TAGS.some((it) => tag.includes(it)));
+    const artistMatch = artistTags.some((tag) => ARTIST_INSTRUMENTAL_TAGS.some((it) => tag.includes(it)));
+    const result = trackMatch || artistMatch;
+    instrumentalTagCache.set(key, result);
+    return result;
+  } catch {
+    instrumentalTagCache.set(key, false);
+    return false;
+  }
+}
+
+// ---- Album opzoeken uit pre-processed Spotify summary ----
+function monthKey(date) {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  return `${y}-${m}`;
+}
+
+// ---- Album detectie uit Last.fm ----
+async function fetchLastfmScrobbles(fromTs, toTs) {
+  const tracks = [];
+  let page = 1;
+  let totalPages = 1;
+
+  while (page <= totalPages) {
+    const res = await fetch(
+      `https://ws.audioscrobbler.com/2.0/?method=user.getrecenttracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&from=${fromTs}&to=${toTs}&limit=200&page=${page}`
+    );
+    const data = await res.json();
+    totalPages = parseInt(data.recenttracks?.['@attr']?.totalPages || '1', 10);
+
+    for (const t of (data.recenttracks?.track || [])) {
+      if (t['@attr']?.nowplaying === 'true') continue;
+      tracks.push({
+        name: t.name,
+        artist: t.artist?.['#text'] || t.artist,
+        album: t.album?.['#text'] || '',
+        image: t.image?.find((img) => img.size === 'extralarge')?.['#text']
+          || t.image?.find((img) => img.size === 'large')?.['#text'] || '',
+      });
+    }
+    page++;
+  }
+  return tracks;
+}
+
+function detectAlbumsFromLastfm(tracks) {
+  const albumMap = new Map();
+  for (const t of tracks) {
+    if (!t.album) continue;
+    const key = `${t.artist}|||${t.album}`;
+    if (!albumMap.has(key)) {
+      albumMap.set(key, { album: t.album, artist: t.artist, image: t.image, trackNames: new Set(), playCount: 0 });
+    }
+    const e = albumMap.get(key);
+    e.trackNames.add(t.name);
+    e.playCount++;
+    if (!e.image && t.image) e.image = t.image;
+  }
+
+  const albums = [];
+  for (const e of albumMap.values()) {
+    if (e.trackNames.size >= 4) {
+      albums.push({ album: e.album, artist: e.artist, image: e.image, playCount: e.playCount });
+    }
+  }
+  albums.sort((a, b) => b.playCount - a.playCount);
+  return albums.slice(0, 10);
+}
+
+// ---- Render albums ----
+async function renderAlbums(container, monthStart, monthEnd) {
+  try {
+    let albums;
+    if (monthStart >= LASTFM_CUTOFF) {
+      // Last.fm
+      const fromTs = Math.floor(monthStart.getTime() / 1000);
+      const toTs = Math.floor(monthEnd.getTime() / 1000);
+      const tracks = await fetchLastfmScrobbles(fromTs, toTs);
+      albums = detectAlbumsFromLastfm(tracks);
+    } else {
+      // Spotify pre-processed summary
+      const allAlbums = await getSpotifyAlbums();
+      const key = monthKey(monthStart);
+      const raw = allAlbums[key] || [];
+      if (raw.length === 0) {
+        container.innerHTML = '<p class="interest-placeholder">Geen albums gevonden.</p>';
+        return;
+      }
+      albums = await Promise.all(raw.map(async (a) => ({
+        album: a.album,
+        artist: a.artist,
+        image: await fetchAlbumArt(a.artist, a.album),
+      })));
+    }
+
+    if (albums.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen albums gevonden.</p>';
+      return;
+    }
+    container.innerHTML = albums.map((a) => `
+      <div class="feed-item" style="cursor: default;">
+        ${a.image ? `<img src="${a.image}" alt="${a.album}" class="feed-art feed-art-music" />` : '<div class="feed-art feed-art-music feed-art-empty"></div>'}
+        <div class="feed-info">
+          <span class="feed-title">${a.album}</span>
+          <span class="feed-meta">${a.artist}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch {
+    container.innerHTML = '<p class="interest-placeholder">Kon albums niet laden.</p>';
+  }
+}
+
+// ---- Nummers ----
+async function renderTracks(container, monthStart, monthEnd) {
+  try {
+    let tracks;
+
+    if (monthStart >= LASTFM_CUTOFF) {
+      // Last.fm
+      const fromTs = Math.floor(monthStart.getTime() / 1000);
+      const toTs = Math.floor(monthEnd.getTime() / 1000);
+      const scrobbles = await fetchLastfmScrobbles(fromTs, toTs);
+
+      // Tel per track, één per album
+      const trackMap = new Map();
+      for (const t of scrobbles) {
+        const key = (t.artist || '') + '|||' + (t.name || '');
+        if (!trackMap.has(key)) trackMap.set(key, { track: t.name, artist: t.artist, album: t.album, count: 0 });
+        trackMap.get(key).count++;
+      }
+      const sorted = [...trackMap.values()].sort((a, b) => b.count - a.count);
+      const seen = new Set();
+      tracks = [];
+      for (const t of sorted) {
+        const albumKey = t.artist + '|||' + (t.album || t.track);
+        if (seen.has(albumKey)) continue;
+        seen.add(albumKey);
+        tracks.push(t);
+        if (tracks.length === 100) break;
+      }
+    } else {
+      // Spotify pre-processed
+      const all = await getSpotifyTracks();
+      tracks = all[monthKey(monthStart)] || [];
+    }
+
+    if (tracks.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen nummers gevonden.</p>';
+      return;
+    }
+
+    // Filter instrumentale nummers, daarna eerste 10 bewaren
+    const instrumentalFlags = await Promise.all(tracks.map((t) => isInstrumental(t.artist, t.track || t.name)));
+    tracks = tracks.filter((_, i) => !instrumentalFlags[i]).slice(0, 10);
+
+    if (tracks.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen nummers gevonden.</p>';
+      return;
+    }
+
+    // Album art ophalen in parallel
+    const tracksWithArt = await Promise.all(tracks.map(async (t) => ({
+      ...t,
+      image: t.album ? await fetchAlbumArt(t.artist, t.album) : '',
+    })));
+
+    container.innerHTML = tracksWithArt.map((t, i) => `
+      <div class="feed-item" style="cursor:default">
+        ${t.image ? `<img src="${t.image}" alt="${t.track}" class="feed-art feed-art-music" />` : '<div class="feed-art feed-art-music feed-art-empty"></div>'}
+        <div class="feed-info">
+          <span class="feed-title">${t.track}</span>
+          <span class="feed-meta">${t.artist}${t.album ? ` — ${t.album}` : ''}</span>
+        </div>
+      </div>
+    `).join('');
+  } catch {
+    container.innerHTML = '<p class="interest-placeholder">Kon nummers niet laden.</p>';
+  }
+}
+
+// ---- Films via lokale Letterboxd diary ----
+let letterboxdCache = null;
+
+async function getLetterboxdDiary() {
+  if (letterboxdCache !== null) return letterboxdCache;
+  try {
+    const res = await fetch('/letterboxd-diary.json');
+    if (!res.ok) { letterboxdCache = []; return []; }
+    letterboxdCache = await res.json();
+    return letterboxdCache;
+  } catch {
+    letterboxdCache = [];
+    return [];
+  }
+}
+
+function toStars(rating) {
+  if (!rating) return '';
+  const n = parseFloat(rating);
+  if (isNaN(n)) return '';
+  return '★'.repeat(Math.floor(n)) + (n % 1 >= 0.5 ? '½' : '');
+}
+
+async function fetchTmdbByTitle(title, year) {
+  try {
+    const res = await fetch(
+      `https://api.themoviedb.org/3/search/movie?api_key=${TMDB_KEY}&query=${encodeURIComponent(title)}&year=${year}&language=en-US`
+    );
+    const data = await res.json();
+    const movie = data.results?.[0];
+    if (!movie) return { poster: '', director: '' };
+    const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w200${movie.poster_path}` : '';
+    const creditsRes = await fetch(`https://api.themoviedb.org/3/movie/${movie.id}/credits?api_key=${TMDB_KEY}`);
+    const credits = await creditsRes.json();
+    const director = credits.crew?.find((c) => c.job === 'Director')?.name || '';
+    return { poster, director };
+  } catch {
+    return { poster: '', director: '' };
+  }
+}
+
+async function renderFilms(container, monthStart, monthEnd) {
+  try {
+    const diary = await getLetterboxdDiary();
+    const items = diary.filter((entry) => {
+      const d = new Date(entry.date);
+      return d >= monthStart && d < monthEnd;
+    });
+
+    if (items.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen films gevonden.</p>';
+      return;
+    }
+
+    const filmData = await Promise.all(items.map(async (entry) => {
+      const { poster, director } = await fetchTmdbByTitle(entry.title, entry.year);
+      return { title: entry.title, year: entry.year, link: entry.uri, poster, director, rating: toStars(entry.rating) };
+    }));
+
+    container.innerHTML = filmData.map((f) => `
+      <a href="${f.link}" target="_blank" rel="noopener" class="feed-item">
+        ${f.poster ? `<img src="${f.poster}" alt="${f.title}" class="feed-art" />` : '<div class="feed-art feed-art-empty"></div>'}
+        <div class="feed-info">
+          <span class="feed-title">${f.title}${f.year ? ` (${f.year})` : ''}</span>
+          <span class="feed-meta">${f.director}${f.rating ? (f.director ? ' — ' : '') + f.rating : ''}</span>
+        </div>
+      </a>
+    `).join('');
+  } catch {
+    container.innerHTML = '<p class="interest-placeholder">Kon films niet laden.</p>';
+  }
+}
+
+const GOODREADS_PROXY = 'https://goodreads-proxy.janusrvk.workers.dev';
+
+// ---- Boeken via Goodreads ----
+async function renderBooks(container, monthStart, monthEnd) {
+  try {
+    const res = await fetch(`${GOODREADS_PROXY}?shelf=read`);
+    const text = await res.text();
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(text, 'text/xml');
+
+    const items = Array.from(xml.querySelectorAll('item')).filter((item) => {
+      const readAt = item.querySelector('user_read_at')?.textContent;
+      const pubDate = item.querySelector('pubDate')?.textContent;
+      const dateStr = readAt || pubDate || '';
+      if (!dateStr) return false;
+      const d = new Date(dateStr);
+      return d >= monthStart && d < monthEnd;
+    });
+
+    if (items.length === 0) {
+      container.innerHTML = '<p class="interest-placeholder">Geen boeken gevonden.</p>';
+      return;
+    }
+
+    container.innerHTML = items.map((item) => {
+      const title = item.querySelector('title')?.textContent || '';
+      const link = item.querySelector('link')?.textContent || '#';
+      const author = item.querySelector('author_name')?.textContent || '';
+      const description = item.querySelector('description')?.textContent || '';
+      const descDoc = parser.parseFromString(description, 'text/html');
+      const coverSrc = descDoc.querySelector('img')?.getAttribute('src') || '';
+      const hiResCover = coverSrc.replace(/\._\w+\d+_/, '._SX100_');
+
+      return `
+        <a href="${link}" target="_blank" rel="noopener" class="feed-item">
+          ${hiResCover ? `<img src="${hiResCover}" alt="${title}" class="feed-art feed-art-book" />` : '<div class="feed-art feed-art-empty"></div>'}
+          <div class="feed-info">
+            <span class="feed-title">${title}</span>
+            <span class="feed-meta">${author}</span>
+          </div>
+        </a>
+      `;
+    }).join('');
+  } catch {
+    container.innerHTML = '<p class="interest-placeholder"><a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener">Bekijk op Goodreads →</a></p>';
+  }
+}
+
+// ---- UI: inline uitklap-rij (desktop) ----
+let activeRow = null;
+
+function closeDetail() {
+  if (activeRow) {
+    const detailRow = activeRow.nextElementSibling;
+    if (detailRow?.classList.contains('archief-detail-row')) {
+      detailRow.classList.remove('open');
+    }
+    activeRow.classList.remove('active');
+    activeRow = null;
+  }
+}
+
+// ---- UI: bottom sheet modal (mobiel) ----
+let activeModal = null;
+
+function closeMobileModal() {
+  if (!activeModal) return;
+  const overlay = activeModal;
+  overlay.classList.remove('open');
+  overlay.addEventListener('transitionend', () => overlay.remove(), { once: true });
+  activeModal = null;
+}
+
+function openMobileModal(monthLabel, parsed) {
+  closeMobileModal();
+
+  const monthStart = new Date(parsed.year, parsed.month, 1);
+  const monthEnd = new Date(parsed.year, parsed.month + 1, 1);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'archief-modal-overlay';
+  overlay.innerHTML = `
+    <div class="archief-modal">
+      <div class="archief-modal-handle"></div>
+      <div class="archief-modal-header">
+        <span class="archief-modal-title">${monthLabel}</span>
+        <button class="archief-modal-close" aria-label="Sluiten">&#x2715;</button>
+      </div>
+      <div class="archief-modal-content">
+        <div class="archief-detail-section">
+          <h4>Meest geluisterde nummers</h4>
+          <div class="detail-tracks"><p class="interest-placeholder">Laden&hellip;</p></div>
+        </div>
+        <div class="archief-detail-section">
+          <h4>Meest geluisterde albums</h4>
+          <div class="detail-albums"><p class="interest-placeholder">Laden&hellip;</p></div>
+        </div>
+        <div class="archief-detail-section">
+          <h4>Films gekeken</h4>
+          <div class="detail-films"><p class="interest-placeholder">Laden&hellip;</p></div>
+        </div>
+        <div class="archief-detail-section">
+          <h4>Boeken gelezen</h4>
+          <div class="detail-books"><p class="interest-placeholder">Laden&hellip;</p></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+  activeModal = overlay;
+
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeMobileModal(); });
+  overlay.querySelector('.archief-modal-close').addEventListener('click', closeMobileModal);
+
+  Promise.all([
+    renderTracks(overlay.querySelector('.detail-tracks'), monthStart, monthEnd),
+    renderAlbums(overlay.querySelector('.detail-albums'), monthStart, monthEnd),
+    renderFilms(overlay.querySelector('.detail-films'), monthStart, monthEnd),
+    renderBooks(overlay.querySelector('.detail-books'), monthStart, monthEnd),
+  ]);
+
+  requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
+function initArchiefCards() {
+  const rows = document.querySelectorAll('.archief-row');
+
+  rows.forEach((row) => {
+    const monthEl = row.querySelector('.archief-row-month');
+    if (!monthEl) return;
+
+    const parsed = parseMonthTitle(monthEl.textContent);
+    if (!parsed) return;
+
+    row.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        openMobileModal(monthEl.textContent.trim(), parsed);
+        return;
+      }
+
+      const isOpen = activeRow === row;
+      closeDetail();
+      if (isOpen) return;
+
+      const monthStart = new Date(parsed.year, parsed.month, 1);
+      const monthEnd = new Date(parsed.year, parsed.month + 1, 1);
+
+      let detailRow = row.nextElementSibling;
+      if (!detailRow?.classList.contains('archief-detail-row')) {
+        detailRow = document.createElement('tr');
+        detailRow.className = 'archief-detail-row';
+        detailRow.innerHTML = `
+          <td class="archief-detail-td archief-detail-td--month"></td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Meest geluisterde nummers</h4>
+              <div class="detail-tracks"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Meest geluisterde albums</h4>
+              <div class="detail-albums"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Films gekeken</h4>
+              <div class="detail-films"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+          <td class="archief-detail-td">
+            <div class="archief-detail-cell-inner">
+              <h4>Boeken gelezen</h4>
+              <div class="detail-books"><p class="interest-placeholder">Laden...</p></div>
+            </div>
+          </td>
+        `;
+        row.after(detailRow);
+        Promise.all([
+          renderTracks(detailRow.querySelector('.detail-tracks'), monthStart, monthEnd),
+          renderAlbums(detailRow.querySelector('.detail-albums'), monthStart, monthEnd),
+          renderFilms(detailRow.querySelector('.detail-films'), monthStart, monthEnd),
+          renderBooks(detailRow.querySelector('.detail-books'), monthStart, monthEnd),
+        ]);
+      }
+
+      requestAnimationFrame(() => detailRow.classList.add('open'));
+      row.classList.add('active');
+      activeRow = row;
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeDetail(); closeMobileModal(); }
+  });
+}
+
+// Init wanneer DOM klaar is
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initArchiefCards);
+} else {
+  initArchiefCards();
+}

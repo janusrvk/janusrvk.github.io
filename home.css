@@ -1,0 +1,1251 @@
+/* =========================================================================
+   home.css — colin-moy.webflow.io reproductie
+   Themas wisselen via de "ogen" in de naam. Default: ink + warme oranje.
+   ========================================================================= */
+
+/* ---------- Theming via CSS variables ---------- */
+:root,
+[data-theme="ink"] {
+  --bg: #0E0E0E;
+  --fg: #F2EFE9;
+  --accent: #E85D1F;
+  --accent-fg: #0E0E0E;
+  --eye-white: #F2EFE9;
+  --eye-pupil: #0E0E0E;
+}
+[data-theme="orange"] {
+  --bg: #E85D1F;
+  --fg: #0E0E0E;
+  --accent: #0E0E0E;
+  --accent-fg: #E85D1F;
+  --eye-white: #FFFFFF;
+  --eye-pupil: #0E0E0E;
+}
+[data-theme="cream"] {
+  --bg: #F2EFE9;
+  --fg: #0E0E0E;
+  --accent: #E85D1F;
+  --accent-fg: #F2EFE9;
+  --eye-white: #FFFFFF;
+  --eye-pupil: #E85D1F;
+}
+[data-theme="rust"] {
+  --bg: #2A1410;
+  --fg: #F2D5B0;
+  --accent: #FF8B4A;
+  --accent-fg: #2A1410;
+  --eye-white: #F2D5B0;
+  --eye-pupil: #FF8B4A;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Archivo', system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-align: center;
+  overflow-x: hidden;
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; height: auto; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+::selection { background: var(--accent); color: var(--accent-fg); }
+
+/* =========================================================================
+   HERO — 100vh: titel + marquee + titel + marquee + scroll-arrow
+   ========================================================================= */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4vh 0 0;
+}
+.hero-stack {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(20px, 3.2vw, 56px);
+}
+
+/* ---------- Titel-regel (één lijn, eventueel met ogen) ---------- */
+.title-line {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0 clamp(12px, 3vw, 40px);
+  height: auto;
+  line-height: 1;
+}
+.title-line .letter {
+  font-family: 'Archivo Black', 'Archivo', sans-serif;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  color: var(--fg);
+  display: inline-block;
+  text-transform: lowercase;
+  transition: color 0.6s ease;
+}
+.title-line.is-large .letter {
+  font-size: clamp(56px, 14vw, 220px);
+}
+.title-line.is-medium .letter {
+  font-size: clamp(36px, 9vw, 140px);
+}
+
+/* ---------- Eye (oog) in titel ---------- */
+.eye {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--eye-white);
+  border-radius: 50%;
+  height: 0.92em;
+  width: 0.92em;
+  margin: 0 0.005em;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background-color 0.6s ease, transform 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+  border: none;
+}
+.eye:hover { transform: scale(1.03); }
+.eye:active { transform: scale(0.96); }
+.eye.is-large { font-size: clamp(56px, 14vw, 220px); }
+.eye.is-medium { font-size: clamp(36px, 9vw, 140px); }
+
+.pupil {
+  display: inline-block;
+  background: var(--eye-pupil);
+  border-radius: 50%;
+  width: 0.42em;
+  height: 0.42em;
+  font-size: 1em;
+  line-height: 1;
+  transition: background-color 0.6s ease;
+  user-select: none;
+  /* JS schrijft --px / --py per oog (range -1..1) */
+  --px: 0;
+  --py: 0;
+  transform: translate(calc(var(--px) * 0.22em), calc(var(--py) * 0.22em));
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pupil { transform: none !important; }
+}
+
+/* =========================================================================
+   MARQUEE — ronde pill, zwart met accent-tekst, doorlopend
+   ========================================================================= */
+.marquee {
+  width: min(92vw, 1100px);
+  margin: 0 auto;
+  background: var(--accent);
+  color: var(--bg); /* tekst = pagina-achtergrond, gegarandeerd in elk thema */
+  border-radius: 999px;
+  height: clamp(40px, 5.2vw, 78px);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+  transition: background-color 0.6s ease, color 0.6s ease;
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  animation: marquee-scroll 32s linear infinite;
+  will-change: transform;
+}
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  font-size: clamp(13px, 1.5vw, 20px);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: 0 18px;
+  color: var(--bg);
+}
+.marquee-sep {
+  display: inline-block;
+  width: 0.8em;
+  text-align: center;
+  opacity: 0.85;
+}
+.marquee.is-live .marquee-tag {
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.75em;
+  margin-right: 8px;
+  opacity: 0.75;
+}
+.marquee-title { font-weight: 700; }
+.marquee-credit { opacity: 0.78; font-weight: 500; }
+
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ---------- Scroll-arrow onderaan hero ---------- */
+.scroll-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 12vh;
+  min-height: 64px;
+  color: var(--fg);
+  transition: transform 0.4s ease, color 0.6s ease;
+  cursor: pointer;
+  animation: arrow-bob 2.2s ease-in-out infinite;
+}
+.scroll-arrow:hover { transform: translateY(6px); }
+.scroll-arrow svg { width: 38px; height: 38px; }
+
+@keyframes arrow-bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(8px); }
+}
+
+/* =========================================================================
+   TAB-SECTIES — drie compacte rijen onder elkaar, klik klapt uit
+   ========================================================================= */
+.tab-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(20px, 3.5vh, 48px) clamp(12px, 4vw, 60px);
+  border-top: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
+}
+.tab-section:last-of-type { border-bottom: 1px solid color-mix(in srgb, var(--fg) 14%, transparent); }
+.tab-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  width: 100%;
+  cursor: default;
+  color: var(--fg);
+}
+.tab-text {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(48px, 13vw, 200px);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  color: var(--fg);
+  text-transform: lowercase;
+  cursor: default;
+  user-select: none;
+}
+
+/* ---------- De "O" / klap-cirkel in een tab — dit is de KNOP ---------- */
+.tab-o {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 9999px;
+  width: clamp(48px, 13vw, 200px);
+  height: clamp(48px, 13vw, 200px);
+  margin: 0 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    width 0.6s cubic-bezier(0.6, 0, 0.2, 1),
+    height 0.6s cubic-bezier(0.6, 0, 0.2, 1),
+    border-radius 0.5s ease,
+    background-color 0.6s ease,
+    transform 0.3s cubic-bezier(0.5, 0, 0.2, 1),
+    box-shadow 0.3s ease,
+    margin 0.6s ease;
+  flex-shrink: 0;
+  /* zachte adempulse — laat zien dat het de actieve knop is */
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: tab-o-pulse 2.6s ease-in-out infinite;
+}
+.tab-section:not(.is-open) .tab-o:hover {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.tab-section:not(.is-open) .tab-o:active { transform: scale(0.97); }
+
+@keyframes tab-o-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+  50%      { box-shadow: 0 0 0 14px color-mix(in srgb, var(--accent) 0%, transparent),
+                          0 0 24px -2px color-mix(in srgb, var(--accent) 35%, transparent); }
+}
+.tab-section.is-open .tab-o { animation: none; box-shadow: none; cursor: default; }
+@media (prefers-reduced-motion: reduce) {
+  .tab-o { animation: none; }
+}
+
+.tab-o-letter {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(48px, 13vw, 200px);
+  line-height: 0.9;
+  color: var(--accent-fg);
+  text-transform: lowercase;
+  transition: opacity 0.3s ease;
+  pointer-events: none; /* klik gaat door naar .tab-o */
+}
+
+/* Inhoud zit in de O en is verborgen tot uitgeklapt */
+.tab-content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(40px, 8vw, 110px) clamp(20px, 5vw, 80px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease 0s;
+  overflow: auto;
+}
+/* Schrijfwerk-tab: minder padding zodat de pills volle breedte krijgen */
+#schrijfwerk .tab-content {
+  padding: clamp(24px, 4vh, 48px) clamp(16px, 2.4vw, 40px);
+  align-items: center;
+}
+
+/* ---------- Open state ---------- */
+.tab-section.is-open {
+  padding: clamp(24px, 4vh, 56px) clamp(12px, 3vw, 40px);
+}
+.tab-section.is-open .tab-link {
+  flex-direction: column;
+  gap: 22px;
+  cursor: default;
+}
+.tab-section.is-open .tab-text {
+  display: none;
+}
+.tab-section.is-open .tab-o {
+  width: min(96vw, 1280px);
+  height: auto;
+  min-height: 60vh;
+  border-radius: clamp(36px, 3.6vw, 56px);
+  margin: 0;
+  cursor: default;
+  background: transparent;   /* gebruik site-achtergrond i.p.v. accent */
+  color: var(--fg);
+}
+.tab-section.is-open .tab-o-letter {
+  display: none;
+}
+.tab-section.is-open .tab-content {
+  position: relative;
+  inset: auto;
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.4s ease 0.35s;
+  width: 100%;
+  overflow: visible;
+}
+
+/* ---------- Close-knop (alleen zichtbaar in open state) ---------- */
+.tab-close {
+  position: absolute;
+  top: 18px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  z-index: 5;
+  transition: transform 0.2s ease;
+}
+.tab-close:hover { transform: rotate(90deg); }
+.tab-section.is-open .tab-close { display: inline-flex; }
+
+/* =========================================================================
+   Inhoud BINNEN de tab-O
+   ========================================================================= */
+.tab-inner {
+  width: 100%;
+  max-width: 1280px;
+  text-align: left;
+  color: var(--fg);
+  font-family: 'Archivo', sans-serif;
+}
+.tab-inner--bare { padding: 0; }   /* schrijfwerk = puur de pills */
+.tab-inner-eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+.tab-inner-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(28px, 4.5vw, 56px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: lowercase;
+  margin-bottom: 24px;
+}
+.tab-inner-lead {
+  font-size: clamp(16px, 1.6vw, 20px);
+  max-width: 640px;
+  margin-bottom: 40px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+
+/* ---------- Schrijfwerk — ovale artikelkaarten ---------- */
+.schrijf-ovals {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(20px, 2.4vw, 40px);
+  width: 100%;
+  margin: 0;
+  padding: clamp(20px, 3vw, 40px) 0 clamp(24px, 3vw, 44px);
+}
+
+.schrijf-oval {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(14px, 1.6vw, 22px);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+}
+
+/* -- Media: de "ovale" pill met oranje offset-shadow -- */
+.schrijf-oval-media {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 9999px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--fg) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
+  box-shadow: 10px 10px 0 var(--accent);
+  transition: box-shadow 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+}
+.schrijf-oval-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease, filter 0.4s ease;
+  filter: saturate(1.02);
+}
+
+/* Kleine categorie-tag bovenaan op de oval */
+.schrijf-oval-tag {
+  position: absolute;
+  top: clamp(16px, 1.8vw, 22px);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 6px 14px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+/* -- Label onder de oval -- */
+.schrijf-oval-label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0 clamp(4px, 0.8vw, 12px);
+  text-align: left;
+}
+.schrijf-oval-byline {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.schrijf-oval-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(16px, 1.45vw, 22px);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  color: var(--fg);
+}
+.schrijf-oval-cta {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0.75;
+  margin-top: 2px;
+  transition: opacity 0.3s ease;
+}
+.schrijf-oval-cta span {
+  display: inline-block;
+  margin-left: 4px;
+  transition: transform 0.3s ease;
+}
+
+/* -- Hover-gedrag -- */
+.schrijf-oval:hover { transform: translateY(-8px); }
+.schrijf-oval:hover .schrijf-oval-media {
+  box-shadow: 16px 16px 0 var(--accent);
+}
+.schrijf-oval:hover .schrijf-oval-media img {
+  transform: scale(1.06);
+  filter: saturate(1.1);
+}
+.schrijf-oval:hover .schrijf-oval-cta { opacity: 1; }
+.schrijf-oval:hover .schrijf-oval-cta span { transform: translateX(5px); }
+.schrijf-oval:focus-visible { outline: none; }
+.schrijf-oval:focus-visible .schrijf-oval-media {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Responsive */
+@media (max-width: 960px) {
+  .schrijf-ovals { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .schrijf-ovals {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .schrijf-oval-media { box-shadow: 8px 8px 0 var(--accent); }
+  .schrijf-oval:hover .schrijf-oval-media { box-shadow: 12px 12px 0 var(--accent); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .schrijf-oval,
+  .schrijf-oval-media,
+  .schrijf-oval-media img,
+  .schrijf-oval-cta,
+  .schrijf-oval-cta span {
+    transition: none;
+  }
+}
+
+/* ---------- Archief: maandkaarten (tab-stijl) ---------- */
+.archief-list {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+.archief-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(22px, 3.5vh, 52px);
+  padding: clamp(36px, 6vh, 96px) 0;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
+  width: 100%;
+}
+.archief-card:first-child { border-top: 0; padding-top: clamp(12px, 2vh, 28px); }
+
+/* ---------- Maand-titel: heel groot, één letter is het klikbare oog ---------- */
+.archief-month {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(44px, 10vw, 168px);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-transform: lowercase;
+  color: var(--fg);
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  user-select: none;
+  width: 100%;
+}
+.archief-month-letter {
+  display: inline-block;
+  line-height: 0.9;
+}
+.archief-year {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 500;
+  font-size: 0.17em;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-left: 0.9em;
+  align-self: center;
+  white-space: nowrap;
+}
+
+/* ---------- De "O" / letter-eye in een maandnaam — dit is de KNOP ---------- */
+.archief-month-eye {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 9999px;
+  width: 0.92em;
+  height: 0.92em;
+  margin: 0 0.03em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  flex-shrink: 0;
+  vertical-align: baseline;
+  transition:
+    background-color 0.6s ease,
+    transform 0.3s cubic-bezier(0.5, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+  /* zachte adempulse — laat zien dat dit de klikbare knop is */
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: archief-month-eye-pulse 2.6s ease-in-out infinite;
+}
+.archief-card:not(.is-active) .archief-month-eye:hover {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.archief-card:not(.is-active) .archief-month-eye:active { transform: scale(0.97); }
+
+@keyframes archief-month-eye-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 0%, transparent); }
+  50%      { box-shadow: 0 0 0 14px color-mix(in srgb, var(--accent) 0%, transparent),
+                          0 0 24px -2px color-mix(in srgb, var(--accent) 35%, transparent); }
+}
+
+/* De gekozen letter wordt INBINNEN de pill getoond — zelfde idee als .tab-o-letter */
+.archief-month-eye-letter {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: 1em;
+  line-height: 0.9;
+  color: var(--accent-fg);
+  text-transform: lowercase;
+  letter-spacing: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.archief-month-eye-cross {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-fg);
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 0.58em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Open state — letter gaat weg, × verschijnt */
+.archief-card.is-active .archief-month-eye {
+  animation: none;
+  box-shadow: none;
+  cursor: pointer;
+}
+.archief-card.is-active .archief-month-eye-letter { opacity: 0; }
+.archief-card.is-active .archief-month-eye-cross { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .archief-month-eye { animation: none; }
+}
+
+/* ---------- Vier favorieten in 4 kolommen naast elkaar ---------- */
+.archief-items {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 2.2vw, 36px);
+  width: 100%;
+  max-width: 1180px;
+}
+.archief-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 18px;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 22%, transparent);
+  text-align: left;
+  min-width: 0;
+}
+.archief-item-tag {
+  font-family: 'Archivo', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  white-space: nowrap;
+}
+.archief-item-body {
+  font-size: clamp(14px, 1.05vw, 16px);
+  line-height: 1.3;
+  min-width: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.archief-item-title {
+  font-weight: 700;
+  color: var(--fg);
+}
+.archief-item-credit {
+  font-weight: 500;
+  opacity: 0.65;
+}
+.archief-item--empty .archief-item-title { opacity: 0.35; font-weight: 400; }
+
+.archief-hidden { display: none; }
+.archief-hidden.archief-visible { display: contents; }
+
+.archief-toggle-wrap {
+  display: flex;
+  justify-content: center;
+  padding: clamp(28px, 5vh, 56px) 0 clamp(8px, 2vh, 16px);
+}
+.archief-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid color-mix(in srgb, var(--fg) 35%, transparent);
+  padding: 12px 26px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+.archief-toggle:hover {
+  background: var(--accent);
+  color: var(--bg);
+  border-color: var(--accent);
+}
+
+/* Archief-tab volle breedte voor de cards */
+#archief .tab-content {
+  padding: clamp(32px, 5vh, 64px) clamp(20px, 4vw, 80px);
+  align-items: flex-start;
+}
+
+/* ---------- Detail-paneel onder een geopende maandkaart ---------- */
+.archief-detail {
+  width: 100%;
+  max-width: 1280px;
+  margin-top: clamp(22px, 3.5vh, 44px);
+  padding-top: clamp(22px, 3.5vh, 44px);
+  border-top: 1px dashed color-mix(in srgb, var(--fg) 20%, transparent);
+  display: block;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.4s ease, max-height 0.6s cubic-bezier(0.6, 0, 0.2, 1);
+}
+.archief-detail.is-open {
+  opacity: 1;
+  max-height: 6000px;   /* genoeg voor langste maand (10+10+films+books) */
+}
+.archief-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(22px, 2.4vw, 40px);
+}
+.archief-detail-section { min-width: 0; }
+.archief-detail-title {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0 0 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
+}
+
+.feed-list {
+  display: grid;
+  gap: 14px;
+}
+.feed-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 14px;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.35;
+}
+.feed-art {
+  width: 56px;
+  height: 56px;
+  border-radius: 6px;
+  object-fit: cover;
+  background: color-mix(in srgb, var(--fg) 8%, transparent);
+  flex-shrink: 0;
+}
+/* Film + boek → rechthoekig (2:3 poster/cover verhouding) */
+.feed-art-film,
+.feed-art-book {
+  width: 56px;
+  height: auto;
+  aspect-ratio: 2 / 3;
+}
+.feed-art-film { object-fit: cover; }
+.feed-art-book { object-fit: contain; background: color-mix(in srgb, var(--fg) 5%, transparent); }
+.feed-art-empty { background: color-mix(in srgb, var(--fg) 8%, transparent); }
+.feed-info { display: flex; flex-direction: column; min-width: 0; }
+.feed-title {
+  font-weight: 700;
+  color: var(--fg);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.feed-meta {
+  font-size: 11.5px;
+  opacity: 0.65;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.feed-year { opacity: 0.6; font-weight: 500; }
+.feed-placeholder {
+  font-size: 12px;
+  opacity: 0.6;
+  font-style: italic;
+}
+
+@media (max-width: 1080px) {
+  .archief-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .archief-detail-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .archief-items { grid-template-columns: 1fr; gap: 18px; }
+  .archief-detail-grid { grid-template-columns: 1fr; gap: 24px; }
+  .archief-month { font-size: clamp(36px, 13vw, 84px); }
+  .archief-year { font-size: 0.2em; margin-left: 0.6em; }
+  .archief-card { padding: clamp(24px, 4vh, 40px) 0; gap: clamp(16px, 3vh, 28px); }
+}
+
+/* =========================================================================
+   OVER MIJ — circulaire avatar + drop-cap bio + uitklapbare CV-secties
+   ========================================================================= */
+.over-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) 1fr;
+  gap: clamp(40px, 6vw, 88px);
+  align-items: start;
+  text-align: left;
+}
+
+/* ---------- Portret: ronde "sticker" met oranje offset-shadow ---------- */
+.over-portrait {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  transition: transform 0.4s cubic-bezier(0.5, 0, 0.2, 1);
+}
+/* oranje offset-cirkel achter het portret — colin-moy sticker vibe */
+.over-portrait::before {
+  content: '';
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: -14px;
+  bottom: -14px;
+  border-radius: 50%;
+  background: var(--accent);
+  z-index: 0;
+  transition: transform 0.45s cubic-bezier(0.5, 0, 0.2, 1);
+}
+.over-portrait:hover::before { transform: translate(-6px, -6px); }
+.over-portrait:hover { transform: translate(3px, 3px); }
+
+.over-portrait-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #F2EFE9;     /* VAST cream papier — theme-onafhankelijk */
+  z-index: 1;
+  box-shadow: 0 24px 50px -24px rgba(0, 0, 0, 0.35);
+}
+.over-portrait-inner img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Grijze PNG-halo wegwerken:
+     – filter crusht de grijze gradient naar bijna-wit
+     – multiply blendt 'wit' naadloos met de cream cirkel
+     – alleen de zwarte inktlijnen blijven over */
+  mix-blend-mode: multiply;
+  filter: contrast(1.45) brightness(1.14);
+}
+
+/* ---------- Bio met drop-cap "I" ---------- */
+.over-text { min-width: 0; }
+.over-bio {
+  font-family: 'Archivo', sans-serif;
+  font-size: clamp(17px, 1.55vw, 21px);
+  line-height: 1.55;
+  font-weight: 400;
+  margin: 0 0 28px;
+  max-width: 62ch;
+  color: var(--fg);
+}
+/* Grote "I" van "Ik ben…" — editorial drop-cap in accent-kleur */
+.over-bio::first-letter {
+  float: left;
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(72px, 9vw, 140px);
+  line-height: 0.78;
+  padding: 0.04em 0.22em 0 0;
+  margin: 0.02em 0 -0.04em 0;
+  color: var(--accent);
+  letter-spacing: -0.04em;
+}
+.over-bio strong { font-weight: 700; }
+
+/* ---------- Meta: key-value lijst ---------- */
+.over-meta {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 12px 28px;
+  font-size: 14px;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 20%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--fg) 20%, transparent);
+  padding: 18px 0;
+  margin-bottom: 32px;
+  max-width: 560px;
+}
+.over-meta dt {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--accent);
+  align-self: center;
+}
+.over-meta dd { font-weight: 500; color: var(--fg); }
+.over-meta dd a { text-decoration: underline; text-underline-offset: 2px; }
+.over-meta dd a:hover { color: var(--accent); }
+
+/* ---------- Download CV knop: accent pill met pijl ---------- */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  background: var(--accent);
+  color: var(--bg);
+  transition: transform 0.25s cubic-bezier(0.5, 0, 0.2, 1), box-shadow 0.3s ease;
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.btn-pill::after { content: '↗'; font-family: 'Archivo', sans-serif; font-size: 15px; letter-spacing: 0; }
+.btn-pill:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -12px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+
+/* =========================================================================
+   CV-SECTIES — mini-tabs: grote titel met O-oog, klik klapt content uit
+   ========================================================================= */
+.cv-sections {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vh, 28px);
+  margin-top: clamp(48px, 6vw, 88px);
+  padding-top: clamp(32px, 4vh, 56px);
+  border-top: 1px solid color-mix(in srgb, var(--fg) 14%, transparent);
+  width: 100%;
+}
+.cv-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  padding: clamp(20px, 3vh, 40px) 0;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+}
+.cv-section:first-child { border-top: 0; padding-top: 0; }
+
+/* ---------- Grote titel in tab-stijl ---------- */
+.cv-section-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(44px, 10vw, 152px);
+  line-height: 0.9;
+  letter-spacing: -0.045em;
+  text-transform: lowercase;
+  color: var(--fg);
+  margin: 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  user-select: none;
+  width: 100%;
+}
+.cv-section-letter {
+  display: inline-block;
+  line-height: 0.9;
+}
+
+/* ---------- De "O" als klikbare eye-knop (zelfde stijl als archief-month-eye) ---------- */
+.cv-section-eye {
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 9999px;
+  width: 0.92em;
+  height: 0.92em;
+  margin: 0 0.03em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  border: 0;
+  padding: 0;
+  flex-shrink: 0;
+  vertical-align: baseline;
+  transition:
+    background-color 0.6s ease,
+    transform 0.3s cubic-bezier(0.5, 0, 0.2, 1),
+    box-shadow 0.3s ease;
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+  animation: archief-month-eye-pulse 2.6s ease-in-out infinite;
+}
+.cv-section:not(.is-active) .cv-section-eye:hover {
+  transform: scale(1.06) rotate(-2deg);
+  box-shadow: 0 12px 30px -10px color-mix(in srgb, var(--accent) 70%, transparent);
+}
+.cv-section:not(.is-active) .cv-section-eye:active { transform: scale(0.97); }
+
+.cv-section-eye-letter {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: 1em;
+  line-height: 0.9;
+  color: var(--accent-fg);
+  text-transform: lowercase;
+  letter-spacing: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.cv-section-eye-cross {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-fg);
+  font-family: 'Archivo', sans-serif;
+  font-weight: 700;
+  font-size: 0.58em;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* Open-state */
+.cv-section.is-active .cv-section-eye { animation: none; box-shadow: none; }
+.cv-section.is-active .cv-section-eye-letter { opacity: 0; }
+.cv-section.is-active .cv-section-eye-cross { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .cv-section-eye { animation: none; }
+}
+
+/* ---------- Uitklapbare content onder de titel ---------- */
+.cv-section-body {
+  width: 100%;
+  max-width: 820px;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  margin-top: 0;
+  transition:
+    opacity 0.4s ease,
+    max-height 0.6s cubic-bezier(0.6, 0, 0.2, 1),
+    margin-top 0.5s ease;
+  text-align: left;
+}
+.cv-section.is-active .cv-section-body {
+  opacity: 1;
+  max-height: 3000px;
+  margin-top: clamp(22px, 3.5vh, 44px);
+}
+
+/* ---------- CV-items: editorial typografie ---------- */
+.cv-item {
+  padding: 18px 0;
+  border-bottom: 1px solid color-mix(in srgb, var(--fg) 10%, transparent);
+}
+.cv-item:last-child { border-bottom: 0; }
+.cv-item-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 2px;
+}
+.cv-item-org { font-weight: 700; font-size: 14px; color: var(--fg); }
+.cv-item-date {
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  opacity: 0.55;
+  text-transform: uppercase;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.cv-item-role {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 15px;
+  margin: 2px 0 8px;
+  letter-spacing: -0.01em;
+  color: var(--accent);
+  text-transform: lowercase;
+}
+.cv-item-desc { font-size: 13.5px; line-height: 1.5; opacity: 0.82; max-width: 60ch; }
+
+@media (max-width: 820px) {
+  .over-grid { grid-template-columns: 1fr; gap: 32px; }
+  .over-portrait { max-width: 240px; margin: 0 auto; }
+  .tab-section.is-open .tab-o { min-height: 90vh; }
+}
+@media (max-width: 640px) {
+  .cv-section-title { font-size: clamp(38px, 13vw, 90px); }
+  .over-bio::first-letter { font-size: clamp(56px, 16vw, 90px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .over-portrait, .over-portrait::before, .btn-pill { transition: none; }
+}
+
+/* =========================================================================
+   Footer (compact)
+   ========================================================================= */
+.footer {
+  padding: 40px 20px 28px;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  border-top: 1px solid color-mix(in srgb, var(--fg) 12%, transparent);
+}
+
+/* =========================================================================
+   Topbar verbergen — colin-moy heeft géén topbar
+   ========================================================================= */
+.topbar { display: none !important; }
+
+/* =========================================================================
+   Reduced motion
+   ========================================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .scroll-arrow { animation: none; }
+  html { scroll-behavior: auto; }
+  body, .tab-o, .tab-content, .eye, .pupil { transition: none !important; }
+}
+
+/* =========================================================================
+   Cross-version toggle (klassiek ↔ nieuw)
+   ========================================================================= */
+.version-switch {
+  position: fixed;
+  top: clamp(14px, 2vw, 20px);
+  right: clamp(14px, 2vw, 20px);
+  z-index: 300;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--rule, color-mix(in srgb, var(--fg) 18%, transparent));
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--fg) 82%, transparent);
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.version-switch:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+.version-switch-label-full { display: inline; }
+.version-switch-label-short { display: none; }
+@media (max-width: 540px) {
+  .version-switch {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    padding: 7px 11px;
+  }
+  .version-switch-label-full { display: none; }
+  .version-switch-label-short { display: inline; }
+}
+
+/* Voorkom dat de toggle de sticky post-header overlapt op artikelpagina's */
+.post-header ~ .version-switch,
+body:has(.post-header) .version-switch {
+  top: clamp(14px, 1.8vw, 22px);
+}

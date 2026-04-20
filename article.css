@@ -1,0 +1,428 @@
+/* =========================================================================
+   article.css — artikelpagina's, consistent met home.css (ink-thema)
+   Zwart canvas, oranje accent, Archivo Black voor koppen, Lora voor body.
+   ========================================================================= */
+
+:root {
+  --bg: #0E0E0E;
+  --fg: #F2EFE9;
+  --accent: #E85D1F;
+  --accent-fg: #0E0E0E;
+  --muted: color-mix(in srgb, var(--fg) 64%, transparent);
+  --rule:  color-mix(in srgb, var(--fg) 14%, transparent);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Lora', Georgia, serif;
+  font-size: 18px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 38%, transparent); transition: border-color 0.2s ease, color 0.2s ease; }
+a:hover { border-bottom-color: var(--accent); }
+
+img { max-width: 100%; height: auto; display: block; }
+
+/* ---------- Header (zelfde taal als home-topbar: subtiel, vast) ---------- */
+.post-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--rule);
+}
+.post-header-inner {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.post-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-radius: 999px;
+  border-bottom: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.post-back:hover { transform: translateX(-3px); border-bottom: none; }
+.post-publication {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+/* ---------- Article layout ---------- */
+.post-article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: clamp(40px, 7vw, 88px) 24px 80px;
+}
+
+/* ---------- Meta (eyebrow, titel, subtitel, byline) ---------- */
+.post-meta { text-align: center; margin-bottom: clamp(32px, 5vw, 56px); }
+
+.post-title {
+  font-family: 'Archivo Black', 'Archivo', sans-serif;
+  font-weight: 900;
+  font-size: clamp(36px, 6vw, 64px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+  color: var(--accent);
+  text-transform: lowercase;
+  margin-bottom: 18px;
+}
+
+.post-subtitle {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 400;
+  font-size: clamp(17px, 1.6vw, 20px);
+  line-height: 1.45;
+  color: color-mix(in srgb, var(--fg) 82%, transparent);
+  max-width: 640px;
+  margin: 0 auto 32px;
+}
+
+.post-byline {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 22px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+}
+.post-byline-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  line-height: 1.2;
+}
+.post-byline-name {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: lowercase;
+  color: var(--fg);
+}
+.post-byline-date {
+  font-family: 'Archivo', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  position: relative;
+  padding-left: 14px;
+}
+.post-byline-date::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ---------- Divider / separator ---------- */
+.post-divider {
+  height: 1px;
+  background: var(--rule);
+  margin: clamp(28px, 4vw, 48px) auto;
+  max-width: 200px;
+  position: relative;
+}
+.post-divider::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 4px var(--bg);
+}
+.post-separator {
+  height: 0;
+  border-top: 1px solid var(--rule);
+  margin: 28px auto;
+  width: 120px;
+}
+
+/* ---------- Hero image met oranje offset-shadow (zoals avatar op home) ---------- */
+.post-hero-image {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto clamp(32px, 5vw, 56px);
+  border-radius: 6px;
+  position: relative;
+  box-shadow: 14px 14px 0 var(--accent);
+}
+
+/* ---------- Body typography ---------- */
+.post-body {
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.72;
+  color: var(--fg);
+}
+.post-body p { margin-bottom: 1.1em; }
+.post-body p:last-child { margin-bottom: 0; }
+
+/* Drop cap op eerste paragraph */
+.post-body > p:first-child::first-letter {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  float: left;
+  font-size: 4.6em;
+  line-height: 0.86;
+  padding-right: 14px;
+  padding-top: 6px;
+  color: var(--accent);
+}
+
+.post-body h2 {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: clamp(22px, 2.4vw, 30px);
+  letter-spacing: -0.01em;
+  text-transform: lowercase;
+  color: var(--accent);
+  margin: 2em 0 0.6em;
+}
+.post-body h2:first-child { margin-top: 0; }
+
+.post-body em { font-style: italic; color: color-mix(in srgb, var(--fg) 90%, transparent); }
+.post-body strong { font-weight: 700; color: var(--fg); }
+
+.post-body blockquote {
+  margin: 1.6em 0;
+  padding: 0 0 0 24px;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+  color: color-mix(in srgb, var(--fg) 90%, transparent);
+}
+
+/* Interview-stijl: vraag als accent-eyebrow */
+.post-question {
+  font-family: 'Archivo', sans-serif;
+  font-weight: 600;
+  font-style: normal !important;
+  color: var(--accent);
+  font-size: 1em;
+  line-height: 1.5;
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+}
+.post-question strong, .post-question em {
+  color: var(--accent);
+  font-style: normal;
+  font-weight: 700;
+}
+
+/* Inline afbeelding binnen artikel */
+.post-inline-image {
+  margin: clamp(28px, 4vw, 44px) 0;
+}
+.post-inline-image img {
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 10px 10px 0 var(--accent);
+}
+.post-inline-image figcaption {
+  margin-top: 12px;
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* ---------- Footer-note onderaan artikel ---------- */
+.post-footer-note {
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: clamp(24px, 3vw, 40px);
+  text-align: center;
+  font-family: 'Archivo', sans-serif;
+}
+.post-footer-note p {
+  color: var(--muted);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+}
+.post-download-btn,
+a.post-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-radius: 9999px;
+  background: var(--accent);
+  color: var(--accent-fg);
+  border-bottom: none;
+  transition: transform 0.25s cubic-bezier(0.5, 0, 0.2, 1), box-shadow 0.3s ease;
+  box-shadow: 0 10px 24px -10px color-mix(in srgb, var(--accent) 55%, transparent);
+}
+.post-download-btn::after { content: '↓'; font-family: 'Archivo', sans-serif; font-size: 15px; letter-spacing: 0; }
+.post-download-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 34px -12px color-mix(in srgb, var(--accent) 70%, transparent);
+  border-bottom: none;
+}
+
+/* Magazine-thumbs (Breitner) */
+.post-magazine-label {
+  margin-top: 24px;
+  font-size: 12px !important;
+  letter-spacing: 0.16em !important;
+  text-transform: uppercase;
+  color: var(--muted) !important;
+}
+.post-magazine-thumbs {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.post-magazine-thumb {
+  width: clamp(140px, 22vw, 220px);
+  border-radius: 4px;
+  cursor: zoom-in;
+  box-shadow: 6px 6px 0 var(--accent);
+  transition: transform 0.3s ease;
+}
+.post-magazine-thumb:hover { transform: translateY(-3px); }
+.post-magazine-thumb.expanded {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: auto;
+  height: auto;
+  max-width: 94vw;
+  max-height: 92vh;
+  z-index: 200;
+  cursor: zoom-out;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+}
+
+/* ---------- Best-of lijst (aanbevelingen.html) ---------- */
+.best-of-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+}
+.best-of-item {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.best-of-item:last-child { border-bottom: none; }
+.best-of-rank {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(28px, 4vw, 44px);
+  line-height: 1;
+  color: var(--accent);
+  min-width: 56px;
+  text-align: center;
+}
+.best-of-info { display: flex; flex-direction: column; gap: 2px; }
+.best-of-title {
+  font-family: 'Archivo Black', sans-serif;
+  font-size: clamp(15px, 1.4vw, 18px);
+  text-transform: lowercase;
+  color: var(--fg);
+}
+.best-of-meta {
+  font-family: 'Archivo', sans-serif;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .post-article { padding: 32px 20px 60px; }
+  .post-hero-image { box-shadow: 8px 8px 0 var(--accent); }
+  .post-body > p:first-child::first-letter {
+    font-size: 3.6em;
+    padding-right: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .post-back, .post-download-btn, .post-magazine-thumb { transition: none; }
+}
+
+/* =========================================================================
+   Cross-version toggle (klassiek ↔ nieuw)
+   ========================================================================= */
+.version-switch {
+  position: fixed;
+  top: clamp(14px, 2vw, 20px);
+  right: clamp(14px, 2vw, 20px);
+  z-index: 300;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  text-decoration: none;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--fg) 82%, transparent);
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.version-switch:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  border-bottom: 1px solid var(--accent);
+}
+.version-switch-label-full { display: inline; }
+.version-switch-label-short { display: none; }
+@media (max-width: 540px) {
+  .version-switch {
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    padding: 7px 11px;
+  }
+  .version-switch-label-full { display: none; }
+  .version-switch-label-short { display: inline; }
+}

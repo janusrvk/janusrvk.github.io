@@ -2,7 +2,6 @@
 // Injected on every page via import
 
 const sections = [
-  { id: 'schrijfwerk', label: 'Schrijfwerk' },
   { id: 'archief', label: 'Archief' },
   { id: 'over-mij', label: 'Over mij' },
 ];
@@ -16,22 +15,26 @@ export function initNav() {
   const onHome = isHomePage();
 
   // Build nav links — on homepage use anchors, on other pages link to /#section
-  const navLinks = sections
-    .map(
+  const navLinks = [
+    `<a href="/klassiek/" class="nav-link${onHome ? ' active' : ''}" data-section="home">Home</a>`,
+    ...sections.map(
       (s) =>
         `<a href="${onHome ? '#' + s.id : '/#' + s.id}" class="nav-link" data-section="${s.id}">${s.label}</a>`
-    )
-    .join('');
+    ),
+  ].join('');
 
   // Build footer links (always use /#section for consistency)
-  const footerLinks = sections.map((s) => `<a href="/#${s.id}">${s.label}</a>`).join('');
+  const footerLinks = [
+    `<a href="/klassiek/">Home</a>`,
+    ...sections.map((s) => `<a href="/#${s.id}">${s.label}</a>`),
+  ].join('');
 
   // Inject header
   const header = document.createElement('header');
   header.className = 'topbar';
   header.innerHTML = `
     <div class="topbar-inner">
-      <a href="/" class="topbar-brand"><span class="topbar-brand-text">Janus van Koolwijk</span></a>
+      <a href="/klassiek/" class="topbar-brand"><span class="topbar-brand-text">Janus van Koolwijk</span></a>
       <nav class="topbar-nav" id="topbar-nav">
         ${navLinks}
       </nav>
@@ -86,8 +89,8 @@ export function initNav() {
     const navLinkEls = document.querySelectorAll('.nav-link[data-section]');
 
     function updateActiveNav() {
-      const scrollY = window.scrollY + 120; // offset for topbar
-      let activeId = null;
+      const scrollY = window.scrollY + 100; // offset for topbar
+      let activeId = 'home';
 
       for (const s of sectionEls) {
         if (s.el.offsetTop <= scrollY) {

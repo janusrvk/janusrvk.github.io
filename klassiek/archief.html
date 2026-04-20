@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mijn Spotify-archief</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green: #1DB954;
+    --green-dim: #158a3e;
+    --bg: #0f0f0f;
+    --surface: #181818;
+    --surface2: #222222;
+    --surface3: #2a2a2a;
+    --text: #ffffff;
+    --text-muted: #a0a0a0;
+    --text-faint: #555555;
+    --border: #2c2c2c;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .header {
+    padding: 56px 32px 40px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .header-eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+
+  .header h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text);
+  }
+
+  .header-sub {
+    margin-top: 12px;
+    color: var(--text-muted);
+    font-size: 14px;
+  }
+
+  /* ── Section container ── */
+  .main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px 80px;
+  }
+
+  /* ── Bar chart ── */
+  .chart-section {
+    margin-bottom: 56px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 20px;
+  }
+
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .bar-year-label {
+    width: 38px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  .bar-track {
+    flex: 1;
+    background: var(--surface2);
+    border-radius: 3px;
+    height: 28px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    min-width: 2px;
+  }
+
+  .bar-row:hover .bar-fill { opacity: 0.85; }
+
+  .bar-count {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    width: 64px;
+    flex-shrink: 0;
+    text-align: right;
+  }
+
+  /* ── Year sections ── */
+  .years-section {  }
+
+  .year-block {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .year-block.open { border-color: #383838; }
+
+  .year-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 24px;
+    cursor: pointer;
+    background: var(--surface);
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .year-header:hover { background: var(--surface2); }
+
+  .year-header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .year-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .year-plays {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .year-chevron {
+    width: 20px;
+    height: 20px;
+    color: var(--text-faint);
+    transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+    flex-shrink: 0;
+  }
+
+  .year-block.open .year-chevron { transform: rotate(180deg); }
+
+  .year-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .year-body-inner {
+    padding: 8px 16px 16px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  /* ── Month sections ── */
+  .month-block {
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--bg);
+    border: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .month-block.open { border-color: var(--border); }
+
+  .month-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    cursor: pointer;
+    user-select: none;
+    border-radius: 8px;
+    transition: background 0.15s;
+  }
+
+  .month-header:hover { background: var(--surface2); }
+  .month-block.open .month-header { border-radius: 8px 8px 0 0; background: var(--surface2); }
+
+  .month-header-left {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .month-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .month-count {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .month-chevron {
+    width: 16px;
+    height: 16px;
+    color: var(--text-faint);
+    transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+    flex-shrink: 0;
+  }
+
+  .month-block.open .month-chevron { transform: rotate(180deg); }
+
+  .month-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .month-body-inner {
+    padding: 16px;
+    border-top: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 600px) {
+    .month-body-inner { grid-template-columns: 1fr; }
+    .header { padding: 32px 20px 28px; }
+    .main { padding: 0 16px 60px; }
+  }
+
+  /* ── Track list ── */
+  .list-section-title {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    margin-bottom: 12px;
+  }
+
+  .track-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .track-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .track-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-faint);
+    width: 18px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    text-align: right;
+  }
+
+  .track-info {
+    min-width: 0;
+  }
+
+  .track-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  .track-artist {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  /* ── Album list ── */
+  .album-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .album-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .album-num {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-faint);
+    width: 18px;
+    flex-shrink: 0;
+    padding-top: 2px;
+    text-align: right;
+  }
+
+  .album-info {
+    min-width: 0;
+  }
+
+  .album-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  .album-artist {
+    font-size: 12px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+
+  .album-meta {
+    font-size: 11px;
+    color: var(--green);
+    font-weight: 500;
+    margin-top: 1px;
+    display: block;
+  }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    padding: 40px 32px;
+    font-size: 12px;
+    color: var(--text-faint);
+    border-top: 1px solid var(--border);
+    max-width: 900px;
+    margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+  <a href="/nieuw.html" class="version-switch" aria-label="Bekijk de nieuwe versie"><span class="version-switch-label-full">nieuwe versie</span><span class="version-switch-label-short">nieuw</span> <span aria-hidden="true">&rarr;</span></a>
+
+<div id="lockScreen" style="position:fixed;inset:0;background:#0f0f0f;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;font-family:Inter,sans-serif;">
+  <div style="color:#1DB954;font-size:32px;">♫</div>
+  <div style="color:#fff;font-size:18px;font-weight:600;">Spotify-archief</div>
+  <input id="pinInput" type="password" inputmode="numeric" placeholder="Wachtwoord" autofocus
+    style="background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#fff;font-size:20px;padding:12px 20px;text-align:center;outline:none;width:180px;letter-spacing:4px;"
+    onkeydown="if(event.key==='Enter')checkPin()">
+  <div id="pinError" style="color:#e05555;font-size:13px;min-height:18px;"></div>
+</div>
+<script>
+  function checkPin() {
+    if (document.getElementById('pinInput').value === '7666') {
+      document.getElementById('lockScreen').style.display = 'none';
+      fetchLiveData();
+    } else {
+      document.getElementById('pinError').textContent = 'Onjuist wachtwoord';
+      document.getElementById('pinInput').value = '';
+    }
+  }
+</script>
+
+<div class="header">
+  <div class="header-eyebrow">Persoonlijk archief</div>
+  <h1>Mijn Spotify&#8209;archief</h1>
+  <p class="header-sub">Luistergeschiedenis per jaar en maand &mdash; top tracks &amp; albums</p>
+</div>
+
+<div class="main">
+  <div class="chart-section">
+    <div class="section-label">Afspeelcijfers per jaar</div>
+    <div class="bar-chart" id="barChart"></div>
+  </div>
+
+  <div class="years-section" id="yearsSection"></div>
+</div>
+
+<div class="footer">Gegenereerd uit persoonlijke Spotify-data &middot; privé archief</div>
+
+<script>
+const STATS = {"byYear": {"2014": 23, "2015": 81, "2016": 37, "2017": 4075, "2018": 8086, "2019": 990, "2020": 8642, "2021": 18640, "2022": 19821, "2023": 19650, "2024": 22440, "2025": 14057, "2026": 2863}, "spotify2026PreLastfm": 1969, "lastfmCutoff": "2026-02-14"};
+const MONTH_COUNTS = {"2014-03": 4, "2014-09": 12, "2014-10": 22, "2015-10": 52, "2015-11": 43, "2015-12": 17, "2016-07": 27, "2016-09": 13, "2016-12": 5, "2017-01": 8, "2017-02": 68, "2017-03": 100, "2017-04": 100, "2017-05": 100, "2017-06": 100, "2017-07": 100, "2017-08": 100, "2017-09": 100, "2017-10": 100, "2017-11": 100, "2017-12": 77, "2018-01": 100, "2018-02": 100, "2018-03": 100, "2018-04": 100, "2018-05": 100, "2018-06": 100, "2018-07": 100, "2018-08": 100, "2018-09": 100, "2018-10": 74, "2018-11": 100, "2018-12": 100, "2019-01": 100, "2019-02": 82, "2019-03": 9, "2019-11": 100, "2019-12": 100, "2020-01": 8, "2020-02": 36, "2020-03": 15, "2020-04": 4, "2020-05": 100, "2020-06": 100, "2020-07": 100, "2020-08": 100, "2020-09": 100, "2020-10": 100, "2020-11": 100, "2020-12": 100, "2021-01": 100, "2021-02": 100, "2021-03": 100, "2021-04": 100, "2021-05": 100, "2021-06": 100, "2021-07": 100, "2021-08": 100, "2021-09": 100, "2021-10": 100, "2021-11": 100, "2021-12": 100, "2022-01": 100, "2022-02": 100, "2022-03": 100, "2022-04": 100, "2022-05": 100, "2022-06": 100, "2022-07": 100, "2022-08": 100, "2022-09": 100, "2022-10": 100, "2022-11": 100, "2022-12": 100, "2023-01": 100, "2023-02": 100, "2023-03": 100, "2023-04": 100, "2023-05": 100, "2023-06": 100, "2023-07": 100, "2023-08": 100, "2023-09": 100, "2023-10": 100, "2023-11": 100, "2023-12": 100, "2024-01": 100, "2024-02": 100, "2024-03": 100, "2024-04": 100, "2024-05": 100, "2024-06": 100, "2024-07": 100, "2024-08": 100, "2024-09": 100, "2024-10": 100, "2024-11": 100, "2024-12": 100, "2025-01": 100, "2025-02": 100, "2025-03": 100, "2025-04": 100, "2025-05": 100, "2025-06": 100, "2025-07": 100, "2025-08": 100, "2025-09": 100, "2025-10": 100, "2025-11": 100, "2025-12": 100, "2026-01": 100, "2026-02": 100, "2026-03": 77};
+const TRACKS = {"2014-03": [{"track": "Happy", "artist": "Pharrell Williams", "album": "Despicable Me 2 (Original Motion Picture Soundtrack)"}, {"track": "Things We Lost In The Fire", "artist": "Bastille", "album": "All This Bad Blood"}, {"track": "Waves", "artist": "Mr. Probz", "album": "Waves"}, {"track": "Send Me on My Way", "artist": "Rusted Root", "album": "Music From Party of Five"}], "2014-09": [{"track": "Things We Lost In The Fire", "artist": "Bastille", "album": "All This Bad Blood"}, {"track": "Waves", "artist": "Mr. Probz", "album": "Waves"}, {"track": "Marilyn Monroe", "artist": "Pharrell Williams", "album": "G I R L"}, {"track": "Happy", "artist": "Pharrell Williams", "album": "Despicable Me 2 (Original Motion Picture Soundtrack)"}, {"track": "These Streets", "artist": "Bastille", "album": "Bad Blood"}, {"track": "All I Want", "artist": "Kodaline", "album": "In A Perfect World (Deluxe)"}, {"track": "Hall of Fame (feat. will.i.am)", "artist": "The Script", "album": "#3 Deluxe Version"}, {"track": "Army of Two", "artist": "Olly Murs", "album": "Right Place Right Time"}, {"track": "Dirty Paws", "artist": "Of Monsters and Men", "album": "My Head Is An Animal"}, {"track": "Gold Days (feat. Action Bronson)", "artist": "Mr. Probz", "album": "The Treatment"}], "2014-10": [{"track": "Salsa Tequila", "artist": "Anders Nilsen", "album": "Salsa Tequila"}, {"track": "Viva La Vida", "artist": "Coldplay", "album": "Viva La Vida (Prospekt's March Edition)"}, {"track": "Bailando - English Version", "artist": "Enrique Iglesias", "album": "Bailando"}, {"track": "Fireball (feat. John Ryan)", "artist": "Pitbull", "album": "Fireball (feat. John Ryan)"}, {"track": "Am I Wrong", "artist": "Nico & Vinz", "album": "Black Star Elephant"}, {"track": "Problem", "artist": "Ariana Grande", "album": "My Everything"}, {"track": "Budapest", "artist": "George Ezra", "album": "Wanted on Voyage"}, {"track": "Don't Panic", "artist": "French Montana", "album": "Don't Panic"}, {"track": "Come to Me", "artist": "The Goo Goo Dolls", "album": "Magnetic"}, {"track": "What Are You Waiting For?", "artist": "Nickelback", "album": "What Are You Waiting For?"}], "2015-10": [{"track": "Niemand", "artist": "Ronnie Flex", "album": "Niemand"}, {"track": "Locked Away (feat. Adam Levine)", "artist": "R. City", "album": "What Dreams Are Made Of"}, {"track": "Stitches", "artist": "Shawn Mendes", "album": "Handwritten"}, {"track": "How Deep Is Your Love", "artist": "Calvin Harris", "album": "How Deep Is Your Love"}, {"track": "Sugar (feat. Francesco Yates)", "artist": "Robin Schulz", "album": "Sugar"}, {"track": "On My Mind", "artist": "Ellie Goulding", "album": "On My Mind"}, {"track": "Can't Feel My Face", "artist": "The Weeknd", "album": "Beauty Behind The Madness"}, {"track": "Lean On (feat. MØ & DJ Snake)", "artist": "Major Lazer", "album": "Peace Is The Mission"}, {"track": "Hula Hoop", "artist": "OMI", "album": "Hula Hoop"}, {"track": "Investeren In De Liefde", "artist": "SFB", "album": "New Wave"}], "2015-11": [{"track": "I'll Show You", "artist": "Justin Bieber", "album": "Purpose"}, {"track": "Ni**as In Paris", "artist": "JAY-Z", "album": "Watch The Throne"}, {"track": "POWER", "artist": "Kanye West", "album": "My Beautiful Dark Twisted Fantasy"}, {"track": "The Next Episode", "artist": "Dr. Dre", "album": "2001"}, {"track": "Sorry", "artist": "Justin Bieber", "album": "Sorry"}, {"track": "Niemand", "artist": "Ronnie Flex", "album": "Niemand"}, {"track": "What Do You Mean?", "artist": "Justin Bieber", "album": "What Do You Mean?"}, {"track": "Stitches", "artist": "Shawn Mendes", "album": "Handwritten"}, {"track": "Focus", "artist": "Ariana Grande", "album": "Focus"}, {"track": "Hotline Bling", "artist": "Drake", "album": "Hotline Bling"}], "2015-12": [{"track": "Investeren In De Liefde", "artist": "SFB", "album": "New Wave"}, {"track": "Santa Tell Me", "artist": "Ariana Grande", "album": "Santa Tell Me"}, {"track": "Lo! How A Rose E'er Blooming", "artist": "Sufjan Stevens", "album": "Songs For Christmas"}, {"track": "Star Star - Live", "artist": "The Swell Season", "album": "Strict Joy"}, {"track": "Christmas Alone", "artist": "Current Swell", "album": "Isn't This World Enough?? A Nettwerk Christmas"}, {"track": "1996", "artist": "The Lake Poets", "album": "The Lake Poets"}, {"track": "Last Christmas", "artist": "Ariana Grande", "album": "Christmas Kisses"}, {"track": "Sorry", "artist": "Justin Bieber", "album": "Purpose"}, {"track": "Hello", "artist": "Adele", "album": "Hello"}, {"track": "See You Again (feat. Charlie Puth)", "artist": "Wiz Khalifa", "album": "See You Again (feat. Charlie Puth)"}], "2016-07": [{"track": "One Dance", "artist": "Drake", "album": "Views"}, {"track": "Ik Was Al Binnen", "artist": "Broederliefde", "album": "Hard Work Pays Off 2"}, {"track": "Hotter Than Hell", "artist": "Dua Lipa", "album": "Hotter Than Hell"}, {"track": "Work from Home (feat. Ty Dolla $ign)", "artist": "Fifth Harmony", "album": "7/27"}, {"track": "Don't Let Me Down", "artist": "The Chainsmokers", "album": "Don't Let Me Down"}, {"track": "CAN'T STOP THE FEELING! (from DreamWorks Animation's \"TROLLS\")", "artist": "Justin Timberlake", "album": "CAN'T STOP THE FEELING! (from DreamWorks Animation's \"TROLLS\")"}, {"track": "Kill Em With Kindness", "artist": "Selena Gomez", "album": "Revival"}, {"track": "This Girl - Kungs Vs. Cookin' On 3 Burners", "artist": "Kungs", "album": "This Girl"}, {"track": "No Money", "artist": "Galantis", "album": "No Money"}, {"track": "Wherever I Go", "artist": "OneRepublic", "album": "Wherever I Go"}], "2016-09": [{"track": "Controlla", "artist": "Drake", "album": "Views"}, {"track": "You & Me", "artist": "Marc E. Bassy", "album": "Groovy People"}, {"track": "Cold Water (feat. Justin Bieber & MØ)", "artist": "Major Lazer", "album": "Cold Water (feat. Justin Bieber & MØ)"}, {"track": "Send My Love (To Your New Lover)", "artist": "Adele", "album": "25"}, {"track": "Ain't My Fault", "artist": "Zara Larsson", "album": "Ain't My Fault"}, {"track": "Broccoli (feat. Lil Yachty)", "artist": "DRAM", "album": "Broccoli (feat. Lil Yachty)"}, {"track": "Into You", "artist": "Ariana Grande", "album": "Dangerous Woman"}, {"track": "We Don't Talk Anymore (feat. Selena Gomez)", "artist": "Charlie Puth", "album": "Nine Track Mind"}, {"track": "i hate u, i love u (feat. olivia o'brien)", "artist": "gnash", "album": "us"}, {"track": "Kill Em With Kindness", "artist": "Selena Gomez", "album": "Revival"}], "2016-12": [{"track": "Die For You", "artist": "The Weeknd", "album": "Starboy"}, {"track": "As You Are", "artist": "The Weeknd", "album": "Beauty Behind The Madness"}, {"track": "Og Kush", "artist": "Liquid", "album": "Slang Funk Slam Dunk"}, {"track": "Utopie feat. Amewu", "artist": "Team Avantgarde", "album": "Erwartungen"}, {"track": "Flagga", "artist": "Breitbild", "album": "Breitbild"}], "2017-01": [{"track": "Sorry", "artist": "Kensington", "album": "Control"}, {"track": "Just Hold On", "artist": "Steve Aoki", "album": "Just Hold On"}, {"track": "Side To Side", "artist": "Ariana Grande", "album": "Dangerous Woman"}, {"track": "No Lie", "artist": "Sean Paul", "album": "No Lie"}, {"track": "Dancing On My Own", "artist": "Calum Scott", "album": "Dancing On My Own"}, {"track": "Mercy", "artist": "Shawn Mendes", "album": "Illuminate"}, {"track": "Starving", "artist": "Hailee Steinfeld", "album": "Starving"}, {"track": "Obama and Alan Keyes Debate Iraq War 2004 (Part 2)", "artist": "Barack Obama", "album": "The Greatest Speeches Vol. 1"}], "2017-02": [{"track": "Views", "artist": "Drake", "album": "Views"}, {"track": "Back To Back", "artist": "Drake", "album": "Back To Back"}, {"track": "Bad Things - With Camila Cabello", "artist": "mgk", "album": "Bad Things"}, {"track": "Run Up (feat. PARTYNEXTDOOR & Nicki Minaj)", "artist": "Major Lazer", "album": "Run Up (feat. PARTYNEXTDOOR & Nicki Minaj)"}, {"track": "Caroline", "artist": "Aminé", "album": "Caroline"}, {"track": "CRZY", "artist": "Kehlani", "album": "CRZY"}, {"track": "Closer", "artist": "The Chainsmokers", "album": "Closer"}, {"track": "Right Hand", "artist": "Drake", "album": "Right Hand"}, {"track": "Legend", "artist": "Drake", "album": "If You're Reading This It's Too Late"}, {"track": "In the Name of Love", "artist": "Martin Garrix", "album": "In the Name of Love"}], "2017-03": [{"track": "Portland", "artist": "Drake", "album": "More Life"}, {"track": "Slapend Rijk", "artist": "Boef", "album": "Slaaptekort"}, {"track": "Six Feet Under", "artist": "The Weeknd", "album": "Starboy"}, {"track": "Shape of You - Stormzy Remix", "artist": "Ed Sheeran", "album": "Shape of You"}, {"track": "Cold", "artist": "Stormzy", "album": "Gang Signs & Prayer"}, {"track": "Bad and Boujee (feat. Lil Uzi Vert)", "artist": "Migos", "album": "Culture"}, {"track": "No Problem (feat. Lil Wayne & 2 Chainz)", "artist": "Chance the Rapper", "album": "Coloring Book"}, {"track": "Mask Off", "artist": "Future", "album": "FUTURE"}, {"track": "Tempo (feat. Sevn Alias, Bko & Boef)", "artist": "Jairzinho", "album": "Tempo (feat. Sevn Alias, Bko & Boef)"}, {"track": "Not Nice", "artist": "PARTYNEXTDOOR", "album": "PARTYNEXTDOOR 3 (P3)"}], "2017-04": [{"track": "Skepta Interlude", "artist": "Drake", "album": "More Life"}, {"track": "This Could Be Us", "artist": "Rae Sremmurd", "album": "SremmLife"}, {"track": "T-Shirt", "artist": "Migos", "album": "Culture"}, {"track": "Champions", "artist": "Kanye West", "album": "Champions"}, {"track": "Big For Your Boots", "artist": "Stormzy", "album": "Gang Signs & Prayer"}, {"track": "Go Off (with Lil Uzi Vert, Quavo & Travis Scott)", "artist": "Lil Uzi Vert", "album": "Go Off"}, {"track": "Now and Later", "artist": "Sage The Gemini", "album": "Now and Later"}, {"track": "Six Feet Under", "artist": "The Weeknd", "album": "Starboy"}, {"track": "Moves", "artist": "Big Sean", "album": "I Decided."}, {"track": "Hotline Bling", "artist": "Drake", "album": "Views"}], "2017-05": [{"track": "Rollin (feat. Future & Khalid)", "artist": "Calvin Harris", "album": "Rollin (feat. Future & Khalid)"}, {"track": "iSpy (feat. Lil Yachty)", "artist": "KYLE", "album": "iSpy (feat. Lil Yachty)"}, {"track": "Big For Your Boots", "artist": "Stormzy", "album": "Gang Signs & Prayer"}, {"track": "Mask Off", "artist": "Future", "album": "FUTURE"}, {"track": "I'm the One", "artist": "DJ Khaled", "album": "I'm the One"}, {"track": "Unforgettable", "artist": "French Montana", "album": "Unforgettable"}, {"track": "Different Kind", "artist": "Frisco (Featuring Shakka)", "album": "Different Kind"}, {"track": "Good Life (with G-Eazy & Kehlani)", "artist": "G-Eazy", "album": "Good Life (with G-Eazy & Kehlani)"}, {"track": "Low Life (feat. The Weeknd)", "artist": "Future", "album": "EVOL"}, {"track": "Shutdown", "artist": "Skepta", "album": "Konnichiwa"}], "2017-06": [{"track": "Slide (feat. Frank Ocean & Migos)", "artist": "Calvin Harris", "album": "Funk Wav Bounces Vol.1"}, {"track": "Know No Better (feat. Travis Scott, Camila Cabello & Quavo)", "artist": "Major Lazer", "album": "Know No Better"}, {"track": "XO TOUR Llif3", "artist": "Lil Uzi Vert", "album": "XO TOUR Llif3"}, {"track": "Despacito - Remix", "artist": "Luis Fonsi", "album": "Despacito Feat. Justin Bieber"}, {"track": "Mama", "artist": "Jonas Blue", "album": "Mama"}, {"track": "Party", "artist": "Jonna Fraser", "album": "Jonathan"}, {"track": "White Iverson", "artist": "Post Malone", "album": "Stoney"}, {"track": "The Song Of The Summer", "artist": "Seven Bucks", "album": "The Song Of The Summer"}, {"track": "1-800-273-8255", "artist": "Logic", "album": "Everybody"}, {"track": "Up", "artist": "Desiigner", "album": "Up"}], "2017-07": [{"track": "Slide (feat. Frank Ocean & Migos)", "artist": "Calvin Harris", "album": "Funk Wav Bounces Vol.1"}, {"track": "XO TOUR Llif3", "artist": "Lil Uzi Vert", "album": "XO TOUR Llif3"}, {"track": "Glorious (feat. Skylar Grey)", "artist": "Macklemore", "album": "Glorious (feat. Skylar Grey)"}, {"track": "Go Flex", "artist": "Post Malone", "album": "Stoney"}, {"track": "Know No Better (feat. Travis Scott, Camila Cabello & Quavo)", "artist": "Major Lazer", "album": "Know No Better"}, {"track": "Signs", "artist": "Drake", "album": "Signs"}, {"track": "Bon appétit", "artist": "Katy Perry", "album": "Witness"}, {"track": "Often", "artist": "The Weeknd", "album": "Beauty Behind The Madness"}, {"track": "Grass Ain't Greener", "artist": "Chris Brown", "album": "Grass Ain't Greener"}, {"track": "Ride", "artist": "Twenty One Pilots", "album": "Blurryface"}], "2017-08": [{"track": "Glorious (feat. Skylar Grey)", "artist": "Macklemore", "album": "Glorious (feat. Skylar Grey)"}, {"track": "A Lie", "artist": "French Montana", "album": "Jungle Rules"}, {"track": "Holiday (feat. Snoop Dogg, John Legend & Takeoff)", "artist": "Calvin Harris", "album": "Funk Wav Bounces Vol.1"}, {"track": "Despacito (Featuring Daddy Yankee)", "artist": "Luis Fonsi", "album": "Despacito (Featuring Daddy Yankee)"}, {"track": "Caroline", "artist": "Aminé", "album": "Good For You"}, {"track": "That's Not Me", "artist": "Skepta", "album": "Konnichiwa"}, {"track": "I'm the One (feat. Justin Bieber, Quavo, Chance the Rapper & Lil Wayne)", "artist": "DJ Khaled", "album": "Grateful"}, {"track": "Strip That Down", "artist": "Liam Payne", "album": "Strip That Down"}, {"track": "Good Goodbye (feat. Pusha T and Stormzy)", "artist": "Linkin Park", "album": "One More Light"}, {"track": "Ball Player (feat. Quavo)", "artist": "Meek Mill", "album": "Wins & Losses"}], "2017-09": [{"track": "Famous", "artist": "Kanye West", "album": "The Life Of Pablo"}, {"track": "rockstar", "artist": "Post Malone", "album": "rockstar"}, {"track": "Sky Walker (feat. Travis Scott)", "artist": "Miguel", "album": "Sky Walker (feat. Travis Scott)"}, {"track": "Mi Gente - Original Mix", "artist": "J Balvin", "album": "Mi Gente"}, {"track": "Silence", "artist": "Marshmello", "album": "Silence"}, {"track": "Slow Jamz (feat. Kanye West & Jamie Foxx)", "artist": "Twista", "album": "Kamikaze"}, {"track": "Gold Digger", "artist": "Kanye West", "album": "Late Registration"}, {"track": "Doe Rustig!", "artist": "Lijpe", "album": "Zandloper"}, {"track": "Cigarettes & Cush (feat. Kehlani & Lily Allen)", "artist": "Stormzy", "album": "Gang Signs & Prayer"}, {"track": "Marmalade (feat. Lil Yachty)", "artist": "Macklemore", "album": "Marmalade (feat. Lil Yachty)"}], "2017-10": [{"track": "Marmalade (feat. Lil Yachty)", "artist": "Macklemore", "album": "GEMINI"}, {"track": "rockstar", "artist": "Post Malone", "album": "rockstar"}, {"track": "Whiskey (feat. A$AP Rocky)", "artist": "Maroon 5", "album": "Whiskey (feat. A$AP Rocky)"}, {"track": "Famous", "artist": "Kanye West", "album": "The Life Of Pablo"}, {"track": "Only One", "artist": "Kanye West", "album": "Only One"}, {"track": "Havana (feat. Young Thug)", "artist": "Camila Cabello", "album": "Havana (feat. Young Thug)"}, {"track": "Patsergedrag", "artist": "Sevn Alias", "album": "Patsergedrag"}, {"track": "Mobali", "artist": "Siboy", "album": "Special"}, {"track": "Mi Gente (feat. Beyoncé)", "artist": "J Balvin", "album": "Mi Gente (feat. Beyoncé)"}, {"track": "Let You Down", "artist": "NF", "album": "Perception"}], "2017-11": [{"track": "Good Morning", "artist": "Kanye West", "album": "Graduation"}, {"track": "Spice Girl", "artist": "Aminé", "album": "Good For You"}, {"track": "Heartless", "artist": "Kanye West", "album": "808s & Heartbreak"}, {"track": "Highlights", "artist": "Kanye West", "album": "The Life Of Pablo"}, {"track": "Black Skinhead", "artist": "Kanye West", "album": "Yeezus"}, {"track": "Deserve (feat. Travis Scott)", "artist": "Kris Wu", "album": "Deserve (feat. Travis Scott)"}, {"track": "Family Business", "artist": "Kanye West", "album": "The College Dropout"}, {"track": "POWER", "artist": "Kanye West", "album": "My Beautiful Dark Twisted Fantasy"}, {"track": "Homecoming", "artist": "Kanye West", "album": "Homecoming"}, {"track": "Gold Digger", "artist": "Kanye West", "album": "Late Registration"}], "2017-12": [{"track": "Watch Me", "artist": "Jaden", "album": "SYRE"}, {"track": "Danger (with Migos & Marshmello)", "artist": "Migos", "album": "Danger (with Migos & Marshmello) [From Bright: The Album]"}, {"track": "Candy Paint", "artist": "Post Malone", "album": "Candy Paint"}, {"track": "Walk On Water (feat. Beyoncé)", "artist": "Eminem", "album": "Revival"}, {"track": "All Day", "artist": "Kanye West", "album": "All Day"}, {"track": "Broken People (with Logic & Rag'n'Bone Man)", "artist": "Logic", "album": "Bright: The Album"}, {"track": "FourFiveSeconds", "artist": "Rihanna", "album": "FourFiveSeconds"}, {"track": "Come Through and Chill (feat. J. Cole & Salaam Remi)", "artist": "Miguel", "album": "Come Through and Chill (feat. J. Cole & Salaam Remi)"}, {"track": "Rolex", "artist": "Ayo & Teo", "album": "Rolex"}, {"track": "Gucci Gang", "artist": "Lil Pump", "album": "Lil Pump"}], "2018-01": [{"track": "Walk On Water (feat. Beyoncé)", "artist": "Eminem", "album": "Revival"}, {"track": "Nikes", "artist": "Jacin Trill", "album": "Nikes"}, {"track": "Broken People (with Logic & Rag'n'Bone Man)", "artist": "Logic", "album": "Bright: The Album"}, {"track": "Spotlight", "artist": "Marshmello", "album": "Spotlight"}, {"track": "E", "artist": "Jaden", "album": "SYRE"}, {"track": "Homecoming", "artist": "Kanye West", "album": "Homecoming"}, {"track": "Marmalade (feat. Lil Yachty)", "artist": "Macklemore", "album": "GEMINI"}, {"track": "Real Life", "artist": "The Weeknd", "album": "Beauty Behind The Madness"}, {"track": "Go Flex", "artist": "Post Malone", "album": "Stoney"}, {"track": "Reminder - Remix", "artist": "The Weeknd", "album": "Reminder"}], "2018-02": [{"track": "Sky Walker (feat. Travis Scott)", "artist": "Miguel", "album": "Sky Walker (feat. Travis Scott)"}, {"track": "Jesus Walks", "artist": "Kanye West", "album": "The College Dropout"}, {"track": "Amen", "artist": "Rich Brian", "album": "Amen"}, {"track": "Come Through and Chill (feat. J. Cole & Salaam Remi)", "artist": "Miguel", "album": "Come Through and Chill (feat. J. Cole & Salaam Remi)"}, {"track": "goosebumps", "artist": "Travis Scott", "album": "Birds In The Trap Sing McKnight"}, {"track": "BUTTERFLY EFFECT", "artist": "Travis Scott", "album": "BUTTERFLY EFFECT"}, {"track": "Feel It Still", "artist": "Portugal. The Man", "album": "Woodstock"}, {"track": "New Slaves", "artist": "Kanye West", "album": "Yeezus"}, {"track": "Pray For Me (with Kendrick Lamar)", "artist": "The Weeknd", "album": "Pray For Me (with Kendrick Lamar)"}, {"track": "Banana Clip", "artist": "Miguel", "album": "War & Leisure"}], "2018-03": [{"track": "Top Off (feat. JAY Z, Future & Beyoncé)", "artist": "DJ Khaled", "album": "Top Off (feat. JAY Z, Future & Beyoncé)"}, {"track": "Saint", "artist": "Huncho Jack", "album": "Huncho Jack, Jack Huncho"}, {"track": "Powerglide (feat. Juicy J)", "artist": "Rae Sremmurd", "album": "Powerglide (feat. Juicy J)"}, {"track": "Barking", "artist": "Ramz", "album": "Barking"}, {"track": "Jumanji", "artist": "B Young", "album": "Jumanji"}, {"track": "Caroline", "artist": "Aminé", "album": "Good For You"}, {"track": "Look Alive (feat. Drake)", "artist": "BlocBoy JB", "album": "Look Alive (feat. Drake)"}, {"track": "Bad Boys (feat. Ghetts and J Hus)", "artist": "Stormzy", "album": "Gang Signs & Prayer"}, {"track": "Do You Mind (feat. Nicki Minaj, Chris Brown, August Alsina, Jeremih, Future & Rick Ross)", "artist": "DJ Khaled", "album": "Major Key"}, {"track": "Even The Odds (& Metro Boomin)", "artist": "Big Sean", "album": "Double Or Nothing (& Metro Boomin)"}], "2018-04": [{"track": "Go Flex", "artist": "Post Malone", "album": "Stoney"}, {"track": "Everyday (feat. Rod Stewart, Miguel & Mark Ronson)", "artist": "A$AP Rocky", "album": "Everyday (feat. Rod Stewart, Miguel & Mark Ronson)"}, {"track": "Caroline", "artist": "Aminé", "album": "Good For You"}, {"track": "Some Way", "artist": "NAV", "album": "NAV"}, {"track": "Saint", "artist": "Huncho Jack", "album": "Huncho Jack, Jack Huncho"}, {"track": "Aladdin", "artist": "Not3s", "album": "Take Not3s"}, {"track": "Sky Walker (feat. Travis Scott)", "artist": "Miguel", "album": "War & Leisure"}, {"track": "Slide (feat. Frank Ocean & Migos)", "artist": "Calvin Harris", "album": "Funk Wav Bounces Vol.1"}, {"track": "A$AP Forever (feat. Moby)", "artist": "A$AP Rocky", "album": "A$AP Forever (feat. Moby)"}, {"track": "Feels (feat. Pharrell Williams, Katy Perry & Big Sean)", "artist": "Calvin Harris", "album": "Feels (feat. Pharrell Williams, Katy Perry & Big Sean)"}], "2018-05": [{"track": "Bedtime Stories (feat. The Weeknd) - From SR3MM", "artist": "Rae Sremmurd", "album": "SR3MM"}, {"track": "Praise The Lord (Da Shine) (feat. Skepta)", "artist": "A$AP Rocky", "album": "TESTING"}, {"track": "Antidote", "artist": "Travis Scott", "album": "Rodeo"}, {"track": "Jackie Chan", "artist": "Preme", "album": "Light Of Day"}, {"track": "If You Know You Know", "artist": "Pusha T", "album": "DAYTONA"}, {"track": "This Is America", "artist": "Childish Gambino", "album": "This Is America"}, {"track": "Diamonds From Sierra Leone - Remix", "artist": "Kanye West", "album": "Diamonds from Sierra Leone Remix ft Jay.z"}, {"track": "M.P.A.", "artist": "Pusha T", "album": "King Push – Darkest Before Dawn: The Prelude"}, {"track": "Ye vs. the People (starring TI as the People)", "artist": "Kanye West", "album": "Ye vs. the People (starring TI as the People)"}, {"track": "Unforgettable", "artist": "French Montana", "album": "Jungle Rules"}], "2018-06": [{"track": "Guatemala - From Swaecation", "artist": "Rae Sremmurd", "album": "SR3MM"}, {"track": "Feel The Love", "artist": "KIDS SEE GHOSTS", "album": "KIDS SEE GHOSTS"}, {"track": "Modern Slavery", "artist": "Huncho Jack", "album": "Huncho Jack, Jack Huncho"}, {"track": "Tony Tone", "artist": "A$AP Rocky", "album": "TESTING"}, {"track": "Yikes", "artist": "Kanye West", "album": "ye"}, {"track": "Jocelyn Flores", "artist": "XXXTENTACION", "album": "17"}, {"track": "SAD!", "artist": "XXXTENTACION", "album": "?"}, {"track": "If You Know You Know", "artist": "Pusha T", "album": "DAYTONA"}, {"track": "GHOST", "artist": "Jaden", "album": "GHOST"}, {"track": "APESHIT", "artist": "The Carters", "album": "EVERYTHING IS LOVE"}], "2018-07": [{"track": "Hopeless Romantic (feat. Swae Lee)", "artist": "Wiz Khalifa", "album": "Hopeless Romantic (feat. Swae Lee)"}, {"track": "Ghost", "artist": "Dizzee Rascal", "album": "Ghost"}, {"track": "Sit Back Down (feat. Maleek Berry)", "artist": "Not3s", "album": "Take Not3s II"}, {"track": "Legends", "artist": "Juice WRLD", "album": "Legends"}, {"track": "Emotionless", "artist": "Drake", "album": "Scorpion"}, {"track": "Narcos", "artist": "Migos", "album": "Culture II"}, {"track": "Nice For What", "artist": "Drake", "album": "Nice For What"}, {"track": "I'm Upset", "artist": "Drake", "album": "I'm Upset"}, {"track": "Stay Woke (feat. Miguel)", "artist": "Meek Mill", "album": "Stay Woke (feat. Miguel)"}, {"track": "I Might Need Security", "artist": "Chance the Rapper", "album": "I Might Need Security"}], "2018-08": [{"track": "STARGAZING", "artist": "Travis Scott", "album": "ASTROWORLD"}, {"track": "See You Again (feat. Kali Uchis)", "artist": "Tyler, The Creator", "album": "Flower Boy"}, {"track": "Run (feat. Rag'n'Bone Man)", "artist": "Bugzy Malone", "album": "Run (feat. Rag'n'Bone Man)"}, {"track": "Day 'N' Nite (Nightmare)", "artist": "Kid Cudi", "album": "Man On The Moon: The End Of Day"}, {"track": "BLACKJACK", "artist": "Aminé", "album": "ONEPOINTFIVE"}, {"track": "Dangerous World (feat. Travis Scott & YG)", "artist": "Mustard", "album": "Dangerous World (feat. Travis Scott & YG)"}, {"track": "Butterflies (feat. Not3s)", "artist": "AJ Tracey", "album": "Butterflies (feat. Not3s)"}, {"track": "Hopeless Romantic (feat. Swae Lee)", "artist": "Wiz Khalifa", "album": "Hopeless Romantic (feat. Swae Lee)"}, {"track": "Plain Jane", "artist": "A$AP Ferg", "album": "Still Striving"}, {"track": "Walk On Water (feat. Beyoncé)", "artist": "Eminem", "album": "Revival"}], "2018-09": [{"track": "Memories (feat. Kid Cudi)", "artist": "David Guetta", "album": "Memories (feat. Kid Cudi)"}, {"track": "Boca Raton (with A$AP Ferg)", "artist": "Bas", "album": "Milky Way"}, {"track": "REEL IT IN", "artist": "Aminé", "album": "ONEPOINTFIVE"}, {"track": "Who Dat Boy (feat. A$AP Rocky)", "artist": "Tyler, The Creator", "album": "Flower Boy"}, {"track": "Feels Like Summer", "artist": "Childish Gambino", "album": "Summer Pack"}, {"track": "Energy (Stay Far Away)", "artist": "Skepta", "album": "Energy (Stay Far Away)"}, {"track": "Dangerous World (feat. Travis Scott & YG)", "artist": "Mustard", "album": "Dangerous World (feat. Travis Scott & YG)"}, {"track": "STARGAZING", "artist": "Travis Scott", "album": "ASTROWORLD"}, {"track": "Blood On The Leaves", "artist": "Kanye West", "album": "Yeezus"}, {"track": "Ghost", "artist": "Dizzee Rascal", "album": "Ghost"}], "2018-10": [{"track": "ZEZE (feat. Travis Scott & Offset)", "artist": "Kodak Black", "album": "ZEZE (feat. Travis Scott & Offset)"}, {"track": "Mo Bamba", "artist": "Sheck Wes", "album": "MUDBOY"}, {"track": "Used 2", "artist": "Lil Wayne", "album": "Tha Carter V"}, {"track": "Loaded Gun", "artist": "6LACK", "album": "East Atlanta Love Letter"}, {"track": "LOST (feat. Kid Cudi)", "artist": "Quavo", "album": "QUAVO HUNCHO"}, {"track": "No Stylist (feat. Drake)", "artist": "French Montana", "album": "No Stylist"}, {"track": "Potato Salad", "artist": "Tyler, The Creator", "album": "Potato Salad"}, {"track": "Falling Down - Bonus Track", "artist": "Lil Peep", "album": "Falling Down"}, {"track": "Verleden Tijd", "artist": "Frenna", "album": "Verleden Tijd"}, {"track": "Blood On The Leaves", "artist": "Kanye West", "album": "Yeezus"}], "2018-11": [{"track": "Drip Too Hard (Lil Baby & Gunna)", "artist": "Lil Baby", "album": "Drip Harder"}, {"track": "No Complaints (feat. Offset & Drake) (Bonus)", "artist": "Metro Boomin", "album": "NOT ALL HEROES WEAR CAPES"}, {"track": "Baka", "artist": "SASH", "album": "Baka"}, {"track": "Waltz in C-sharp minor, Op. 64 No. 2", "artist": "Frédéric Chopin", "album": "Chopin: Works for Piano"}, {"track": "Diva", "artist": "Don Toliver", "album": "Donny Womack"}, {"track": "Watching Me (with Rae Sremmurd & Kodak Black)", "artist": "Mike WiLL Made-It", "album": "Creed II: The Album"}, {"track": "Hasta La Vista", "artist": "Lil Wayne", "album": "Hasta La Vista"}, {"track": "SOHO", "artist": "Jaden", "album": "The Sunset Tapes: A Cool Tape Story"}, {"track": "Brother's Keeper (feat. Pusha T)", "artist": "Anderson .Paak", "album": "Oxnard"}, {"track": "Prince", "artist": "SASH", "album": "Prince"}], "2018-12": [{"track": "151 Rum", "artist": "JID", "album": "DiCaprio 2"}, {"track": "Going Bad (feat. Drake)", "artist": "Meek Mill", "album": "Championships"}, {"track": "BAD!", "artist": "XXXTENTACION", "album": "SKINS"}, {"track": "monster", "artist": "21 Savage", "album": "i am > i was"}, {"track": "No Role Modelz", "artist": "J. Cole", "album": "2014 Forest Hills Drive"}, {"track": "Sunflower - Spider-Man: Into the Spider-Verse", "artist": "Post Malone", "album": "Spider-Man: Into the Spider-Verse"}, {"track": "L$D", "artist": "A$AP Rocky", "album": "AT.LONG.LAST.A$AP"}, {"track": "FUN!", "artist": "Vince Staples", "album": "FM!"}, {"track": "ROCKABYE BABY (feat. ScHoolboy Q)", "artist": "Joey Bada$$", "album": "ALL-AMERIKKKAN BADA$$"}, {"track": "BUSY / SIRENS", "artist": "Saba", "album": "CARE FOR ME"}], "2019-01": [{"track": "SWITCH IT UP | ZWITCH 1T UP", "artist": "Denzel Curry", "album": "TA13OO"}, {"track": "Lost in the Fire", "artist": "Gesaffelstein", "album": "Lost in the Fire"}, {"track": "Pursuit Of Happiness (Nightmare)", "artist": "Kid Cudi", "album": "Man On The Moon: The End Of Day"}, {"track": "Album of the Year - Freestyle", "artist": "J. Cole", "album": "Album of the Year"}, {"track": "Mile High", "artist": "James Blake", "album": "Assume Form"}, {"track": "Look Back at It", "artist": "A Boogie Wit da Hoodie", "album": "Hoodie SZN"}, {"track": "Faucet Failure", "artist": "Ski Mask The Slump God", "album": "STOKELEY"}, {"track": "MIDDLE CHILD", "artist": "J. Cole", "album": "MIDDLE CHILD"}, {"track": "Slick Talk", "artist": "JID", "album": "DiCaprio 2"}, {"track": "Lucky You (feat. Joyner Lucas)", "artist": "Eminem", "album": "Kamikaze"}], "2019-02": [{"track": "Ladders", "artist": "Mac Miller", "album": "Swimming"}, {"track": "Notice Me", "artist": "Migos", "album": "Culture II"}, {"track": "Workin Out", "artist": "JID", "album": "DiCaprio 2"}, {"track": "Meditate (feat. J.I.D.)", "artist": "EARTHGANG", "album": "Rags"}, {"track": "Leave Me Alone", "artist": "Flipp Dinero", "album": "Leave Me Alone"}, {"track": "Rainy Days (feat. Eminem)", "artist": "WESTSIDE BOOGIE", "album": "Everythings For Sale"}, {"track": "Look Back at It", "artist": "A Boogie Wit da Hoodie", "album": "Hoodie SZN"}, {"track": "No Stylist (feat. Drake)", "artist": "French Montana", "album": "No Stylist"}, {"track": "MIDDLE CHILD", "artist": "J. Cole", "album": "MIDDLE CHILD"}, {"track": "1985 - Intro to “The Fall Off”", "artist": "J. Cole", "album": "KOD"}], "2019-03": [{"track": "Telemóveis", "artist": "CONAN OSIRIS", "album": "Festival da Canção 2019"}, {"track": "Soldi", "artist": "Mahmood", "album": "Gioventù Bruciata"}, {"track": "Foot Fungus", "artist": "Ski Mask The Slump God", "album": "STOKELEY"}, {"track": "Don't Call Me Up", "artist": "Mabel", "album": "Ivy To Roses - Mixtape"}, {"track": "Rompe", "artist": "Priceless", "album": "Rompe"}, {"track": "IJskoud", "artist": "Nielson", "album": "Diamant"}, {"track": "Team", "artist": "Xavier Weeks", "album": "Team"}, {"track": "Survival Tactics", "artist": "Joey Bada$$", "album": "1999"}, {"track": "Leftonread", "artist": "boyband", "album": "Leftonread"}], "2019-11": [{"track": "Location", "artist": "Playboi Carti", "album": "Playboi Carti"}, {"track": "Hide (feat. Seezyn)", "artist": "Juice WRLD", "album": "Spider-Man: Into the Spider-Verse"}, {"track": "Come Through and Chill (feat. J. Cole & Salaam Remi)", "artist": "Miguel", "album": "Come Through and Chill (feat. J. Cole & Salaam Remi)"}, {"track": "Loaded Gun", "artist": "6LACK", "album": "East Atlanta Love Letter"}, {"track": "L$D", "artist": "A$AP Rocky", "album": "AT.LONG.LAST.A$AP"}, {"track": "Sit Back Down (feat. Maleek Berry)", "artist": "Not3s", "album": "Take Not3s II"}, {"track": "HIGHEST IN THE ROOM", "artist": "Travis Scott", "album": "HIGHEST IN THE ROOM"}, {"track": "Mr. Clean", "artist": "Yung Gravy", "album": "Snow Cougar"}, {"track": "Self Care", "artist": "Mac Miller", "album": "Swimming"}, {"track": "m.A.A.d city", "artist": "Kendrick Lamar", "album": "good kid, m.A.A.d city"}], "2019-12": [{"track": "I'm Good Luv, Enjoy.", "artist": "Aaron May", "album": "CHASE"}, {"track": "On My Own", "artist": "Jaden", "album": "ERYS"}, {"track": "Want Her", "artist": "Mustard", "album": "Cold Summer"}, {"track": "Hasta Luego - Bonus", "artist": "JID", "album": "DiCaprio 2"}, {"track": "High For This", "artist": "The Weeknd", "album": "Trilogy"}, {"track": "Lot to Learn", "artist": "Luke Christopher", "album": "TMRW"}, {"track": "MAMA", "artist": "6ix9ine", "album": "DUMMY BOY"}, {"track": "Because I Got High", "artist": "Afroman", "album": "The Good Times"}, {"track": "Wiley Flow", "artist": "Stormzy", "album": "Wiley Flow"}, {"track": "Location", "artist": "Playboi Carti", "album": "Playboi Carti"}], "2020-01": [{"track": "Smile", "artist": "SASH", "album": "Smile"}, {"track": "Lets Go", "artist": "SASH", "album": "Not A Formula"}, {"track": "Elephants", "artist": "Ollie Joseph", "album": "Elephants"}, {"track": "Drive Slow", "artist": "Kanye West", "album": "Late Registration"}, {"track": "Dirt", "artist": "SASH", "album": "Dirt"}, {"track": "What Would a Champion Do?", "artist": "NFL", "album": "What Would A Champion Do?"}, {"track": "Better Man", "artist": "Pearl Jam", "album": "Vitalogy"}, {"track": "No Mind", "artist": "Promoting Sounds", "album": "No Mind"}], "2020-02": [{"track": "Maria I'm Drunk (feat. Justin Bieber & Young Thug)", "artist": "Travis Scott", "album": "Rodeo"}, {"track": "No Mind", "artist": "Promoting Sounds", "album": "No Mind"}, {"track": "Dangerous", "artist": "Kid Enigma", "album": "Dangerous"}, {"track": "Whatcha Gon Do (feat. Bhad Bhabie, Rich The Kid & 24hrs)", "artist": "Benzi", "album": "Whatcha Gon Do (feat. Bhad Bhabie, Rich The Kid & 24hrs)"}, {"track": "Catch Me Outside", "artist": "Ski Mask The Slump God", "album": "You Will Regret"}, {"track": "Paper Trail$", "artist": "Joey Bada$$", "album": "B4.DA.$$"}, {"track": "So Alone", "artist": "Sik World", "album": "So Alone"}, {"track": "Homecoming", "artist": "Justin Stone", "album": "Homecoming"}, {"track": "Ladders", "artist": "Mac Miller", "album": "Swimming"}, {"track": "Wonderful Day - 1200 Warriors Remix", "artist": "Kid Enigma", "album": "The Hermit EP"}], "2020-03": [{"track": "After Party", "artist": "Don Toliver", "album": "Heaven Or Hell"}, {"track": "Party We Will Throw Now!", "artist": "Warren G", "album": "Party We Will Throw Now! - Single"}, {"track": "It's A Raid (feat. Post Malone)", "artist": "Ozzy Osbourne", "album": "It's A Raid (feat. Post Malone)"}, {"track": "Smoorverliefd", "artist": "Snelle", "album": "Smoorverliefd"}, {"track": "Mama Bid", "artist": "Josylvio", "album": "Mama Bid"}, {"track": "Wejow (feat. DinDin)", "artist": "Pierrii", "album": "Wejow (feat. DinDin)"}, {"track": "Amsterdam", "artist": "KA", "album": "Amsterdam"}, {"track": "Rain Jacket", "artist": "Sevn Alias", "album": "Twenty Four Sevn 4"}, {"track": "Buzzdown (feat. Henkie T)", "artist": "Jacin Trill", "album": "Buzzdown (feat. Henkie T)"}, {"track": "Faith In My Killy (feat. Nafe Smallz, Yxng Bane, Blade Brown and Skrapz)", "artist": "GRM Daily", "album": "Faith In My Killy (feat. Nafe Smallz, Yxng Bane, Blade Brown and Skrapz)"}], "2020-04": [{"track": "talk that shit", "artist": "isaac!", "album": "talk that shit"}, {"track": "Telefoon", "artist": "RIO", "album": "Telefoon"}, {"track": "Non Stop", "artist": "RIO", "album": "Non Stop"}, {"track": "The Final Episode", "artist": "Nawod", "album": "Hyakuman Dreams"}], "2020-05": [{"track": "Spice Girl", "artist": "Aminé", "album": "Good For You"}, {"track": "BALD! REMIX", "artist": "JPEGMAFIA", "album": "BALD! REMIX"}, {"track": "Learn How to Watch (feat. Mac Miller & MadeinTYO)", "artist": "Carnage", "album": "Learn How to Watch (feat. Mac Miller & MadeinTYO)"}, {"track": "Really Doe", "artist": "Danny Brown", "album": "Really Doe"}, {"track": "Mercy", "artist": "Kanye West", "album": "Mercy"}, {"track": "ULT", "artist": "Denzel Curry", "album": "Imperial"}, {"track": "outside", "artist": "Travis Scott", "album": "Birds In The Trap Sing McKnight"}, {"track": "You Got Me", "artist": "The Roots", "album": "Things Fall Apart"}, {"track": "Feel The Love", "artist": "KIDS SEE GHOSTS", "album": "KIDS SEE GHOSTS"}, {"track": "Who Dat Boy (feat. A$AP Rocky)", "artist": "Tyler, The Creator", "album": "Who Dat Boy / 911"}], "2020-06": [{"track": "ooh la la (feat. Greg Nice & DJ Premier)", "artist": "Run The Jewels", "album": "RTJ4"}, {"track": "Good Ass Intro", "artist": "Chance the Rapper", "album": "Acid Rap"}, {"track": "Down (feat. Joi)", "artist": "Run The Jewels", "album": "Run the Jewels 3"}, {"track": "Street Punks", "artist": "Vince Staples", "album": "Summertime '06"}, {"track": "NEW MAGIC WAND", "artist": "Tyler, The Creator", "album": "IGOR"}, {"track": "Accordion", "artist": "Madvillain", "album": "Madvillainy"}, {"track": "Woah", "artist": "Mblm_", "album": "Woah"}, {"track": "No Photos", "artist": "Don Toliver", "album": "Heaven Or Hell"}, {"track": "The New", "artist": "J Dilla", "album": "Donuts"}, {"track": "Know My Rights (feat. Lil Baby)", "artist": "6LACK", "album": "6pc Hot EP"}], "2020-07": [{"track": "lonely", "artist": "not dvr", "album": "tape_01"}, {"track": "t h e . c l i m b . b a c k", "artist": "J. Cole", "album": "Lewis Street"}, {"track": "Ego Death (feat. Kanye West, FKA twigs & Skrillex)", "artist": "Ty Dolla $ign", "album": "Ego Death (feat. Kanye West, FKA twigs & Skrillex)"}, {"track": "What Kinda Music", "artist": "Tom Misch", "album": "What Kinda Music"}, {"track": "Night Garden (feat. Kenny Beats & Bakar)", "artist": "BENEE", "album": "Night Garden (feat. Kenny Beats & Bakar)"}, {"track": "Fourth of July", "artist": "Sufjan Stevens", "album": "Carrie & Lowell"}, {"track": "America", "artist": "Sufjan Stevens", "album": "America"}, {"track": "Life's A Mess (feat. Halsey)", "artist": "Juice WRLD", "album": "Legends Never Die"}, {"track": "Mr. Rager", "artist": "Kid Cudi", "album": "Man On The Moon II: The Legend Of Mr. Rager"}, {"track": "Someday", "artist": "The Strokes", "album": "Is This It"}], "2020-08": [{"track": "Grasshopper", "artist": "Tkay Maidza", "album": "Last Year Was Weird, Vol. 2"}, {"track": "CUT EM IN (feat. Rick Ross)", "artist": "Anderson .Paak", "album": "CUT EM IN (feat. Rick Ross)"}, {"track": "The Plan - From the Motion Picture \"TENET\"", "artist": "Travis Scott", "album": "The Plan"}, {"track": "Giannis (feat. Anderson .Paak)", "artist": "Freddie Gibbs", "album": "Bandana"}, {"track": "Burden", "artist": "Aminé", "album": "Limbo"}, {"track": "Daylight", "artist": "Joji", "album": "Daylight"}, {"track": "Kolors", "artist": "monte booker", "album": "Soulection White Label - Monte Booker"}, {"track": "Une Annee Sans Lumiere", "artist": "Arcade Fire", "album": "Funeral"}, {"track": "Model Village", "artist": "IDLES", "album": "Model Village"}, {"track": "Derecho de Nacimiento (feat. Los Macorinos)", "artist": "Natalia Lafourcade", "album": "Musas (Un Homenaje al Folclore Latinoamericano en Manos de Los Macorinos), Vol. 2"}], "2020-09": [{"track": "Something in the Water", "artist": "Saba", "album": "Mrs. Whoever / Something in the Water"}, {"track": "Paper Thin", "artist": "Lianne La Havas", "album": "Lianne La Havas"}, {"track": "Homemade Dynamite", "artist": "Lorde", "album": "Melodrama"}, {"track": "Flowers Of Neptune 6", "artist": "The Flaming Lips", "album": "American Head"}, {"track": "Eden", "artist": "Sevdaliza", "album": "Shabrang"}, {"track": "feel away (feat. James Blake & Mount Kimbie)", "artist": "slowthai", "album": "feel away (feat. James Blake & Mount Kimbie)"}, {"track": "Diamonds", "artist": "Sam Smith", "album": "Diamonds"}, {"track": "Reigns", "artist": "IDLES", "album": "Ultra Mono"}, {"track": "A Bigger Paper Bag", "artist": "Father John Misty", "album": "Pure Comedy"}, {"track": "There She Goes Again", "artist": "The Velvet Underground", "album": "The Velvet Underground & Nico 45th Anniversary"}], "2020-10": [{"track": "Plastic 100°C", "artist": "Sampha", "album": "Process"}, {"track": "Atlas", "artist": "BICEP", "album": "Atlas"}, {"track": "Anza (feat. Armani Caesar)", "artist": "Conway the Machine", "album": "From King To A GOD"}, {"track": "PRBLMS", "artist": "6LACK", "album": "FREE 6LACK"}, {"track": "Awake", "artist": "Tkay Maidza", "album": "Last Year Was Weird, Vol. 2"}, {"track": "It Runs Through Me", "artist": "Tom Misch", "album": "Geography"}, {"track": "Little Boy", "artist": "SAULT", "album": "Untitled (Rise)"}, {"track": "Featherweight", "artist": "Fleet Foxes", "album": "Shore"}, {"track": "What’s Your Pleasure?", "artist": "Jessie Ware", "album": "What's Your Pleasure?"}, {"track": "Indecision", "artist": "Sampha", "album": "Dual"}], "2020-11": [{"track": "4 Thangs (feat. Big Sean & Hit-Boy)", "artist": "Freddie Gibbs", "album": "4 Thangs (feat. Big Sean & Hit-Boy)"}, {"track": "dragon eyes", "artist": "Adrianne Lenker", "album": "songs"}, {"track": "Désolé (feat. Fatoumata Diawara) - Extended Version", "artist": "Gorillaz", "album": "Song Machine, Season One: Strange Timez"}, {"track": "Therefore I Am", "artist": "Billie Eilish", "album": "Therefore I Am"}, {"track": "The Glorious Land", "artist": "PJ Harvey", "album": "Let England Shake"}, {"track": "VALENTINO", "artist": "24kGoldn", "album": "DROPPED OUTTA COLLEGE"}, {"track": "Check the Lock", "artist": "clipping.", "album": "Visions of Bodies Being Burned"}, {"track": "Look Over Your Shoulder (feat. Kendrick Lamar)", "artist": "Busta Rhymes", "album": "Extinction Level Event 2: The Wrath of God"}, {"track": "Concerning the UFO sighting near Highland, Illinois", "artist": "Sufjan Stevens", "album": "Illinois"}, {"track": "Mirage", "artist": "Quelle Chris", "album": "Innocent Country 2"}], "2020-12": [{"track": "It Was A Good Day", "artist": "Ice Cube", "album": "The Predator"}, {"track": "Surf & Turf", "artist": "Boldy James", "album": "The Price Of Tea In China"}, {"track": "Tavern Kween", "artist": "Desire Marea", "album": "Desire"}, {"track": "What A Life", "artist": "Scarlet Pleasure", "album": "What A Life"}, {"track": "I'm Deadass", "artist": "Medhane", "album": "Cold Water"}, {"track": "DOLOMEALS", "artist": "Medhane", "album": "DOLOMEALS"}, {"track": "Barbed Wire", "artist": "Kendrick Lamar", "album": "Overly Dedicated"}, {"track": "The Fall of SIHEYMN", "artist": "Liturgy", "album": "Origin of the Alimonies"}, {"track": "The Chain - 2004 Remaster", "artist": "Fleetwood Mac", "album": "Rumours"}, {"track": "He Can Only Hold Her", "artist": "Amy Winehouse", "album": "Back To Black"}], "2021-01": [{"track": "Hopprock", "artist": "Madlib", "album": "Hopprock"}, {"track": "Love Is Back", "artist": "Celeste", "album": "Love Is Back"}, {"track": "Return to Oz - ARTBAT Remix", "artist": "Monolink", "album": "Return to Oz"}, {"track": "Figaro", "artist": "Madvillain", "album": "Madvillainy"}, {"track": "Wool (feat. Vince Staples)", "artist": "Earl Sweatshirt", "album": "I Don't Like Shit, I Don't Go Outside: An Album by Earl Sweatshirt"}, {"track": "Solo Dolo, Pt. III", "artist": "Kid Cudi", "album": "Man On The Moon III: The Chosen"}, {"track": "Atlas", "artist": "BICEP", "album": "Isles"}, {"track": "MAZZA (feat. A$AP Rocky)", "artist": "slowthai", "album": "MAZZA (feat. A$AP Rocky)"}, {"track": "Glue", "artist": "BICEP", "album": "Bicep"}, {"track": "Sweet Dreams (Are Made of This) - Remastered", "artist": "Eurythmics", "album": "Sweet Dreams (Are Made Of This)"}], "2021-02": [{"track": "Road Of The Lonely Ones", "artist": "Madlib", "album": "Sound Ancestors"}, {"track": "Ride Out", "artist": "The Kount", "album": "Ride Out"}, {"track": "CANCELLED (feat. Skepta)", "artist": "slowthai", "album": "CANCELLED"}, {"track": "Jungle", "artist": "Tash Sultana", "album": "Notion"}, {"track": "Walking With Elephants (Radio Edit)", "artist": "Black Ministry", "album": "Walking With Elephants - IBIZA Summer Deep House Mixes"}, {"track": "Bruuuh (with Denzel Curry) - Remix", "artist": "JID", "album": "Bruuuh (with Denzel Curry)"}, {"track": "Crop Circles", "artist": "Tash Sultana", "album": "Terra Firma"}, {"track": "Blackbird", "artist": "Tash Sultana", "album": "Flow State"}, {"track": "MAN OF THE PEOPLE", "artist": "Steven Wilson", "album": "THE FUTURE BITES"}, {"track": "Here Comes The Rain", "artist": "Weezer", "album": "OK Human"}], "2021-03": [{"track": "Never Come Back", "artist": "Caribou", "album": "Suddenly"}, {"track": "Where Is My Mind?", "artist": "Tkay Maidza", "album": "Where Is My Mind?"}, {"track": "A Song About Fishing", "artist": "Genesis Owusu", "album": "Smiling with No Teeth"}, {"track": "True Sorry", "artist": "Ibrahim Maalouf", "album": "Illusions"}, {"track": "ブリーズ", "artist": "稲垣次郎とソウル・メディア", "album": "ファンキー・スタッフ"}, {"track": "Sepia", "artist": "Indigo Jam Unit", "album": "Oonops Drops Vol. 1"}, {"track": "Distant Lands", "artist": "Kupla", "album": "Life Forms"}, {"track": "Oceans", "artist": "RY X", "album": "Oceans"}, {"track": "push (feat. Deb Never)", "artist": "slowthai", "album": "TYRON"}, {"track": "qualia", "artist": "PRIMITIVE ART ORCHESTRA", "album": "qualia"}], "2021-04": [{"track": "When Will I Return?", "artist": "Swans", "album": "The Glowing Man"}, {"track": "One Touch", "artist": "Baauer", "album": "ß"}, {"track": "Exit Music (For A Film)", "artist": "Radiohead", "album": "OK Computer"}, {"track": "Un Monde Nouveau", "artist": "Feu! Chatterton", "album": "Palais d'argile"}, {"track": "Introvert", "artist": "Little Simz", "album": "Introvert"}, {"track": "Confessions", "artist": "BADBADNOTGOOD", "album": "III"}, {"track": "Confessions Pt. III", "artist": "BADBADNOTGOOD", "album": "Confessions Pt. III"}, {"track": "Valse De Marimón", "artist": "Etienne Balestre", "album": "Valse De Marimón"}, {"track": "silbermond", "artist": "Flavia Cortez", "album": "Sunflower Field"}, {"track": "A Song About Fishing", "artist": "Genesis Owusu", "album": "Smiling with No Teeth"}], "2021-05": [{"track": "A Rush of Blood to the Head", "artist": "Coldplay", "album": "A Rush of Blood to the Head"}, {"track": "Loose Change (feat. Earl Sweatshirt)", "artist": "The Alchemist", "album": "This Thing Of Ours"}, {"track": "Vendetta", "artist": "Iceage", "album": "Seek Shelter"}, {"track": "Don't Hurt Yourself (feat. Jack White)", "artist": "Beyoncé", "album": "Lemonade"}, {"track": "Dinosaur", "artist": "Manchester Orchestra", "album": "The Million Masks Of God"}, {"track": "Public Service Announcement (Interlude)", "artist": "JAY-Z", "album": "The Black Album"}, {"track": "See Me", "artist": "King Gizzard & The Lizard Wizard", "album": "L.W."}, {"track": "…At The Holiday Party", "artist": "St. Vincent", "album": "Daddy's Home"}, {"track": "Siena", "artist": "BICEP", "album": "Isles (Deluxe)"}, {"track": "No Love", "artist": "Death Grips", "album": "No Love Deep Web"}], "2021-06": [{"track": "Chapters", "artist": "Sweet Trip", "album": "A Tiny House, In Secret Speeches, Polar Equals"}, {"track": "Cashmere", "artist": "Tkay Maidza", "album": "Cashmere"}, {"track": "Reckoner", "artist": "Radiohead", "album": "In Rainbows"}, {"track": "Headshots (4r da Locals)", "artist": "Isaiah Rashad", "album": "Headshots (4r Da Locals)"}, {"track": "Animal - Edit", "artist": "LUMP", "album": "Climb Every Wall"}, {"track": "brutal", "artist": "Olivia Rodrigo", "album": "SOUR"}, {"track": "Drugs N Hella Melodies (feat. Kali Uchis)", "artist": "Don Toliver", "album": "Drugs N Hella Melodies (feat. Kali Uchis)"}, {"track": "Fight the Feeling", "artist": "Mac Miller", "album": "Macadelic (Remastered Edition)"}, {"track": "No Hard Feelings", "artist": "Wolf Alice", "album": "Blue Weekend"}, {"track": "LUMBERJACK", "artist": "Tyler, The Creator", "album": "LUMBERJACK"}], "2021-07": [{"track": "The Eighth Day", "artist": "Akira Kosemura", "album": "The Eighth Day"}, {"track": "silbermond", "artist": "Flavia Cortez", "album": "Sunflower Field"}, {"track": "In questo momento", "artist": "Eliodoro Russo", "album": "In questo momento"}, {"track": "Etc...", "artist": "Franz Gordon", "album": "Hymnus Faunus"}, {"track": "My fellow creatures", "artist": "Carlos Cipa", "album": "Correlations B-Sides (on Yamaha Upright, 1981)"}, {"track": "Glänta", "artist": "Matti Bye", "album": "Glänta"}, {"track": "Komorebi", "artist": "Kyūka", "album": "Komorebi"}, {"track": "two wheels north", "artist": "praam", "album": "two wheels north"}, {"track": "Breathe", "artist": "Nil Ciuró", "album": "Breathe / Debris"}, {"track": "Last Things First", "artist": "Baltasar Thorgrimson", "album": "Last Things First"}], "2021-08": [{"track": "OverHeated", "artist": "Billie Eilish", "album": "Happier Than Ever"}, {"track": "Louie Bag (feat. Smino)", "artist": "Yebba", "album": "Louie Bag (feat. Smino)"}, {"track": "Stand For Myself", "artist": "Yola", "album": "Stand For Myself"}, {"track": "Clouds", "artist": "Jordan Rakei", "album": "Clouds"}, {"track": "Darkest Hour", "artist": "Sevdaliza", "album": "Shabrang"}, {"track": "Take My Breath - Single Version", "artist": "The Weeknd", "album": "Take My Breath"}, {"track": "In My Arms", "artist": "Disclosure", "album": "Never Enough"}, {"track": "Jimmy Jimmy (feat. AJ Tracey)", "artist": "Gorillaz", "album": "Meanwhile EP"}, {"track": "Summer '68 - 2011 Remaster", "artist": "Pink Floyd", "album": "Atom Heart Mother"}, {"track": "Love Cry", "artist": "Four Tet", "album": "There Is Love in You"}], "2021-09": [{"track": "Good Ones", "artist": "Charli xcx", "album": "Good Ones"}, {"track": "Standing Ovation", "artist": "Little Simz", "album": "Sometimes I Might Be Introvert"}, {"track": "Beside April", "artist": "BADBADNOTGOOD", "album": "Beside April"}, {"track": "Meanwhile (feat. Jelani Blackman & Barrington Levy)", "artist": "Gorillaz", "album": "Meanwhile EP"}, {"track": "God Breathed", "artist": "Kanye West", "album": "Donda"}, {"track": "Family", "artist": "Jordan Rakei", "album": "Unguarded"}, {"track": "ANNIVERSARY", "artist": "Duran Duran", "album": "ANNIVERSARY"}, {"track": "If You Say the Word", "artist": "Radiohead", "album": "If You Say the Word"}, {"track": "BIG PERSONA (feat. Tyler, The Creator)", "artist": "Maxo Kream", "album": "BIG PERSONA (feat. Tyler, The Creator)"}, {"track": "DOLLA SIGN SLIME (feat. Megan Thee Stallion)", "artist": "Lil Nas X", "album": "MONTERO"}], "2021-10": [{"track": "Return to Oz - ARTBAT Remix", "artist": "Monolink", "album": "Return to Oz"}, {"track": "Tarantula - Original Mix", "artist": "Pleasurekraft", "album": "Tarantula (7 Year Itch Rework)"}, {"track": "When You're Near", "artist": "Guru", "album": "Jazzmatazz Volume 1"}, {"track": "Foot Forward", "artist": "James Blake", "album": "Friends That Break Your Heart"}, {"track": "Neighborhood Threat", "artist": "Iggy Pop", "album": "Lust For Life"}, {"track": "Pantagruel", "artist": "Dusty Kid", "album": "Kydàios EP"}, {"track": "Vanishing", "artist": "Circuit des Yeux", "album": "Vanishing"}, {"track": "Nostalgic Bitch", "artist": "Oscar and the Wolf", "album": "The Shimmer"}, {"track": "Fire", "artist": "Weval", "album": "Fire"}, {"track": "OG!", "artist": "JPEGMAFIA", "album": "LP!"}], "2021-11": [{"track": "Sexy Villain", "artist": "Remi Wolf", "album": "Juno"}, {"track": "greedy", "artist": "Emma Bale", "album": "RETROSPECT"}, {"track": "Feet Don't Fail Me Now", "artist": "Joy Crookes", "album": "Skin"}, {"track": "DAY OF TEARS AND MOURNING", "artist": "Lingua Ignota", "album": "CALIGULA"}, {"track": "Be Alive (Original Song from the Motion Picture \"King Richard\")", "artist": "Beyoncé", "album": "Be Alive (Original Song from the Motion Picture \"King Richard\")"}, {"track": "Valentine", "artist": "Snail Mail", "album": "Valentine"}, {"track": "Birdsong (feat. JID & Saba)", "artist": "Lute", "album": "Gold Mouf"}, {"track": "Numbers Up", "artist": "De Staat", "album": "Numbers Up"}, {"track": "Keep Moving", "artist": "Jungle", "album": "Loving In Stereo"}, {"track": "Can I Get It", "artist": "Adele", "album": "30"}], "2021-12": [{"track": "Kelso (Blue sky)", "artist": "Grouper", "album": "Shade"}, {"track": "Vi de Relance a Coroa", "artist": "Juçara Marçal", "album": "Delta Estácio Blues"}, {"track": "Gypsy Woman - Quarantine Sessions", "artist": "Tom Misch", "album": "Quarantine Sessions"}, {"track": "Shadows", "artist": "Bonobo", "album": "Shadows"}, {"track": "Santé", "artist": "Stromae", "album": "Santé"}, {"track": "White Picket Fence", "artist": "Koreless", "album": "Agor"}, {"track": "I Want You (She's So Heavy) - Remastered 2009", "artist": "The Beatles", "album": "Abbey Road"}, {"track": "I'm Only Sleeping - Remastered 2009", "artist": "The Beatles", "album": "Revolver"}, {"track": "Can I Kick It?", "artist": "A Tribe Called Quest", "album": "People's Instinctive Travels and the Paths of Rhythm (25th Anniversary Edition)"}, {"track": "LABOU", "artist": "Mach-Hommy", "album": "Balens Cho (Hot Candles)"}], "2022-01": [{"track": "Sacrifice", "artist": "The Weeknd", "album": "Dawn FM"}, {"track": "Space Song", "artist": "Beach House", "album": "Depression Cherry"}, {"track": "L’enfer", "artist": "Stromae", "album": "L’enfer"}, {"track": "Instant Crush (feat. Julian Casablancas)", "artist": "Daft Punk", "album": "Random Access Memories"}, {"track": "Deadly Valentine", "artist": "Charlotte Gainsbourg", "album": "Rest"}, {"track": "Over and Over", "artist": "Beach House", "album": "Once Twice Melody"}, {"track": "Which Side are You On?", "artist": "Pete Seeger", "album": "If I Had a Hammer: Songs of Hope and Struggle"}, {"track": "THE REV3NGE", "artist": "Joey Bada$$", "album": "THE REV3NGE"}, {"track": "Succession (Main Title Theme)", "artist": "Nicholas Britell", "album": "Succession: Season 1 (HBO Original Series Soundtrack)"}, {"track": "Melanin", "artist": "Philou Louzolo", "album": "Melanin"}], "2022-02": [{"track": "Held", "artist": "Spoon", "album": "Lucifer On The Sofa"}, {"track": "Anfang", "artist": "OG Keemo", "album": "Mann Beisst Hund"}, {"track": "Symphony No. 7 in A Major, Op. 92: II. Allegretto", "artist": "Ludwig van Beethoven", "album": "Beethoven: Symphonies Nos.4 & 7"}, {"track": "These Days", "artist": "Nico", "album": "Chelsea Girl"}, {"track": "The Only Place", "artist": "Big Thief", "album": "Dragon New Warm Mountain I Believe In You"}, {"track": "Haldern", "artist": "Black Country, New Road", "album": "Ants From Up There"}, {"track": "Say Nothing", "artist": "Flume", "album": "Say Nothing"}, {"track": "Mass in B Minor, BWV 232: Agnus Dei: Agnus Dei (Alto)", "artist": "Johann Sebastian Bach", "album": "Bach: Mass in B minor"}, {"track": "Bane", "artist": "alt-J", "album": "The Dream"}, {"track": "The Innocent", "artist": "AURORA", "album": "The Gods We Can Touch"}], "2022-03": [{"track": "Fils de joie", "artist": "Stromae", "album": "Multitude"}, {"track": "Baby", "artist": "Charli xcx", "album": "Baby"}, {"track": "I lie", "artist": "David Lang", "album": "Lang: The Little Match Girl Passion"}, {"track": "Zonder Gezicht", "artist": "Froukje", "album": "Uitzinnig"}, {"track": "Dies irae", "artist": "Zbigniew Preisner", "album": "Requiem for My Friend"}, {"track": "Hear Me Clearly (with Nigo)", "artist": "Pusha T", "album": "Hear Me Clearly"}, {"track": "Vladimir Martynov: The Beatitudes", "artist": "Vladimir Martynov", "album": "Music of Vladimir Martynov"}, {"track": "CANDY", "artist": "ROSALÍA", "album": "MOTOMAMI"}, {"track": "Beg for You (feat. Rina Sawayama)", "artist": "Charli xcx", "album": "Every Rule"}, {"track": "Hi-De-Ho", "artist": "Jack White", "album": "Hi-De-Ho"}], "2022-04": [{"track": "Follow Me", "artist": "Pabllo Vittar", "album": "Follow Me"}, {"track": "Into the Twilight", "artist": "Jack White", "album": "Fear Of The Dawn"}, {"track": "Priority Boredom", "artist": "Kae Tempest", "album": "The Line Is A Curve"}, {"track": "Love & Hate", "artist": "Michael Kiwanuka", "album": "Love & Hate"}, {"track": "Grace", "artist": "Jeff Buckley", "album": "Grace"}, {"track": "Asylum", "artist": "billy woods", "album": "Aethiopes"}, {"track": "The Grim Reaper", "artist": "King Gizzard & The Lizard Wizard", "album": "Omnium Gatherum"}, {"track": "Boss", "artist": "Little Simz", "album": "GREY Area"}, {"track": "Roads", "artist": "Portishead", "album": "Dummy"}, {"track": "Sinaasappels - Elias Mazian Rework", "artist": "Meetsysteem", "album": "Sinaasappels"}], "2022-05": [{"track": "Old Fashioned", "artist": "HARU NEMURI", "album": "SHUNKA RYOUGEN"}, {"track": "Eden", "artist": "Ben Khan", "album": "1992 EP"}, {"track": "I Shall Be Released - Live at Sin-é, New York, NY - July/August 1993", "artist": "Jeff Buckley", "album": "Live At Sin-é (Legacy Edition)"}, {"track": "All the Way Out", "artist": "Boldy James", "album": "Killing Nothing"}, {"track": "United In Grief", "artist": "Kendrick Lamar", "album": "Mr. Morale & The Big Steppers"}, {"track": "Age of Anxiety II (Rabbit Hole)", "artist": "Arcade Fire", "album": "WE"}, {"track": "I Want A Love Like This", "artist": "Everything Everything", "album": "Raw Data Feel"}, {"track": "A House In Nebraska", "artist": "Ethel Cain", "album": "Preacher’s Daughter"}, {"track": "We Don't Know What Tomorrow Brings", "artist": "The Smile", "album": "A Light for Attracting Attention"}, {"track": "Light My Fire", "artist": "The Doors", "album": "The Doors"}], "2022-06": [{"track": "Come Back Home", "artist": "070 Shake", "album": "You Can’t Kill Me"}, {"track": "Fitzpleasure", "artist": "alt-J", "album": "An Awesome Wave"}, {"track": "Aloha! (Main Title Theme) - from “The White Lotus: Season 1”", "artist": "Cristobal Tapia De Veer", "album": "The White Lotus (Soundtrack from the HBO® Original Limited Series)"}, {"track": "Água de Beber", "artist": "Astrud Gilberto", "album": "The Astrud Gilberto Album"}, {"track": "Je te vois enfin", "artist": "Christine and the Queens", "album": "Je te vois enfin"}, {"track": "Mojo Pin", "artist": "Jeff Buckley", "album": "Grace"}, {"track": "HOME - Remix", "artist": "Mike Dimes", "album": "HOME"}, {"track": "Mercury", "artist": "Steve Lacy", "album": "Mercury"}, {"track": "Underlands", "artist": "Andrew Bird", "album": "Inside Problems"}, {"track": "California Dreamin' - Single Version", "artist": "The Mamas & The Papas", "album": "If You Can Believe Your Eyes & Ears"}], "2022-07": [{"track": "Cold Little Heart", "artist": "Michael Kiwanuka", "album": "Love & Hate"}, {"track": "Deacon Blues", "artist": "Steely Dan", "album": "Aja"}, {"track": "The Devil Is Human", "artist": "AURORA", "album": "The Devil Is Human"}, {"track": "Chega de Saudade", "artist": "João Gilberto", "album": "João Gilberto Apresenta Chega de Saudade"}, {"track": "DE AQUÍ NO SALES - Cap.4: Disputa", "artist": "ROSALÍA", "album": "El Mal Querer"}, {"track": "Knocks Me Off My Feet", "artist": "Stevie Wonder", "album": "Songs In The Key Of Life"}, {"track": "Je te laisserai des mots", "artist": "Patrick Watson", "album": "Je te laisserai des mots"}, {"track": "Summertime", "artist": "Charlie Parker", "album": "April In Paris: The Genius Of Charlie Parker #2"}, {"track": "The Pretender", "artist": "Foo Fighters", "album": "Echoes, Silence, Patience & Grace"}, {"track": "Mojo Pin", "artist": "Jeff Buckley", "album": "Grace"}], "2022-08": [{"track": "Dear Boy - Remastered 2012", "artist": "Paul McCartney", "album": "Ram"}, {"track": "War Dance", "artist": "Kokoroko", "album": "Could We Be More"}, {"track": "My Heart Has Teeth (feat. Skylar Grey) - From 'Resident Evil'", "artist": "deadmau5", "album": "My Heart Has Teeth (feat. Skylar Grey)"}, {"track": "CUFF IT", "artist": "Beyoncé", "album": "RENAISSANCE"}, {"track": "Burning", "artist": "Yeah Yeah Yeahs", "album": "Burning"}, {"track": "Houses in Motion - 2005 Remaster", "artist": "Talking Heads", "album": "Remain in Light"}, {"track": "Mojo Pin", "artist": "Jeff Buckley", "album": "Grace"}, {"track": "La Jeune Fille en Feu (Bande originale du film)", "artist": "Para One", "album": "La Jeune Fille en Feu (Bande originale du film)"}, {"track": "Blacked Out", "artist": "Yussef Dayes", "album": "Blacked Out"}, {"track": "Twin Flame", "artist": "KAYTRANADA", "album": "Twin Flame"}], "2022-09": [{"track": "It's Too Late", "artist": "Carole King", "album": "Tapestry"}, {"track": "Greatest Hits", "artist": "Jockstrap", "album": "I Love You Jennifer B"}, {"track": "New Gold (feat. Tame Impala and Bootie Brown)", "artist": "Gorillaz", "album": "New Gold (feat. Tame Impala and Bootie Brown)"}, {"track": "It's Not Just Me, It's Everybody", "artist": "Weyes Blood", "album": "It's Not Just Me, It's Everybody"}, {"track": "50/50", "artist": "Jockstrap", "album": "50/50"}, {"track": "Tonight You Belong To Me", "artist": "Patience & Prudence", "album": "The Best Of Patience & Prudence"}, {"track": "Art Of Dying - Remastered 2014", "artist": "George Harrison", "album": "All Things Must Pass"}, {"track": "Looking for Water (feat. Boldy James)", "artist": "Pink Siifu", "album": "Looking for Water (feat. Boldy James)"}, {"track": "All You Do", "artist": "Magdalena Bay", "album": "All You Do"}, {"track": "Concrete Over Water", "artist": "Jockstrap", "album": "Concrete Over Water"}], "2022-10": [{"track": "Looking at Your Pager - Solomun Remix", "artist": "KH", "album": "Looking At Your Pager"}, {"track": "Polarity", "artist": "Coloray", "album": "Polarity"}, {"track": "Iron Lung", "artist": "King Gizzard & The Lizard Wizard", "album": "Iron Lung"}, {"track": "Never Stay For Love", "artist": "Weval", "album": "Never Stay For Love"}, {"track": "Digital Abyss", "artist": "Coloray", "album": "Future Static"}, {"track": "Billie Toppy", "artist": "Men I Trust", "album": "Billie Toppy"}, {"track": "Distance", "artist": "Mark Reeve", "album": "Distance - EP"}, {"track": "Breathing", "artist": "Mall Grab", "album": "Breathing"}, {"track": "You Want It Darker", "artist": "Leonard Cohen", "album": "You Want It Darker"}, {"track": "Girl", "artist": "Men I Trust", "album": "Girl"}], "2022-11": [{"track": "Gangsta's Paradise", "artist": "Coolio", "album": "Gangsta's Paradise"}, {"track": "DIRT (feat. JPEGMAFIA)", "artist": "Y2K", "album": "DIRT (feat. JPEGMAFIA)"}, {"track": "DARE", "artist": "Gorillaz", "album": "Demon Days"}, {"track": "Don't Let Go", "artist": "Supershy", "album": "Don't Let Go"}, {"track": "knots", "artist": "Quadeca", "album": "I Didn't Mean To Haunt You"}, {"track": "Forever", "artist": "Weval", "album": "Forever"}, {"track": "Power Nap", "artist": "Nicholas Craven", "album": "Fair Exchange No Robbery"}, {"track": "Grapevine", "artist": "Weyes Blood", "album": "And In The Darkness, Hearts Aglow"}, {"track": "God Turn Me Into a Flower", "artist": "Weyes Blood", "album": "God Turn Me Into A Flower"}, {"track": "Ridin'", "artist": "Chamillionaire", "album": "The Sound of Revenge"}], "2022-12": [{"track": "The Feeling", "artist": "Massano", "album": "The Feeling"}, {"track": "D.A.N.C.E", "artist": "Justice", "album": "Justice"}, {"track": "The High Road", "artist": "Broken Bells", "album": "Broken Bells"}, {"track": "Can You Get To That", "artist": "Funkadelic", "album": "Maggot Brain"}, {"track": "Miss Modular", "artist": "Stereolab", "album": "Dots And Loops"}, {"track": "Dora’s Lullaby", "artist": "Julius Rodriguez", "album": "Dora's Lullaby / Chemical X"}, {"track": "Polarity", "artist": "Coloray", "album": "Polarity"}, {"track": "People Everywhere (Still Alive)", "artist": "Khruangbin", "album": "The Universe Smiles Upon You"}, {"track": "Heart on Fire", "artist": "Little Simz", "album": "NO THANK YOU"}, {"track": "I Think I'm in Love", "artist": "Spiritualized", "album": "Ladies and gentlemen we are floating in space"}], "2023-01": [{"track": "Polarity", "artist": "Coloray", "album": "Polarity"}, {"track": "Distant Places", "artist": "TANUKI", "album": "HYPERNIGHT, Vol. 1"}, {"track": "Search For Love - Edit", "artist": "Tigerblind", "album": "Search For Love"}, {"track": "Widow", "artist": "Working Men's Club", "album": "Fear Fear"}, {"track": "Atlas", "artist": "BICEP", "album": "Atlas"}, {"track": "Turn On The Lights again.. (feat. Future)", "artist": "Fred again..", "album": "USB"}, {"track": "Eli Eli - Maduk Remix", "artist": "Misun", "album": "Maduk Summer Remixes"}, {"track": "Jungle", "artist": "Fred again..", "album": "Jungle"}, {"track": "I Feel Love", "artist": "Sam Smith", "album": "I Feel Love"}, {"track": "ATK", "artist": "Bonobo", "album": "ATK"}], "2023-02": [{"track": "Back Roads", "artist": "REYNO", "album": "Back Roads"}, {"track": "Black Mascara.", "artist": "RAYE", "album": "My 21st Century Blues"}, {"track": "Sixtyten", "artist": "Boards of Canada", "album": "Music Has The Right To Children"}, {"track": "Keep On", "artist": "Alfa Mist", "album": "Antiphon"}, {"track": "Época", "artist": "Gotan Project", "album": "La revancha del tango"}, {"track": "Zero Degree Machine", "artist": "Horse Lords", "album": "Comradely Objects"}, {"track": "Running Out Of Time", "artist": "Paramore", "album": "This Is Why"}, {"track": "Lucky", "artist": "Mood Bored", "album": "Lucky"}, {"track": "XENA", "artist": "Skrillex", "album": "XENA"}, {"track": "Hostiles", "artist": "Damon Albarn", "album": "Everyday Robots"}], "2023-03": [{"track": "SCARING THE HOES", "artist": "JPEGMAFIA", "album": "SCARING THE HOES"}, {"track": "Eye Know", "artist": "De La Soul", "album": "3 Feet High and Rising"}, {"track": "HAPPY", "artist": "slowthai", "album": "UGLY"}, {"track": "Changed for the Better", "artist": "Weval", "album": "Forever"}, {"track": "I Wanna Be Your Dog - 2019 Remaster", "artist": "The Stooges", "album": "The Stooges"}, {"track": "Halt dich an deiner Liebe fest", "artist": "Ton Steine Scherben", "album": "Wenn die Nacht am tiefsten"}, {"track": "Day After Day", "artist": "Weval", "album": "Remember"}, {"track": "Chlorine", "artist": "Twenty One Pilots", "album": "Trench"}, {"track": "Fistful Of Love", "artist": "Antony and the Johnsons", "album": "I Am A Bird Now"}, {"track": "Pyjamas - feat. Remi Wolf", "artist": "Benny Sings", "album": "Young Hearts"}], "2023-04": [{"track": "Begin Again", "artist": "Jessie Ware", "album": "That! Feels Good!"}, {"track": "4EVA (feat. Pharrell Williams)", "artist": "KAYTRAMINÉ", "album": "4EVA (feat. Pharrell Williams)"}, {"track": "Gosh", "artist": "Jamie xx", "album": "In Colour"}, {"track": "Genda (Go Away)", "artist": "Alfa Mist", "album": "Variables"}, {"track": "FIGHT", "artist": "BROCKHAMPTON", "album": "SATURATION II"}, {"track": "One Touch", "artist": "BAMBII", "album": "One Touch"}, {"track": "Top Dog", "artist": "Magdalena Bay", "album": "mini mix vol. 3"}, {"track": "School", "artist": "Pip Blom", "album": "School"}, {"track": "Shot My Baby", "artist": "Daniel Caesar", "album": "NEVER ENOUGH"}, {"track": "Crystalised", "artist": "The xx", "album": "xx"}], "2023-05": [{"track": "Tried And True", "artist": "Ween", "album": "Quebec"}, {"track": "leikara ljóð", "artist": "Susanne Sundfør", "album": "blómi"}, {"track": "Eat The Acid", "artist": "Kesha", "album": "Fine Line / Eat The Acid"}, {"track": "Lucky", "artist": "Mood Bored", "album": "Lucky"}, {"track": "The Hardest Cut", "artist": "Spoon", "album": "Lucifer On The Sofa"}, {"track": "Home At Last", "artist": "Steely Dan", "album": "Aja"}, {"track": "Época", "artist": "Gotan Project", "album": "La revancha del tango"}, {"track": "Welcome to the DCC", "artist": "Nothing But Thieves", "album": "Welcome to the DCC"}, {"track": "Soft Landing", "artist": "billy woods", "album": "Soft Landing"}, {"track": "The Layover", "artist": "billy woods", "album": "Maps"}], "2023-06": [{"track": "Run, Run, Run", "artist": "McKinley Dixon", "album": "Beloved! Paradise! Jazz!?"}, {"track": "Popular (with Playboi Carti & Madonna) - The Idol Vol. 1 (Music from the HBO Original Series)", "artist": "The Weeknd", "album": "Popular"}, {"track": "Begin Again", "artist": "Jessie Ware", "album": "Begin Again"}, {"track": "Djit Nishrab (feat. Ahmed Doma)", "artist": "Dudu Tassa", "album": "Jarak Qaribak"}, {"track": "Working Class Hero - Remastered 2010", "artist": "John Lennon", "album": "Plastic Ono Band"}, {"track": "Rust (feat. Tom Misch)", "artist": "Yussef Dayes", "album": "Rust (feat. Tom Misch)"}, {"track": "California Uber Alles", "artist": "Dead Kennedys", "album": "Give Me Convenience or Give Me Death"}, {"track": "Victory Dance", "artist": "Ezra Collective", "album": "Where I'm Meant To Be"}, {"track": "Don’t Say It’s Over", "artist": "Gaz Coombes", "album": "Turn The Car Around"}, {"track": "Eminence Front", "artist": "The Who", "album": "It's Hard"}], "2023-07": [{"track": "Tioga Pass (feat. Rocco Palladino)", "artist": "Yussef Dayes", "album": "Marching Band / Tioga Pass"}, {"track": "Welcome to the Hills", "artist": "Yussef Dayes", "album": "Welcome to the Hills"}, {"track": "Take My Time", "artist": "Supershy", "album": "Change / Take My Time"}, {"track": "(Don't Worry) If There Is a Hell Below, We're All Going to Go", "artist": "Curtis Mayfield", "album": "Curtis"}, {"track": "Meutrière (feat. Flore Benguigui)", "artist": "Alan Palomo", "album": "Meutrière (feat. Flore Benguigui)"}, {"track": "De Selby (Part 2)", "artist": "Hozier", "album": "De Selby (Part 2)"}, {"track": "Feel Like Makin' Love (feat. Roberta Flack)", "artist": "Supershy", "album": "Feel Like Makin' Love (feat. Roberta Flack)"}, {"track": "Under the Sun", "artist": "SPELLLING", "album": "Cherry / Under The Sun"}, {"track": "Fairlies", "artist": "Grian Chatten", "album": "All Of The People"}, {"track": "Glory", "artist": "Gabriels", "album": "Glory"}], "2023-08": [{"track": "Ourinou", "artist": "Roufaida", "album": "Roufaida"}, {"track": "Music for 18 Musicians", "artist": "Steve Reich", "album": "Reich: Music for 18 Musicians"}, {"track": "Changed for the Better", "artist": "Weval", "album": "Forever"}, {"track": "ASR (feat. Jeff Parker)", "artist": "Meshell Ndegeocello", "album": "The Omnichord Real Book"}, {"track": "Ik Zweef Alweer", "artist": "Igor", "album": "Ik Zweef Alweer"}, {"track": "Bevrijd Me", "artist": "Elias Mazian", "album": "Alleen Bij Mij"}, {"track": "Double Trio", "artist": "By Storm", "album": "Double Trio"}, {"track": "The Mushroom Cloud", "artist": "The Kyteman Orchestra", "album": "The Kyteman Orchestra"}, {"track": "Keep It Rising", "artist": "Supershy", "album": "Happy Music"}, {"track": "Us Against The World", "artist": "Jungle", "album": "Volcano"}], "2023-09": [{"track": "chained to a cloud", "artist": "Slowdive", "album": "everything is alive"}, {"track": "Do You Love Me Yet?", "artist": "Nothing But Thieves", "album": "Dead Club City"}, {"track": "Are You Real", "artist": "Weval", "album": "Dreaming"}, {"track": "Lightenup", "artist": "Parcels", "album": "Parcels"}, {"track": "low down", "artist": "venbee", "album": "low down"}, {"track": "Free (feat. Tom Misch)", "artist": "Joel Culpepper", "album": "Free (feat. Tom Misch)"}, {"track": "Self", "artist": "Cleo Sol", "album": "Heaven"}, {"track": "New Form", "artist": "Coloray", "album": "©"}, {"track": "Somethinggreater", "artist": "Parcels", "album": "Day/Night"}, {"track": "Reckless & Sweet", "artist": "Amaarae", "album": "Fountain Baby"}], "2023-10": [{"track": "Boy of Stranger Things", "artist": "Ana Frango Elétrico", "album": "Me Chama De Gato Que Eu Sou Sua"}, {"track": "Come to Me", "artist": "DMX Krew", "album": "Nu Romantix"}, {"track": "Leave Now", "artist": "Robin Kester", "album": "Honeycomb Shades"}, {"track": "Eat Your Dollar", "artist": "Baby Berserk", "album": "Baby's Berserk"}, {"track": "Sleeper", "artist": "BADBADNOTGOOD", "album": "Sleeper"}, {"track": "Dancing Circles", "artist": "Sampha", "album": "Lahai"}, {"track": "KITCHEN LIGHTS", "artist": "Westside Gunn", "album": "And Then You Pray For Me"}, {"track": "We Were We Still Are", "artist": "Future Utopia", "album": "We Were We Still Are"}, {"track": "New Joy", "artist": "Slauson Malone 1", "album": "EXCELSIOR"}, {"track": "Far Away", "artist": "Junip", "album": "Fields"}], "2023-11": [{"track": "I Don't Belong", "artist": "Fontaines D.C.", "album": "A Hero's Death"}, {"track": "Nothing Matters", "artist": "The Last Dinner Party", "album": "Nothing Matters"}, {"track": "Heart Of Glass [24-Bit Digitally Remastered 01] - Remastered 2001", "artist": "Blondie", "album": "Parallel Lines - Remastered"}, {"track": "Sinner", "artist": "The Last Dinner Party", "album": "Sinner"}, {"track": "Turkish Gold", "artist": "Wiki", "album": "14K Figaro"}, {"track": "Free As A Bird - Anthology 1 Version", "artist": "The Beatles", "album": "Anthology 1"}, {"track": "Electric Counterpoint: III. Fast", "artist": "Steve Reich", "album": "Different Trains / Electric Counterpoint"}, {"track": "Stirrings, Still", "artist": "John Zorn", "album": "Nothing Is As Real As Nothing"}, {"track": "pressure", "artist": "blackwave.", "album": "pressure"}, {"track": "Jenn’s Terrific Vacation - feat. Kassa Overall", "artist": "Danny Brown", "album": "Jenn’s Terrific Vacation"}], "2023-12": [{"track": "ingydar", "artist": "Adrianne Lenker", "album": "songs"}, {"track": "The Rip", "artist": "Portishead", "album": "Third"}, {"track": "Rave Out", "artist": "Turno", "album": "Rave Out"}, {"track": "Paris", "artist": "Kenya Grace", "album": "Paris"}, {"track": "Lettre", "artist": "Shurik'n", "album": "Où je vis"}, {"track": "Just The Once", "artist": "Metric", "album": "Just The Once"}, {"track": "Houdini - Extended", "artist": "Dua Lipa", "album": "Houdini - Extended"}, {"track": "Silver Girl", "artist": "Spoon", "album": "Memory Dust EP"}, {"track": "Vaslaw", "artist": "Lydia Képinski", "album": "Depuis"}, {"track": "Bloodflow", "artist": "Grandbrothers", "album": "Open"}], "2024-01": [{"track": "Loneliness - Radio Cut", "artist": "Tomcraft", "album": "Loneliness"}, {"track": "Say Goodbye", "artist": "Future Islands", "album": "Say Goodbye"}, {"track": "Igual Que Un Ángel (with Peso Pluma)", "artist": "Kali Uchis", "album": "ORQUÍDEAS"}, {"track": "Nooit Meer een Einde", "artist": "Elias Mazian", "album": "Vrij van Dromen"}, {"track": "Mine World - Jazzy Mix", "artist": "Rawling", "album": "Mine World"}, {"track": "Teleharmonic", "artist": "The Smile", "album": "Wall Of Eyes"}, {"track": "My Golden Years", "artist": "The Lemon Twigs", "album": "My Golden Years"}, {"track": "Loved", "artist": "Four Tet", "album": "Loved"}, {"track": "Big Love - 2017 Remaster", "artist": "Fleetwood Mac", "album": "Tango In the Night"}, {"track": "For Granted (feat. Arin Ray)", "artist": "Dinner Party", "album": "Enigmatic Society"}], "2024-02": [{"track": "Butterfly Net (feat. Weyes Blood)", "artist": "Caroline Polachek", "album": "Butterfly Net (feat. Weyes Blood)"}, {"track": "Blank Space (Taylor's Version)", "artist": "Taylor Swift", "album": "1989 (Taylor's Version)"}, {"track": "Image I (Kareem Ali Remix)", "artist": "Gan Gemi", "album": "Image I (Joseph Shabason Remix)"}, {"track": "Waiting For You (feat. Naomi Sharon)", "artist": "Majid Jordan", "album": "Waiting For You (feat. Naomi Sharon)"}, {"track": "Forest Fruit", "artist": "Jungle by Night", "album": "A Moon Shaped Face"}, {"track": "Mashoor", "artist": "Sheherazaad", "album": "Dhund Lo Mujhe"}, {"track": "Xander, Dit Is Je Verjaardag", "artist": "Cadeautje voor jou", "album": "(U-V-W-X-Y-Z) Dit Is Je Verjaardag"}, {"track": "CHROMA 001 HELIUM", "artist": "BICEP", "album": "CHROMA 001"}, {"track": "The Time Is Now", "artist": "Moloko", "album": "Things to Make and Do"}, {"track": "Groovejet (If This Ain't Love) [feat. Sophie Ellis-Bextor]", "artist": "Spiller", "album": "Groovejet (If This Ain't Love) [feat. Sophie Ellis-Bextor]"}], "2024-03": [{"track": "7 Mädchen", "artist": "Paula Hartmann", "album": "kleine Feuer"}, {"track": "So Flute", "artist": "St Germain", "album": "Tourist"}, {"track": "JOY (Life Goes On)", "artist": "Ezra Collective", "album": "Where I'm Meant To Be"}, {"track": "Good Torture (with Elyanna)", "artist": "Sevdaliza", "album": "Good Torture (with Elyanna)"}, {"track": "Make You Mine", "artist": "Madison Beer", "album": "Make You Mine"}, {"track": "obsessed", "artist": "Olivia Rodrigo", "album": "GUTS (spilled)"}, {"track": "Buddy, Come Over", "artist": "Everything Everything", "album": "Mountainhead"}, {"track": "Get A Move On!", "artist": "Mr. Scruff", "album": "Keep It Unreal"}, {"track": "Gesicht", "artist": "Lina Maly", "album": "Könnten Augen alles sehen"}, {"track": "31 Bloom", "artist": "Four Tet", "album": "Three"}], "2024-04": [{"track": "Starburster", "artist": "Fontaines D.C.", "album": "Starburster"}, {"track": "Closer", "artist": "Fabiana Palladino", "album": "Fabiana Palladino"}, {"track": "Big Time Nothing", "artist": "St. Vincent", "album": "Big Time Nothing"}, {"track": "Illusion", "artist": "Dua Lipa", "album": "Illusion"}, {"track": "Reaching Out", "artist": "Beth Gibbons", "album": "Reaching Out"}, {"track": "Where We Go (Calypso)", "artist": "Compact Disk Dummies", "album": "The Signal"}, {"track": "Dromen van Karton", "artist": "De Jeugd Van Tegenwoordig", "album": "\"Ja, natúúrlijk!\""}, {"track": "A Figure In The Surf", "artist": "Mount Kimbie", "album": "The Sunset Violent"}, {"track": "You & Me", "artist": "Goldband", "album": "You & Me"}, {"track": "mangata", "artist": "Judeline", "album": "mangata"}], "2024-05": [{"track": "Aspiration", "artist": "Zaho de Sagazan", "album": "La symphonie des éclairs"}, {"track": "Drone Bomb Me", "artist": "ANOHNI", "album": "HOPELESSNESS"}, {"track": "Honey Boy (feat. Nile Rodgers & Shenseea)", "artist": "Purple Disco Machine", "album": "Honey Boy (feat. Nile Rodgers & Shenseea)"}, {"track": "Insecure", "artist": "Tom Misch", "album": "Insecure"}, {"track": "California", "artist": "MRCY", "album": "VOLUME 1"}, {"track": "#RICHAXXHAITIAN", "artist": "Mach-Hommy", "album": "#RICHAXXHAITIAN"}, {"track": "Reaching Out", "artist": "Beth Gibbons", "album": "Reaching Out"}, {"track": "la noia", "artist": "Angelina Mango", "album": "la noia"}, {"track": "French Exit", "artist": "Dua Lipa", "album": "Radical Optimism"}, {"track": "Down To The Sea", "artist": "Angus & Julia Stone", "album": "Cape Forestier"}], "2024-06": [{"track": "The Blade", "artist": "AURORA", "album": "What Happened To The Heart?"}, {"track": "Run Your Mouth", "artist": "The Marías", "album": "Submarine"}, {"track": "BLACK DOG / WHITE HORSE", "artist": "BIG SPECIAL", "album": "POSTINDUSTRIAL HOMETOWN BLUES"}, {"track": "Time For Slurp", "artist": "King Krule", "album": "SHHHHHHH!"}, {"track": "Treat Each Other Right", "artist": "Jamie xx", "album": "Treat Each Other Right"}, {"track": "Aey Nehin", "artist": "Arooj Aftab", "album": "Night Reign"}, {"track": "Heartbeat", "artist": "YUMA", "album": "Heartbeat"}, {"track": "Baby Blue Movie", "artist": "Cigarettes After Sex", "album": "Baby Blue Movie"}, {"track": "Snap My Finger (feat. PinkPantheress)", "artist": "KAYTRANADA", "album": "TIMELESS"}, {"track": "Sympathy is a knife", "artist": "Charli xcx", "album": "BRAT"}], "2024-07": [{"track": "Le bonheur et la tristesse", "artist": "Dani Terreur", "album": "Le bonheur et la tristesse"}, {"track": "Do The Right Thing", "artist": "Redhead Kingpin", "album": "Fascinating Rhythms"}, {"track": "SIN MIEDO", "artist": "JPEGMAFIA", "album": "SIN MIEDO"}, {"track": "Going to Georgia", "artist": "Jake Xerxes Fussell", "album": "When I'm Called"}, {"track": "If The Sun Never Rises Again", "artist": "Johnny Blue Skies", "album": "Passage Du Desir"}, {"track": "Satellite Business 2.0", "artist": "Sampha", "album": "Satellite Business 2.0"}, {"track": "Chinito Chinito", "artist": "Ry Cooder", "album": "Chávez Ravine"}, {"track": "So Much Further to Go", "artist": "Alexis Taylor", "album": "Piano"}, {"track": "Chama os Mulekes", "artist": "ConeCrewDiretoria", "album": "Com os Neurônios Evoluidos"}, {"track": "28", "artist": "Zach Bryan", "album": "The Great American Bar Scene"}], "2024-08": [{"track": "Always a Stranger", "artist": "Tindersticks", "album": "Always a Stranger"}, {"track": "In The Modern World", "artist": "Fontaines D.C.", "album": "In The Modern World"}, {"track": "Simply Falling", "artist": "Iyeoka", "album": "Say Yes"}, {"track": "Mood To Make Love", "artist": "Rosie Lowe", "album": "Lover, Other"}, {"track": "Love Sensation", "artist": "Loleatta Holloway", "album": "Love Sensation"}, {"track": "Everybody Wants To Rule the World [Feat. Lalah Hathaway & Common]", "artist": "Robert Glasper", "album": "Black Radio III"}, {"track": "Die With A Smile", "artist": "Lady Gaga", "album": "Die With A Smile"}, {"track": "Bug", "artist": "Fontaines D.C.", "album": "Romance"}, {"track": "Le bonheur et la tristesse", "artist": "Dani Terreur", "album": "Le bonheur et la tristesse"}, {"track": "One On One. (feat. Headband Henny) - Remix", "artist": "Micah Dailey-White", "album": "Micah."}], "2024-09": [{"track": "Between Two Points (with Romany Gilmour)", "artist": "David Gilmour", "album": "Between Two Points (with Romany Gilmour)"}, {"track": "E2-E4 (A reference to E2-E4 by Manuel Gottsching)", "artist": "Alex Kassian", "album": "E2-E4 (A reference to E2-E4 by Manuel Gottsching)"}, {"track": "Turned My Back", "artist": "Tindersticks", "album": "Soft Tissue"}, {"track": "Just A Western", "artist": "Nilüfer Yanya", "album": "My Method Actor"}, {"track": "Eusexua", "artist": "FKA twigs", "album": "Eusexua"}, {"track": "Golden Lady", "artist": "Stevie Wonder", "album": "Innervisions"}, {"track": "There Goes The Light", "artist": "Rosie Lowe", "album": "Lover, Other"}, {"track": "Curiosa", "artist": "Alaï", "album": "Curiosa"}, {"track": "Wild Is The Wind", "artist": "Nina Simone", "album": "Wild Is The Wind"}, {"track": "Saturday Morning", "artist": "Gil sm", "album": "Forward"}], "2024-10": [{"track": "Darlin'", "artist": "Jean Dawson", "album": "Glimmer of God"}, {"track": "We Are the Sun", "artist": "SAULT", "album": "5"}, {"track": "Spirit", "artist": "Cleo Sol", "album": "Mother"}, {"track": "Don't Stop The Dance", "artist": "Bryan Ferry", "album": "Boys And Girls"}, {"track": "Not Over Yet", "artist": "Grace", "album": "If I Could Fly"}, {"track": "Bread Wine Body Blood", "artist": "Ka", "album": "The Thief Next to Jesus"}, {"track": "Never Enough", "artist": "BIG LOVE", "album": "Never Enough"}, {"track": "Draai Terug De Tijd", "artist": "Fresku", "album": "Leren Leven"}, {"track": "Lorelei", "artist": "Tucker Zimmerman", "album": "Dance Of Love"}, {"track": "White Flag", "artist": "Dido", "album": "Life For Rent"}], "2024-11": [{"track": "Aquí", "artist": "Nicolas Jaar", "album": "Piedras 1"}, {"track": "Elephant", "artist": "070 Shake", "album": "Petrichor"}, {"track": "I Want More", "artist": "Warhaus", "album": "Karaoke Moon"}, {"track": "STILL IN THE PAINT (with LAZER DIM 700 & Bktherula)", "artist": "Denzel Curry", "album": "KING OF THE MISCHIEVOUS SOUTH"}, {"track": "Leader of the Pack", "artist": "Wunderhorse", "album": "Cub"}, {"track": "Like The End", "artist": "James Blake", "album": "Like The End"}, {"track": "Nobody's Wife", "artist": "Anouk", "album": "Together Alone"}, {"track": "alsof", "artist": "De Toegift", "album": "alsof"}, {"track": "Keep Pushing", "artist": "clipping.", "album": "Keep Pushing"}, {"track": "Golden Skinne", "artist": "Greetje Bijma", "album": "Sykheljende Lûden"}], "2024-12": [{"track": "Colourblind (feat. Loyle Carner)", "artist": "Tom Misch", "album": "Colourblind (feat. Loyle Carner)"}, {"track": "Rüzgar", "artist": "Yan Lâle", "album": "Otherlands"}, {"track": "Je Verdient Beter", "artist": "KA", "album": "Recklezz"}, {"track": "NISSAN ALTIMA", "artist": "Doechii", "album": "NISSAN ALTIMA"}, {"track": "CATFISH", "artist": "Doechii", "album": "Alligator Bites Never Heal"}, {"track": "Misschien (Kwijt)", "artist": "Gotu Jim", "album": "HIGH SOCIETY SWAGGERBOY"}, {"track": "exes", "artist": "Tate McRae", "album": "THINK LATER"}, {"track": "Darlin'", "artist": "Jean Dawson", "album": "Glimmer of God"}, {"track": "The Change and the Changing", "artist": "Mandrake Handshake", "album": "The Change and the Changing"}, {"track": "coloured concrete", "artist": "Nemahsis", "album": "Verbathim"}], "2025-01": [{"track": "family and friends", "artist": "Oklou", "album": "family and friends"}, {"track": "Sing Like Madonna", "artist": "Sebastian Schub", "album": "Sing Like Madonna"}, {"track": "Breath From Another", "artist": "Esthero", "album": "Breath From Another"}, {"track": "Indiana", "artist": "Adrianne Lenker", "album": "Hours Were the Birds"}, {"track": "Jaouad", "artist": "Dressed Like Boys", "album": "Jaouad"}, {"track": "All It Takes", "artist": "The Bony King of Nowhere", "album": "Everybody Knows"}, {"track": "Overcome", "artist": "Tricky", "album": "Maxinquaye"}, {"track": "Extraordinary Wings", "artist": "Heartworms", "album": "Extraordinary Wings"}, {"track": "Fairy in a Bottle", "artist": "Jacob Alon", "album": "Fairy in a Bottle"}, {"track": "Girl Feels Good", "artist": "FKA twigs", "album": "EUSEXUA"}], "2025-02": [{"track": "Ascension (Don't Ever Wonder) - Remastered 2021", "artist": "Maxwell", "album": "Maxwell's Urban Hang Suite"}, {"track": "blade bird", "artist": "Oklou", "album": "blade bird"}, {"track": "Idiot Box", "artist": "Sharon Van Etten", "album": "Sharon Van Etten & The Attachment Theory"}, {"track": "animal", "artist": "Martin Luke Brown", "album": "man oh man !"}, {"track": "One of These Days (I'm Gonna Spend the Whole Night With You)", "artist": "Bonnie Prince Billy", "album": "The Purple Bird"}, {"track": "Blue Train", "artist": "John Coltrane", "album": "Blue Train"}, {"track": "Let Go", "artist": "Noha Saré", "album": "Let Go"}, {"track": "Unrequited Love", "artist": "Ella Walton", "album": "Unrequited Love"}, {"track": "Leef Een Beetje", "artist": "Big2", "album": "Leef Een Beetje"}, {"track": "thank you for recording", "artist": "Oklou", "album": "choke enough"}], "2025-03": [{"track": "Can't Feel Too Much (with May)", "artist": "Michael Ekow", "album": "Love Songs About Nobody (with May)"}, {"track": "Joanne", "artist": "S10", "album": "Mijn Haren Ruiken Naar Vuur"}, {"track": "Seasons", "artist": "JOHAN", "album": "Seasons"}, {"track": "Nothing To Give", "artist": "CunninLynguists", "album": "A Piece Of Strange"}, {"track": "How to Impress God", "artist": "Saba", "album": "From The Private Collection of Saba and No ID"}, {"track": "COLORATURA", "artist": "Ichiko Aoba", "album": "Luminescent Creatures"}, {"track": "Dinosaur", "artist": "Soft Launch", "album": "Dinosaur"}, {"track": "Cancionera", "artist": "Natalia Lafourcade", "album": "Cancionera"}, {"track": "Anxiety", "artist": "Doechii", "album": "Anxiety"}, {"track": "Mandingo", "artist": "Wu-Tang Clan", "album": "Mandingo"}], "2025-04": [{"track": "Garota", "artist": "Erlend Øye", "album": "Legao"}, {"track": "End of the World", "artist": "Miley Cyrus", "album": "End of the World"}, {"track": "Alles", "artist": "Big2", "album": "Alles"}, {"track": "Numa Ilha", "artist": "Marina Sena", "album": "Coisas Naturais"}, {"track": "Everybody's trying to figure me out", "artist": "HAIM", "album": "Everybody's trying to figure me out"}, {"track": "One To Grow On", "artist": "The UMC's", "album": "Fruits Of Nature"}, {"track": "Silver Linings", "artist": "Roufaida", "album": "Silver Linings"}, {"track": "Ze Is Pas Net Begonnen (Leerstage / Werkstage)", "artist": "De Jeugd Van Tegenwoordig", "album": "Ze Is Pas Net Begonnen (Leerstage / Werkstage)"}, {"track": "Rules of School", "artist": "Yukimi", "album": "For You"}, {"track": "Hart In Brand", "artist": "Froukje", "album": "Hart In Brand"}], "2025-05": [{"track": "The Fork", "artist": "Oscar Jerome", "album": "The Fork"}, {"track": "Luna Creciente", "artist": "Natalia Lafourcade", "album": "Cancionera"}, {"track": "Illegal", "artist": "PinkPantheress", "album": "Fancy That"}, {"track": "Shout To The Top", "artist": "The Style Council", "album": "Greatest Hits"}, {"track": "Thank You for the Day", "artist": "Emma-Jean Thackray", "album": "Weirdo"}, {"track": "Carried Away", "artist": "Men I Trust", "album": "Equus Caballus"}, {"track": "Vocab - Refugees Hip Hop Remix", "artist": "Fugees", "album": "Bootleg Versions"}, {"track": "Everwanting: To Want You to Want - Remastered 2018", "artist": "Maxwell", "album": "Embrya"}, {"track": "Lead Paint Test", "artist": "billy woods", "album": "GOLLIWOG"}, {"track": "Melodie Is A Wound", "artist": "Stereolab", "album": "Instant Holograms On Metal Film"}], "2025-06": [{"track": "December", "artist": "Erika de Casier", "album": "Lifetime"}, {"track": "Fame is a Gun", "artist": "Addison Rae", "album": "Fame is a Gun"}, {"track": "Villain", "artist": "Annahstasia", "album": "Tether"}, {"track": "New York", "artist": "Addison Rae", "album": "Addison"}, {"track": "Blue", "artist": "Little Simz", "album": "Lotus"}, {"track": "Wild Wood", "artist": "Paul Weller", "album": "Wild Wood"}, {"track": "Keep On Calling", "artist": "Nilüfer Yanya", "album": "Inside Out"}, {"track": "A Memorial Garden On Enghavevej - From „Copenhagen Dreams” Soundtrack", "artist": "Jóhann Jóhannsson", "album": "Copenhagen Dreams"}, {"track": "De Nachtbus Van Zoran", "artist": "Meetsysteem", "album": "Gekleed In Donker, Ze Vroegen Niks"}, {"track": "No Need To Be Shy", "artist": "Faye Meana", "album": "No Need To Be Shy"}], "2025-07": [{"track": "SUBIR EL MONTE (II)", "artist": "César y su Jardín", "album": "CORRE Y SUELTA A LOS PERROS"}, {"track": "1995", "artist": "Freddie Gibbs", "album": "Alfredo 2"}, {"track": "Overflow", "artist": "Annahstasia", "album": "Tether"}, {"track": "Chains & Whips", "artist": "Clipse", "album": "Let God Sort Em Out"}, {"track": "pacifist", "artist": "Sef", "album": "lieve monsters"}, {"track": "Ojos Secos (with Cuco)", "artist": "Adrian Quesada", "album": "Boleros Psicodélicos II"}, {"track": "Crystal Tears", "artist": "Janne Schra", "album": "Crystal Tears"}, {"track": "The Glass", "artist": "Billie Marten", "album": "Dog Eared"}, {"track": "Peace", "artist": "Cass McCombs", "album": "Peace"}, {"track": "Canto Ostinato: Section 1 - Live", "artist": "Simeon ten Holt", "album": "Canto Ostinato"}], "2025-08": [{"track": "Summerinlove", "artist": "Parcels", "album": "Summerinlove"}, {"track": "Le vent nous portera", "artist": "Noir Désir", "album": "Des visages des figures"}, {"track": "Kill Me", "artist": "Hayley Williams", "album": "Kill Me"}, {"track": "Fun", "artist": "Deki Alem", "album": "Forget In Mass"}, {"track": "Negative Self Talk", "artist": "Hayley Williams", "album": "Negative Self Talk"}, {"track": "True Believer", "artist": "Hayley Williams", "album": "True Believer"}, {"track": "Hard", "artist": "Hayley Williams", "album": "Hard"}, {"track": "NO QUESTIONS ASKED", "artist": "Quadeca", "album": "Vanisher, Horizon Scraper"}, {"track": "I Won't Quit On You", "artist": "Hayley Williams", "album": "I Won't Quit On You"}, {"track": "Gunslinger", "artist": "Natalie Bergman", "album": "My Home Is Not In This World"}], "2025-09": [{"track": "Melody", "artist": "The Cinematic Orchestra", "album": "Man With A Movie Camera"}, {"track": "Als Het Donker Wordt", "artist": "Pip Lieke Lucas", "album": "Als Het Donker Wordt"}, {"track": "Hello Sunshine", "artist": "Flyte", "album": "Between You and Me"}, {"track": "Game Sounds", "artist": "Robin Kester", "album": "Dark Sky Reserve"}, {"track": "Allbarone", "artist": "Baxter Dury", "album": "Allbarone"}, {"track": "Saint Pablo", "artist": "Kanye West", "album": "The Life Of Pablo"}, {"track": "Dracula", "artist": "Tame Impala", "album": "Dracula"}, {"track": "Zo Niet Mij", "artist": "Typhoon", "album": "Tussen Licht En Lucht"}, {"track": "genoeg problemen", "artist": "Sef", "album": "lieve monsters"}, {"track": "MOVEMENT", "artist": "Weval", "album": "MOVEMENT"}], "2025-10": [{"track": "The Watershed", "artist": "Mark Hollis", "album": "Mark Hollis"}, {"track": "Manchild", "artist": "Sabrina Carpenter", "album": "Man’s Best Friend"}, {"track": "Overflow", "artist": "Annahstasia", "album": "Tether"}, {"track": "GRIND", "artist": "Novelist", "album": "AUDACITY"}, {"track": "Drinking Age", "artist": "Cameron Winter", "album": "Heavy Metal"}, {"track": "My Old Ways", "artist": "Tame Impala", "album": "Deadbeat"}, {"track": "Unfolding", "artist": "Rival Consoles", "album": "Persona"}, {"track": "No Other", "artist": "Gene Clark", "album": "No Other"}, {"track": "Crucify - 2015 Remaster", "artist": "Tori Amos", "album": "Little Earthquakes"}, {"track": "Tracery", "artist": "Nusrat Fateh Ali Khan", "album": "Mustt Mustt"}], "2025-11": [{"track": "Otra Noche de Llorar", "artist": "Mon Laferte", "album": "FEMME FATALE"}, {"track": "Diarabi", "artist": "Vieux Farka Touré", "album": "Ali"}, {"track": "The Sea", "artist": "Morcheeba", "album": "Big Calm"}, {"track": "Esto Es Amor", "artist": "Mon Laferte", "album": "Esto Es Amor"}, {"track": "Berghain", "artist": "ROSALÍA", "album": "LUX"}, {"track": "Capital I", "artist": "Andrew Bird", "album": "Borrow or Rob"}, {"track": "Rosie", "artist": "Claw Boys Claw", "album": "Sugar"}, {"track": "same sign", "artist": "Gabriel Jacoby", "album": "gutta child"}, {"track": "On My Own", "artist": "Sevdaliza", "album": "HEROINA"}, {"track": "Moon (Feat. Bon Iver)", "artist": "Daniel Caesar", "album": "Son Of Spergy"}], "2025-12": [{"track": "Slow", "artist": "Annahstasia", "album": "Tether"}, {"track": "Thorn", "artist": "Keo", "album": "Siren"}, {"track": "Breath From Another", "artist": "Esthero", "album": "Breath From Another"}, {"track": "Stop The Bleeding", "artist": "Baby Rose", "album": "Through and Through"}, {"track": "Love Is", "artist": "Dove Ellis", "album": "Blizzard"}, {"track": "Cannock Chase", "artist": "Labi Siffre", "album": "Crying Laughing Loving Lying"}, {"track": "Me and Bobby McGee", "artist": "Janis Joplin", "album": "Pearl"}, {"track": "I Look for You", "artist": "SAULT", "album": "Acts of Faith"}, {"track": "There Goes The Light", "artist": "Rosie Lowe", "album": "Lover, Other"}, {"track": "Everybody", "artist": "Mac Miller", "album": "Circles"}], "2026-01": [{"track": "186 Tage", "artist": "Ludwig", "album": "186 Tage"}, {"track": "Op Het Spectrum Scoor Ik Hoog", "artist": "Vjèze Fur", "album": "Tuinieren"}, {"track": "Das ist alles von der Kunstfreiheit gedeckt", "artist": "Danger Dan", "album": "Das ist alles von der Kunstfreiheit gedeckt"}, {"track": "Alles von alleine", "artist": "Dominik Hartz", "album": "Alles von alleine"}, {"track": "Lean", "artist": "Charlotte Day Wilson", "album": "Lean"}, {"track": "Warum bleibst du", "artist": "Ludwig", "album": "Warum bleibst du"}, {"track": "Downhill", "artist": "Postman", "album": "Green"}, {"track": "Mangos mit Chili", "artist": "Nina Chuba", "album": "Glas"}, {"track": "Crisis", "artist": "Postmen", "album": "Documents (15th Anniversary Edition)"}, {"track": "Blame It On The Sun", "artist": "Stevie Wonder", "album": "Talking Book"}], "2026-02": [{"track": "Song by the sea", "artist": "Tsar B", "album": "The Writer"}, {"track": "TIJDSGEEST", "artist": "Abel", "album": "IJSLAND 2"}, {"track": "Lean", "artist": "Charlotte Day Wilson", "album": "Lean"}, {"track": "The Lighthouse", "artist": "Tessa Rose Jackson", "album": "The Lighthouse"}, {"track": "O Tempo (Foi O Meu Mestre)", "artist": "Fabiano do Nascimento", "album": "O Tempo (Foi O Meu Mestre)"}, {"track": "Iedereen Gaat Vreemd", "artist": "Froukje", "album": "Iedereen Gaat Vreemd"}, {"track": "On peut comme ça", "artist": "Zaz", "album": "Sains et saufs"}, {"track": "OFFERINGS", "artist": "Ransom", "album": "OFFERINGS"}, {"track": "In the Garden", "artist": "Van Morrison", "album": "No Guru, No Method, No Teacher (Bonus Track Version)"}, {"track": "Op Het Spectrum Scoor Ik Hoog", "artist": "Vjèze Fur", "album": "Tuinieren"}], "2026-03": [{"track": "Woes of The World", "artist": "Saba", "album": "Woes of The World"}, {"track": "They Say I'm Different", "artist": "Betty Davis", "album": "They Say I'm Different"}, {"track": "Nasty Gal", "artist": "Betty Davis", "album": "Nasty Gal"}, {"track": "Piano Sonata No. 2 \"Concord Mass., 1840-1860\": I. Emerson", "artist": "Charles Ives", "album": "Each and All"}, {"track": "In a Lake", "artist": "Mitski", "album": "Nothing's About to Happen to Me"}, {"track": "Transcending the Archetype", "artist": "Stephen Emmer", "album": "Asymmetrical Dot"}, {"track": "For Better Days", "artist": "VENTILATEUR", "album": "For Better Days"}, {"track": "Take Me Home", "artist": "Cher", "album": "Take Me Home"}, {"track": "Only the Lonely", "artist": "Roy Orbison", "album": "Sings Lonely and Blue"}, {"track": "Rainy", "artist": "Sunstack Jones", "album": "Rainy"}]};
+const ALBUMS = {"2017-02": [{"album": "Views", "artist": "Drake", "trackCount": 18, "msPlayed": 4658300}], "2017-03": [{"album": "More Life", "artist": "Drake", "trackCount": 22, "msPlayed": 16524219}, {"album": "Slaaptekort", "artist": "Boef", "trackCount": 15, "msPlayed": 8575071}, {"album": "Gang Signs & Prayer", "artist": "Stormzy", "trackCount": 14, "msPlayed": 3823918}, {"album": "Starboy", "artist": "The Weeknd", "trackCount": 7, "msPlayed": 3346773}], "2017-04": [{"album": "More Life", "artist": "Drake", "trackCount": 21, "msPlayed": 12028055}, {"album": "Starboy", "artist": "The Weeknd", "trackCount": 10, "msPlayed": 5670537}, {"album": "Slaaptekort", "artist": "Boef", "trackCount": 9, "msPlayed": 3375101}, {"album": "Views", "artist": "Drake", "trackCount": 9, "msPlayed": 2197356}], "2017-05": [{"album": "Starboy", "artist": "The Weeknd", "trackCount": 8, "msPlayed": 2815869}, {"album": "More Life", "artist": "Drake", "trackCount": 5, "msPlayed": 916199}], "2017-06": [{"album": "Stoney", "artist": "Post Malone", "trackCount": 14, "msPlayed": 25525630}, {"album": "Funk Wav Bounces Vol.1", "artist": "Calvin Harris", "trackCount": 10, "msPlayed": 2413210}], "2017-07": [{"album": "Funk Wav Bounces Vol.1", "artist": "Calvin Harris", "trackCount": 10, "msPlayed": 4598612}, {"album": "Stoney", "artist": "Post Malone", "trackCount": 7, "msPlayed": 2709358}, {"album": "Starboy", "artist": "The Weeknd", "trackCount": 5, "msPlayed": 1512546}], "2017-08": [{"album": "Starboy", "artist": "The Weeknd", "trackCount": 16, "msPlayed": 8321746}, {"album": "Funk Wav Bounces Vol.1", "artist": "Calvin Harris", "trackCount": 7, "msPlayed": 4513981}, {"album": "Stoney", "artist": "Post Malone", "trackCount": 9, "msPlayed": 2773872}], "2017-09": [{"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 19, "msPlayed": 19992930}, {"album": "GEMINI", "artist": "Macklemore", "trackCount": 14, "msPlayed": 14245576}, {"album": "808s & Heartbreak", "artist": "Kanye West", "trackCount": 5, "msPlayed": 10062526}, {"album": "Funk Wav Bounces Vol.1", "artist": "Calvin Harris", "trackCount": 8, "msPlayed": 8059766}, {"album": "Stoney", "artist": "Post Malone", "trackCount": 7, "msPlayed": 1460133}], "2017-10": [{"album": "GEMINI", "artist": "Macklemore", "trackCount": 16, "msPlayed": 28771450}, {"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 9, "msPlayed": 5050632}, {"album": "808s & Heartbreak", "artist": "Kanye West", "trackCount": 5, "msPlayed": 1630478}, {"album": "Starboy", "artist": "The Weeknd", "trackCount": 5, "msPlayed": 1091274}], "2017-11": [{"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 18, "msPlayed": 25711817}, {"album": "My Beautiful Dark Twisted Fantasy", "artist": "Kanye West", "trackCount": 12, "msPlayed": 16856168}, {"album": "808s & Heartbreak", "artist": "Kanye West", "trackCount": 11, "msPlayed": 15839966}, {"album": "Graduation", "artist": "Kanye West", "trackCount": 12, "msPlayed": 13255771}], "2017-12": [{"album": "SYRE", "artist": "Jaden", "trackCount": 17, "msPlayed": 35675459}, {"album": "My Beautiful Dark Twisted Fantasy", "artist": "Kanye West", "trackCount": 11, "msPlayed": 8290343}, {"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 13, "msPlayed": 7552728}, {"album": "Graduation", "artist": "Kanye West", "trackCount": 10, "msPlayed": 6743530}, {"album": "808s & Heartbreak", "artist": "Kanye West", "trackCount": 10, "msPlayed": 4717935}], "2018-01": [{"album": "SYRE", "artist": "Jaden", "trackCount": 17, "msPlayed": 14425069}, {"album": "Beauty Behind The Madness", "artist": "The Weeknd", "trackCount": 13, "msPlayed": 14260869}, {"album": "Stoney", "artist": "Post Malone", "trackCount": 14, "msPlayed": 9298515}, {"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 12, "msPlayed": 7353339}, {"album": "Starboy", "artist": "The Weeknd", "trackCount": 11, "msPlayed": 5429635}], "2018-08": [{"album": "ASTROWORLD", "artist": "Travis Scott", "trackCount": 17, "msPlayed": 33637114}, {"album": "ONEPOINTFIVE", "artist": "Aminé", "trackCount": 13, "msPlayed": 5502840}, {"album": "Kiss Land - Deluxe", "artist": "The Weeknd", "trackCount": 10, "msPlayed": 3405147}, {"album": "Flower Boy", "artist": "Tyler, The Creator", "trackCount": 5, "msPlayed": 2733478}, {"album": "beerbongs & bentleys", "artist": "Post Malone", "trackCount": 6, "msPlayed": 1292277}], "2018-09": [{"album": "ASTROWORLD", "artist": "Travis Scott", "trackCount": 16, "msPlayed": 16473491}, {"album": "ONEPOINTFIVE", "artist": "Aminé", "trackCount": 13, "msPlayed": 14266912}, {"album": "Tha Carter V", "artist": "Lil Wayne", "trackCount": 23, "msPlayed": 10135331}, {"album": "Flower Boy", "artist": "Tyler, The Creator", "trackCount": 6, "msPlayed": 8352787}, {"album": "Take Not3s II", "artist": "Not3s", "trackCount": 9, "msPlayed": 2818172}], "2018-10": [{"album": "Tha Carter V", "artist": "Lil Wayne", "trackCount": 17, "msPlayed": 69336551}, {"album": "East Atlanta Love Letter", "artist": "6LACK", "trackCount": 11, "msPlayed": 17189027}, {"album": "ASTROWORLD", "artist": "Travis Scott", "trackCount": 12, "msPlayed": 5682652}, {"album": "ONEPOINTFIVE", "artist": "Aminé", "trackCount": 5, "msPlayed": 1640424}, {"album": "Scorpion", "artist": "Drake", "trackCount": 7, "msPlayed": 1371470}], "2018-11": [{"album": "NOT ALL HEROES WEAR CAPES", "artist": "Metro Boomin", "trackCount": 13, "msPlayed": 67638768}, {"album": "Creed II: The Album", "artist": "Mike WiLL Made-It", "trackCount": 10, "msPlayed": 23299039}, {"album": "Donny Womack", "artist": "Don Toliver", "trackCount": 13, "msPlayed": 17412720}, {"album": "Tha Carter V", "artist": "Lil Wayne", "trackCount": 18, "msPlayed": 9902470}, {"album": "The Sunset Tapes: A Cool Tape Story", "artist": "Jaden", "trackCount": 10, "msPlayed": 8158773}], "2018-12": [{"album": "i am > i was", "artist": "21 Savage", "trackCount": 9, "msPlayed": 14774314}, {"album": "Championships", "artist": "Meek Mill", "trackCount": 13, "msPlayed": 8257308}, {"album": "ASTROWORLD", "artist": "Travis Scott", "trackCount": 11, "msPlayed": 6760502}, {"album": "Tha Carter V", "artist": "Lil Wayne", "trackCount": 11, "msPlayed": 6279801}, {"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 10, "msPlayed": 4711397}], "2019-01": [{"album": "TA13OO", "artist": "Denzel Curry", "trackCount": 8, "msPlayed": 26654983}, {"album": "DiCaprio 2", "artist": "JID", "trackCount": 8, "msPlayed": 9526208}, {"album": "Everythings For Sale", "artist": "WESTSIDE BOOGIE", "trackCount": 5, "msPlayed": 5645850}, {"album": "ASTROWORLD", "artist": "Travis Scott", "trackCount": 9, "msPlayed": 3724572}, {"album": "Tha Carter V", "artist": "Lil Wayne", "trackCount": 10, "msPlayed": 3276097}], "2020-05": [{"album": "Piñata", "artist": "Freddie Gibbs", "trackCount": 17, "msPlayed": 3144287}, {"album": "Abbey Road", "artist": "The Beatles", "trackCount": 21, "msPlayed": 3040445}, {"album": "The Beatles", "artist": "The Beatles", "trackCount": 31, "msPlayed": 3015664}, {"album": "Birds In The Trap Sing McKnight", "artist": "Travis Scott", "trackCount": 9, "msPlayed": 2966867}, {"album": "KIDS SEE GHOSTS", "artist": "KIDS SEE GHOSTS", "trackCount": 7, "msPlayed": 1692834}], "2020-06": [{"album": "Summertime '06", "artist": "Vince Staples", "trackCount": 20, "msPlayed": 18498777}, {"album": "Acid Rap", "artist": "Chance the Rapper", "trackCount": 13, "msPlayed": 14226058}, {"album": "Trilogy", "artist": "The Weeknd", "trackCount": 24, "msPlayed": 10260306}, {"album": "The Epic", "artist": "Kamasi Washington", "trackCount": 12, "msPlayed": 9946162}, {"album": "IGOR", "artist": "Tyler, The Creator", "trackCount": 11, "msPlayed": 7528447}], "2020-07": [{"album": "Man On The Moon II: The Legend Of Mr. Rager", "artist": "Kid Cudi", "trackCount": 17, "msPlayed": 9375494}, {"album": "What Kinda Music", "artist": "Tom Misch", "trackCount": 11, "msPlayed": 9369610}, {"album": "4eva Is A Mighty Long Time", "artist": "Big K.R.I.T.", "trackCount": 21, "msPlayed": 8673761}, {"album": "My Beautiful Dark Twisted Fantasy", "artist": "Kanye West", "trackCount": 12, "msPlayed": 8423201}, {"album": "Man On The Moon: The End Of Day", "artist": "Kid Cudi", "trackCount": 13, "msPlayed": 7978022}], "2018-02": [{"album": "Amen", "artist": "Rich Brian", "trackCount": 14, "msPlayed": 12633190}, {"album": "War & Leisure", "artist": "Miguel", "trackCount": 12, "msPlayed": 10096209}, {"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 17, "msPlayed": 8405871}, {"album": "My Beautiful Dark Twisted Fantasy", "artist": "Kanye West", "trackCount": 5, "msPlayed": 2620222}, {"album": "Gang Signs & Prayer", "artist": "Stormzy", "trackCount": 12, "msPlayed": 2243319}], "2018-03": [{"album": "Double Or Nothing (& Metro Boomin)", "artist": "Big Sean", "trackCount": 9, "msPlayed": 5489835}, {"album": "My Dear Melancholy,", "artist": "The Weeknd", "trackCount": 6, "msPlayed": 5204076}, {"album": "SYRE", "artist": "Jaden", "trackCount": 14, "msPlayed": 5029930}, {"album": "The Life Of Pablo", "artist": "Kanye West", "trackCount": 14, "msPlayed": 4880757}, {"album": "Gang Signs & Prayer", "artist": "Stormzy", "trackCount": 11, "msPlayed": 3698713}], "2018-04": [{"album": "Good For You", "artist": "Aminé", "trackCount": 15, "msPlayed": 14577736}, {"album": "SYRE", "artist": "Jaden", "trackCount": 17, "msPlayed": 12597653}, {"album": "Stoney", "artist": "Post Malone", "trackCount": 14, "msPlayed": 12299094}, {"album": "Double Or Nothing (& Metro Boomin)", "artist": "Big Sean", "trackCount": 10, "msPlayed": 10610820}, {"album": "NORI", "artist": "Ronnie Flex", "trackCount": 13, "msPlayed": 8129407}], "2018-05": [{"album": "SR3MM", "artist": "Rae Sremmurd", "trackCount": 21, "msPlayed": 14088384}, {"album": "DAYTONA", "artist": "Pusha T", "trackCount": 7, "msPlayed": 8579927}, {"album": "TESTING", "artist": "A$AP Rocky", "trackCount": 13, "msPlayed": 6392929}, {"album": "beerbongs & bentleys", "artist": "Post Malone", "trackCount": 7, "msPlayed": 2269749}, {"album": "SYRE", "artist": "Jaden", "trackCount": 6, "msPlayed": 1487388}], "2018-06": [{"album": "KIDS SEE GHOSTS", "artist": "KIDS SEE GHOSTS", "trackCount": 7, "msPlayed": 25315762}, {"album": "ye", "artist": "Kanye West", "trackCount": 7, "msPlayed": 21062400}, {"album": "TESTING", "artist": "A$AP Rocky", "trackCount": 7, "msPlayed": 13672670}, {"album": "SR3MM", "artist": "Rae Sremmurd", "trackCount": 5, "msPlayed": 7596355}, {"album": "DAYTONA", "artist": "Pusha T", "trackCount": 6, "msPlayed": 5401519}], "2018-07": [{"album": "Scorpion", "artist": "Drake", "trackCount": 25, "msPlayed": 24239641}, {"album": "Take Not3s II", "artist": "Not3s", "trackCount": 8, "msPlayed": 6298652}, {"album": "Double Or Nothing (& Metro Boomin)", "artist": "Big Sean", "trackCount": 10, "msPlayed": 3295667}, {"album": "beerbongs & bentleys", "artist": "Post Malone", "trackCount": 9, "msPlayed": 2780541}, {"album": "SR3MM", "artist": "Rae Sremmurd", "trackCount": 5, "msPlayed": 2218906}], "2020-08": [{"album": "Twin Fantasy", "artist": "Car Seat Headrest", "trackCount": 8, "msPlayed": 6304664}, {"album": "Trilogy", "artist": "The Weeknd", "trackCount": 16, "msPlayed": 5874500}, {"album": "Musas (Un Homenaje al Folclore Latinoamericano en Manos de Los Macorinos), Vol. 2", "artist": "Natalia Lafourcade", "trackCount": 12, "msPlayed": 5415709}, {"album": "Last Year Was Weird, Vol. 2", "artist": "Tkay Maidza", "trackCount": 8, "msPlayed": 5259654}, {"album": "Limbo", "artist": "Aminé", "trackCount": 8, "msPlayed": 4668576}], "2020-09": [{"album": "Shabrang", "artist": "Sevdaliza", "trackCount": 15, "msPlayed": 11748723}, {"album": "Ultra Mono", "artist": "IDLES", "trackCount": 10, "msPlayed": 8861448}, {"album": "Melodrama", "artist": "Lorde", "trackCount": 10, "msPlayed": 8026675}, {"album": "Song For Our Daughter", "artist": "Laura Marling", "trackCount": 10, "msPlayed": 7069447}, {"album": "The Velvet Underground & Nico 45th Anniversary", "artist": "The Velvet Underground", "trackCount": 11, "msPlayed": 6899225}], "2020-10": [{"album": "Process", "artist": "Sampha", "trackCount": 10, "msPlayed": 15605784}, {"album": "A Moon Shaped Pool", "artist": "Radiohead", "trackCount": 10, "msPlayed": 8771803}, {"album": "Shore", "artist": "Fleet Foxes", "trackCount": 10, "msPlayed": 8366883}, {"album": "Lianne La Havas", "artist": "Lianne La Havas", "trackCount": 10, "msPlayed": 6662786}, {"album": "Untitled (Rise)", "artist": "SAULT", "trackCount": 15, "msPlayed": 5550159}], "2020-11": [{"album": "Song Machine, Season One: Strange Timez", "artist": "Gorillaz", "trackCount": 15, "msPlayed": 12610475}, {"album": "Innocent Country 2", "artist": "Quelle Chris", "trackCount": 16, "msPlayed": 8856545}, {"album": "A Moon Shaped Pool", "artist": "Radiohead", "trackCount": 8, "msPlayed": 7214143}, {"album": "songs", "artist": "Adrianne Lenker", "trackCount": 11, "msPlayed": 7154488}, {"album": "Let England Shake", "artist": "PJ Harvey", "trackCount": 12, "msPlayed": 5930397}], "2020-12": [{"album": "Overly Dedicated", "artist": "Kendrick Lamar", "trackCount": 11, "msPlayed": 9410240}, {"album": "Rumours", "artist": "Fleetwood Mac", "trackCount": 11, "msPlayed": 7669756}, {"album": "We Were There", "artist": "Ernst Reijseger", "trackCount": 10, "msPlayed": 6288585}, {"album": "To Be Kind", "artist": "Swans", "trackCount": 5, "msPlayed": 4796593}, {"album": "Unknown Pleasures", "artist": "Joy Division", "trackCount": 10, "msPlayed": 4794603}], "2021-01": [{"album": "Madvillainy", "artist": "Madvillain", "trackCount": 18, "msPlayed": 6682865}, {"album": "Les enfants terribles", "artist": "Philip Glass", "trackCount": 13, "msPlayed": 5887177}, {"album": "I Don't Like Shit, I Don't Go Outside: An Album by Earl Sweatshirt", "artist": "Earl Sweatshirt", "trackCount": 10, "msPlayed": 5729823}, {"album": "Man On The Moon III: The Chosen", "artist": "Kid Cudi", "trackCount": 5, "msPlayed": 5662134}, {"album": "MM..FOOD", "artist": "MF DOOM", "trackCount": 15, "msPlayed": 4637476}], "2021-02": [{"album": "For the first time", "artist": "Black Country, New Road", "trackCount": 6, "msPlayed": 9642685}, {"album": "Sound Ancestors", "artist": "Madlib", "trackCount": 14, "msPlayed": 8553176}, {"album": "A Moon Shaped Pool", "artist": "Radiohead", "trackCount": 6, "msPlayed": 6562263}, {"album": "OK Human", "artist": "Weezer", "trackCount": 11, "msPlayed": 6400806}, {"album": "Terra Firma", "artist": "Tash Sultana", "trackCount": 10, "msPlayed": 6041825}], "2021-03": [{"album": "To Be Kind", "artist": "Swans", "trackCount": 8, "msPlayed": 6884258}, {"album": "This Is Happening", "artist": "LCD Soundsystem", "trackCount": 5, "msPlayed": 6119726}, {"album": "Palais d'argile", "artist": "Feu! Chatterton", "trackCount": 13, "msPlayed": 6004680}, {"album": "Creation Never Sleeps, Creation Never Dies: The Willie Dunn Anthology", "artist": "Willie Dunn", "trackCount": 16, "msPlayed": 5059738}, {"album": "We Were There", "artist": "Ernst Reijseger", "trackCount": 8, "msPlayed": 4536387}], "2021-04": [{"album": "The Glowing Man", "artist": "Swans", "trackCount": 8, "msPlayed": 23325386}, {"album": "III", "artist": "BADBADNOTGOOD", "trackCount": 8, "msPlayed": 11229808}, {"album": "The Seer", "artist": "Swans", "trackCount": 11, "msPlayed": 8524241}, {"album": "Palais d'argile", "artist": "Feu! Chatterton", "trackCount": 10, "msPlayed": 8460268}, {"album": "The Idler Wheel Is Wiser Than the Driver of the Screw and Whipping Cords Will Serve You More Than Ropes Will Ever Do", "artist": "Fiona Apple", "trackCount": 11, "msPlayed": 7847163}], "2021-11": [{"album": "CRAWLER", "artist": "IDLES", "trackCount": 11, "msPlayed": 9092319}, {"album": "Madison", "artist": "Sloppy Jane", "trackCount": 11, "msPlayed": 7322414}, {"album": "RETROSPECT", "artist": "Emma Bale", "trackCount": 6, "msPlayed": 6729804}, {"album": "I Love You, Honeybear", "artist": "Father John Misty", "trackCount": 11, "msPlayed": 6525366}, {"album": "Skin", "artist": "Joy Crookes", "trackCount": 11, "msPlayed": 6371213}], "2021-12": [{"album": "I Don’t Live Here Anymore", "artist": "The War On Drugs", "trackCount": 10, "msPlayed": 7656496}, {"album": "The Fat of the Land", "artist": "The Prodigy", "trackCount": 10, "msPlayed": 6483812}, {"album": "Ignorance", "artist": "The Weather Station", "trackCount": 9, "msPlayed": 6137724}, {"album": "Delta Estácio Blues", "artist": "Juçara Marçal", "trackCount": 11, "msPlayed": 4513909}, {"album": "Your Queen Is A Reptile", "artist": "Sons Of Kemet", "trackCount": 9, "msPlayed": 4493177}], "2022-01": [{"album": "Dawn FM", "artist": "The Weeknd", "trackCount": 16, "msPlayed": 15228783}, {"album": "Random Access Memories", "artist": "Daft Punk", "trackCount": 9, "msPlayed": 12218277}, {"album": "Discovery", "artist": "Daft Punk", "trackCount": 14, "msPlayed": 7630924}, {"album": "Once Twice Melody", "artist": "Beach House", "trackCount": 8, "msPlayed": 6014862}, {"album": "Music Has The Right To Children", "artist": "Boards of Canada", "trackCount": 17, "msPlayed": 5686557}], "2022-02": [{"album": "Ants From Up There", "artist": "Black Country, New Road", "trackCount": 8, "msPlayed": 12972409}, {"album": "Lucifer On The Sofa", "artist": "Spoon", "trackCount": 10, "msPlayed": 10246128}, {"album": "Marchita", "artist": "Silvana Estrada", "trackCount": 11, "msPlayed": 7391782}, {"album": "Dragon New Warm Mountain I Believe In You", "artist": "Big Thief", "trackCount": 18, "msPlayed": 7315823}, {"album": "Three Dimensions Deep", "artist": "Amber Mark", "trackCount": 17, "msPlayed": 6357634}], "2022-03": [{"album": "MOTOMAMI", "artist": "ROSALÍA", "trackCount": 15, "msPlayed": 11767931}, {"album": "Illinois", "artist": "Sufjan Stevens", "trackCount": 20, "msPlayed": 9361731}, {"album": "Melt My Eyez See Your Future", "artist": "Denzel Curry", "trackCount": 13, "msPlayed": 7811683}, {"album": "Tana Talk 3", "artist": "Benny The Butcher", "trackCount": 14, "msPlayed": 6586684}, {"album": "Multitude", "artist": "Stromae", "trackCount": 10, "msPlayed": 5887063}], "2022-04": [{"album": "Omnium Gatherum", "artist": "King Gizzard & The Lizard Wizard", "trackCount": 16, "msPlayed": 24468013}, {"album": "Love & Hate", "artist": "Michael Kiwanuka", "trackCount": 9, "msPlayed": 16060319}, {"album": "Soundtracks for the Blind", "artist": "Swans", "trackCount": 23, "msPlayed": 9368285}, {"album": "GREY Area", "artist": "Little Simz", "trackCount": 7, "msPlayed": 6591300}, {"album": "Aethiopes", "artist": "billy woods", "trackCount": 13, "msPlayed": 6034129}], "2022-05": [{"album": "Mr. Morale & The Big Steppers", "artist": "Kendrick Lamar", "trackCount": 18, "msPlayed": 22638074}, {"album": "Preacher’s Daughter", "artist": "Ethel Cain", "trackCount": 13, "msPlayed": 9467268}, {"album": "SHUNKA RYOUGEN", "artist": "HARU NEMURI", "trackCount": 20, "msPlayed": 9143458}, {"album": "We've Been Going About This All Wrong", "artist": "Sharon Van Etten", "trackCount": 10, "msPlayed": 7724154}, {"album": "Dummy", "artist": "Portishead", "trackCount": 11, "msPlayed": 6839466}], "2021-05": [{"album": "The Million Masks Of God", "artist": "Manchester Orchestra", "trackCount": 11, "msPlayed": 16859937}, {"album": "Vulture Prince", "artist": "Arooj Aftab", "trackCount": 7, "msPlayed": 11034338}, {"album": "Daddy's Home", "artist": "St. Vincent", "trackCount": 13, "msPlayed": 10175909}, {"album": "Bright Green Field", "artist": "Squid", "trackCount": 10, "msPlayed": 8976250}, {"album": "L.W.", "artist": "King Gizzard & The Lizard Wizard", "trackCount": 8, "msPlayed": 8160640}], "2021-06": [{"album": "In Rainbows", "artist": "Radiohead", "trackCount": 10, "msPlayed": 15048125}, {"album": "A Tiny House, In Secret Speeches, Polar Equals", "artist": "Sweet Trip", "trackCount": 11, "msPlayed": 7576962}, {"album": "CALL ME IF YOU GET LOST", "artist": "Tyler, The Creator", "trackCount": 15, "msPlayed": 7523323}, {"album": "Jubilee", "artist": "Japanese Breakfast", "trackCount": 6, "msPlayed": 3388097}, {"album": "L.W.", "artist": "King Gizzard & The Lizard Wizard", "trackCount": 5, "msPlayed": 2774358}], "2021-07": [{"album": "The Turning Wheel", "artist": "SPELLLING", "trackCount": 12, "msPlayed": 22493069}, {"album": "Home Video", "artist": "Lucy Dacus", "trackCount": 10, "msPlayed": 5760282}, {"album": "Last Year Was Weird, Vol. 3", "artist": "Tkay Maidza", "trackCount": 5, "msPlayed": 4597846}, {"album": "everyday struggle", "artist": "daysover", "trackCount": 6, "msPlayed": 4244894}, {"album": "Twin Shadow", "artist": "Twin Shadow", "trackCount": 9, "msPlayed": 4151701}], "2021-08": [{"album": "Happier Than Ever", "artist": "Billie Eilish", "trackCount": 10, "msPlayed": 11048024}, {"album": "SINNER GET READY", "artist": "Lingua Ignota", "trackCount": 9, "msPlayed": 8923136}, {"album": "Stand For Myself", "artist": "Yola", "trackCount": 11, "msPlayed": 8430513}, {"album": "Donda", "artist": "Kanye West", "trackCount": 21, "msPlayed": 5855015}, {"album": "GLOW ON", "artist": "Turnstile", "trackCount": 14, "msPlayed": 4312193}], "2021-09": [{"album": "Sometimes I Might Be Introvert", "artist": "Little Simz", "trackCount": 16, "msPlayed": 19998916}, {"album": "Donda", "artist": "Kanye West", "trackCount": 14, "msPlayed": 8794723}, {"album": "A Southern Gothic", "artist": "Adia Victoria", "trackCount": 10, "msPlayed": 6822657}, {"album": "Lateralus", "artist": "TOOL", "trackCount": 10, "msPlayed": 6478992}, {"album": "Bitterzoet", "artist": "Eefje de Visser", "trackCount": 13, "msPlayed": 5118923}], "2021-10": [{"album": "FUTURE PAST", "artist": "Duran Duran", "trackCount": 11, "msPlayed": 10099406}, {"album": "Tidal", "artist": "Fiona Apple", "trackCount": 10, "msPlayed": 8298955}, {"album": "The Shimmer", "artist": "Oscar and the Wolf", "trackCount": 8, "msPlayed": 7480550}, {"album": "Friends That Break Your Heart", "artist": "James Blake", "trackCount": 11, "msPlayed": 7375440}, {"album": "The Miseducation of Lauryn Hill", "artist": "Ms. Lauryn Hill", "trackCount": 16, "msPlayed": 6456410}], "2022-11": [{"album": "98.12.28 男達の別れ", "artist": "Fishmans", "trackCount": 14, "msPlayed": 17413283}, {"album": "Demon Days", "artist": "Gorillaz", "trackCount": 15, "msPlayed": 10595627}, {"album": "And In The Darkness, Hearts Aglow", "artist": "Weyes Blood", "trackCount": 9, "msPlayed": 9642774}, {"album": "De Todas las Flores", "artist": "Natalia Lafourcade", "trackCount": 10, "msPlayed": 7175037}, {"album": "I Didn't Mean To Haunt You", "artist": "Quadeca", "trackCount": 11, "msPlayed": 6940415}], "2022-12": [{"album": "Dots And Loops", "artist": "Stereolab", "trackCount": 10, "msPlayed": 14413389}, {"album": "NO THANK YOU", "artist": "Little Simz", "trackCount": 10, "msPlayed": 12482832}, {"album": "Maggot Brain", "artist": "Funkadelic", "trackCount": 7, "msPlayed": 9386492}, {"album": "Ladies and gentlemen we are floating in space", "artist": "Spiritualized", "trackCount": 12, "msPlayed": 8496584}, {"album": "Where I'm Meant To Be", "artist": "Ezra Collective", "trackCount": 12, "msPlayed": 7157615}], "2023-01": [{"album": "Mezzanine", "artist": "Massive Attack", "trackCount": 11, "msPlayed": 10222083}, {"album": "Jazzmatazz Volume 1", "artist": "Guru", "trackCount": 12, "msPlayed": 7866811}, {"album": "LCD Soundsystem", "artist": "LCD Soundsystem", "trackCount": 15, "msPlayed": 7613778}, {"album": "Bitches Brew", "artist": "Miles Davis", "trackCount": 7, "msPlayed": 7382993}, {"album": "To Bring You My Love", "artist": "PJ Harvey", "trackCount": 10, "msPlayed": 7320342}], "2023-02": [{"album": "Heaven and Earth", "artist": "Kamasi Washington", "trackCount": 16, "msPlayed": 10298329}, {"album": "This Is Why", "artist": "Paramore", "trackCount": 9, "msPlayed": 8820028}, {"album": "My 21st Century Blues", "artist": "RAYE", "trackCount": 14, "msPlayed": 6798668}, {"album": "Everyday Robots", "artist": "Damon Albarn", "trackCount": 12, "msPlayed": 5728487}, {"album": "The Infamous", "artist": "Mobb Deep", "trackCount": 16, "msPlayed": 5622742}], "2023-03": [{"album": "Wenn die Nacht am tiefsten", "artist": "Ton Steine Scherben", "trackCount": 11, "msPlayed": 11309873}, {"album": "SCARING THE HOES", "artist": "JPEGMAFIA", "trackCount": 14, "msPlayed": 10454616}, {"album": "Trench", "artist": "Twenty One Pilots", "trackCount": 14, "msPlayed": 8571257}, {"album": "3 Feet High and Rising", "artist": "De La Soul", "trackCount": 22, "msPlayed": 8299662}, {"album": "Live at Bush Hall", "artist": "Black Country, New Road", "trackCount": 9, "msPlayed": 8020369}], "2023-04": [{"album": "Chopin: Nocturnes - Sony Classical Originals", "artist": "Frédéric Chopin", "trackCount": 18, "msPlayed": 8514713}, {"album": "Variables", "artist": "Alfa Mist", "trackCount": 9, "msPlayed": 8087274}, {"album": "Goodbye Yellow Brick Road - Remastered", "artist": "Elton John", "trackCount": 17, "msPlayed": 7336636}, {"album": "Blood On The Tracks", "artist": "Bob Dylan", "trackCount": 10, "msPlayed": 6989966}, {"album": "NEVER ENOUGH", "artist": "Daniel Caesar", "trackCount": 15, "msPlayed": 6001363}], "2023-05": [{"album": "Bitches Brew", "artist": "Miles Davis", "trackCount": 7, "msPlayed": 11056815}, {"album": "blómi", "artist": "Susanne Sundfør", "trackCount": 9, "msPlayed": 10838335}, {"album": "Quebec", "artist": "Ween", "trackCount": 15, "msPlayed": 8558767}, {"album": "Maps", "artist": "billy woods", "trackCount": 16, "msPlayed": 6435691}, {"album": "Moon Safari", "artist": "Air", "trackCount": 10, "msPlayed": 5677344}], "2022-06": [{"album": "Grace", "artist": "Jeff Buckley", "trackCount": 11, "msPlayed": 10841890}, {"album": "You Can’t Kill Me", "artist": "070 Shake", "trackCount": 13, "msPlayed": 10613814}, {"album": "Ugly Season", "artist": "Perfume Genius", "trackCount": 10, "msPlayed": 7732128}, {"album": "Once Twice Melody", "artist": "Beach House", "trackCount": 18, "msPlayed": 7149519}, {"album": "Home, before and after", "artist": "Regina Spektor", "trackCount": 9, "msPlayed": 6996212}], "2022-07": [{"album": "Aja", "artist": "Steely Dan", "trackCount": 7, "msPlayed": 16691313}, {"album": "Vespertine", "artist": "Björk", "trackCount": 12, "msPlayed": 10729503}, {"album": "Electric Ladyland", "artist": "Jimi Hendrix", "trackCount": 16, "msPlayed": 8817067}, {"album": "Songs In The Key Of Life", "artist": "Stevie Wonder", "trackCount": 21, "msPlayed": 8171873}, {"album": "João Gilberto Apresenta Chega de Saudade", "artist": "João Gilberto", "trackCount": 17, "msPlayed": 7946344}], "2022-08": [{"album": "Ram", "artist": "Paul McCartney", "trackCount": 20, "msPlayed": 15005785}, {"album": "RENAISSANCE", "artist": "Beyoncé", "trackCount": 16, "msPlayed": 9668682}, {"album": "Remain in Light", "artist": "Talking Heads", "trackCount": 9, "msPlayed": 8523618}, {"album": "Aquemini", "artist": "Outkast", "trackCount": 15, "msPlayed": 6436091}, {"album": "Grace", "artist": "Jeff Buckley", "trackCount": 10, "msPlayed": 6229479}], "2022-09": [{"album": "All Things Must Pass", "artist": "George Harrison", "trackCount": 24, "msPlayed": 14399081}, {"album": "I Love You Jennifer B", "artist": "Jockstrap", "trackCount": 9, "msPlayed": 6917019}, {"album": "In These Times", "artist": "Makaya McCraven", "trackCount": 11, "msPlayed": 6555954}, {"album": "Hold The Girl", "artist": "Rina Sawayama", "trackCount": 13, "msPlayed": 6139942}, {"album": "Tapestry", "artist": "Carole King", "trackCount": 11, "msPlayed": 6017466}], "2022-10": [{"album": "Hounds Of Love", "artist": "Kate Bush", "trackCount": 11, "msPlayed": 8481649}, {"album": "Ice, Death, Planets, Lungs, Mushrooms And Lava", "artist": "King Gizzard & The Lizard Wizard", "trackCount": 7, "msPlayed": 8238315}, {"album": "Led Zeppelin IV", "artist": "Led Zeppelin", "trackCount": 8, "msPlayed": 8039896}, {"album": "Transformer", "artist": "Lou Reed", "trackCount": 11, "msPlayed": 7338457}, {"album": "The Velvet Underground", "artist": "The Velvet Underground", "trackCount": 11, "msPlayed": 6559908}], "2023-10": [{"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 9, "msPlayed": 9400498}, {"album": "Gold", "artist": "Cleo Sol", "trackCount": 10, "msPlayed": 8340616}, {"album": "Lahai", "artist": "Sampha", "trackCount": 12, "msPlayed": 7950758}, {"album": "Water Made Us", "artist": "Jamila Woods", "trackCount": 13, "msPlayed": 6993669}, {"album": "Javelin", "artist": "Sufjan Stevens", "trackCount": 10, "msPlayed": 6001604}], "2023-11": [{"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 9, "msPlayed": 9720907}, {"album": "76:14", "artist": "Global Communication", "trackCount": 9, "msPlayed": 7366011}, {"album": "Ik Zou Voor Veel Kunnen Sterven Maar Niet Voor Een Vlag", "artist": "Sef", "trackCount": 17, "msPlayed": 4784113}, {"album": "Quaranta", "artist": "Danny Brown", "trackCount": 11, "msPlayed": 3901011}, {"album": "Parallel Lines - Remastered", "artist": "Blondie", "trackCount": 11, "msPlayed": 3743497}], "2023-12": [{"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 8, "msPlayed": 14228095}, {"album": "Third", "artist": "Portishead", "trackCount": 11, "msPlayed": 9356270}, {"album": "Crying, Laughing, Loving, Lying", "artist": "Labi Siffre", "trackCount": 12, "msPlayed": 8763347}, {"album": "Chopin: Nocturnes - Sony Classical Originals", "artist": "Frédéric Chopin", "trackCount": 10, "msPlayed": 6625454}, {"album": "Dragon New Warm Mountain I Believe In You", "artist": "Big Thief", "trackCount": 10, "msPlayed": 4989733}], "2024-01": [{"album": "Chopin: Nocturnes - Sony Classical Originals", "artist": "Frédéric Chopin", "trackCount": 19, "msPlayed": 17118401}, {"album": "Get Up With It", "artist": "Miles Davis", "trackCount": 8, "msPlayed": 16077477}, {"album": "Arvo Pärt: Tabula Rasa", "artist": "Arvo Pärt", "trackCount": 5, "msPlayed": 15659534}, {"album": "Out Of The Cool", "artist": "The Gil Evans Orchestra", "trackCount": 5, "msPlayed": 11702574}, {"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 9, "msPlayed": 11557945}], "2024-02": [{"album": "Compassion", "artist": "Vijay Iyer", "trackCount": 12, "msPlayed": 9317700}, {"album": "Prelude to Ecstasy", "artist": "The Last Dinner Party", "trackCount": 11, "msPlayed": 7703695}, {"album": "SCRAPYARD", "artist": "Quadeca", "trackCount": 15, "msPlayed": 6762491}, {"album": "76:14", "artist": "Global Communication", "trackCount": 8, "msPlayed": 6173357}, {"album": "TANGK", "artist": "IDLES", "trackCount": 9, "msPlayed": 5921161}], "2024-03": [{"album": "Mountainhead", "artist": "Everything Everything", "trackCount": 14, "msPlayed": 9771177}, {"album": "Eagle's Point", "artist": "Chris Potter", "trackCount": 8, "msPlayed": 8592216}, {"album": "Something in the Room She Moves", "artist": "Julia Holter", "trackCount": 10, "msPlayed": 8413869}, {"album": "Three", "artist": "Four Tet", "trackCount": 8, "msPlayed": 7610143}, {"album": "Horses (Legacy Edition)", "artist": "Patti Smith", "trackCount": 9, "msPlayed": 6110451}], "2023-06": [{"album": "The Epic", "artist": "Kamasi Washington", "trackCount": 13, "msPlayed": 12001945}, {"album": "The Beggar", "artist": "Swans", "trackCount": 11, "msPlayed": 10639016}, {"album": "When we were that what wept for the sea", "artist": "Colin Stetson", "trackCount": 16, "msPlayed": 6959876}, {"album": "PARANOÏA, ANGELS, TRUE LOVE", "artist": "Christine and the Queens", "trackCount": 20, "msPlayed": 6441625}, {"album": "But Here We Are", "artist": "Foo Fighters", "trackCount": 10, "msPlayed": 5619070}], "2023-07": [{"album": "Bitches Brew", "artist": "Miles Davis", "trackCount": 7, "msPlayed": 13850571}, {"album": "Curtis", "artist": "Curtis Mayfield", "trackCount": 9, "msPlayed": 8039073}, {"album": "UTOPIA", "artist": "Travis Scott", "trackCount": 18, "msPlayed": 6614050}, {"album": "Music for 18 Musicians", "artist": "Steve Reich", "trackCount": 13, "msPlayed": 6156967}, {"album": "Nefertiti", "artist": "Miles Davis", "trackCount": 6, "msPlayed": 5606645}], "2023-08": [{"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 9, "msPlayed": 18855472}, {"album": "Chopin: Nocturnes - Sony Classical Originals", "artist": "Frédéric Chopin", "trackCount": 19, "msPlayed": 12900649}, {"album": "Cold Fact", "artist": "Rodríguez", "trackCount": 12, "msPlayed": 6819573}, {"album": "STRUGGLER", "artist": "Genesis Owusu", "trackCount": 10, "msPlayed": 6023183}, {"album": "Philip Glass: Solo Piano", "artist": "Philip Glass", "trackCount": 7, "msPlayed": 5644470}], "2023-09": [{"album": "everything is alive", "artist": "Slowdive", "trackCount": 8, "msPlayed": 9414353}, {"album": "Nefertiti", "artist": "Miles Davis", "trackCount": 6, "msPlayed": 9010920}, {"album": "Black Classical Music", "artist": "Yussef Dayes", "trackCount": 13, "msPlayed": 6264955}, {"album": "Zach Bryan", "artist": "Zach Bryan", "trackCount": 15, "msPlayed": 6059457}, {"album": "Holy Waters", "artist": "Puma Blue", "trackCount": 11, "msPlayed": 6046438}], "2024-09": [{"album": "Endlessness", "artist": "Nala Sinephro", "trackCount": 10, "msPlayed": 12942806}, {"album": "Wild Is The Wind", "artist": "Nina Simone", "trackCount": 11, "msPlayed": 12149230}, {"album": "Composers Collective: Beyond The Jukebox", "artist": "Marquis Hill", "trackCount": 17, "msPlayed": 11582345}, {"album": "Soft Tissue", "artist": "Tindersticks", "trackCount": 9, "msPlayed": 11106463}, {"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 9, "msPlayed": 10749774}], "2024-10": [{"album": "Patterns in Repeat", "artist": "Laura Marling", "trackCount": 11, "msPlayed": 8348609}, {"album": "Mother", "artist": "Cleo Sol", "trackCount": 7, "msPlayed": 8229775}, {"album": "Ashes to Gold", "artist": "Avishai Cohen", "trackCount": 7, "msPlayed": 7512703}, {"album": "CHROMAKOPIA", "artist": "Tyler, The Creator", "trackCount": 14, "msPlayed": 5472120}, {"album": "Dunya", "artist": "Mustafa", "trackCount": 11, "msPlayed": 5414101}], "2024-11": [{"album": "GNX", "artist": "Kendrick Lamar", "trackCount": 13, "msPlayed": 11002355}, {"album": "Ashes to Gold", "artist": "Avishai Cohen", "trackCount": 7, "msPlayed": 7580761}, {"album": "Blue Train", "artist": "John Coltrane", "trackCount": 5, "msPlayed": 6387184}, {"album": "Complex Emotions", "artist": "The Bad Plus", "trackCount": 8, "msPlayed": 5360528}, {"album": "Piedras 1", "artist": "Nicolas Jaar", "trackCount": 7, "msPlayed": 5359141}], "2024-12": [{"album": "Acts of Faith", "artist": "SAULT", "trackCount": 9, "msPlayed": 9418549}, {"album": "Alligator Bites Never Heal", "artist": "Doechii", "trackCount": 16, "msPlayed": 6939497}, {"album": "Midas", "artist": "Wunderhorse", "trackCount": 10, "msPlayed": 5428005}, {"album": "Verbathim", "artist": "Nemahsis", "trackCount": 12, "msPlayed": 3985551}, {"album": "CHROMAKOPIA", "artist": "Tyler, The Creator", "trackCount": 9, "msPlayed": 3316218}], "2025-01": [{"album": "Breath From Another", "artist": "Esthero", "trackCount": 11, "msPlayed": 11160814}, {"album": "Everybody Knows", "artist": "The Bony King of Nowhere", "trackCount": 11, "msPlayed": 10242948}, {"album": "EUSEXUA", "artist": "FKA twigs", "trackCount": 11, "msPlayed": 9563346}, {"album": "Hurry Up Tomorrow", "artist": "The Weeknd", "trackCount": 20, "msPlayed": 8604212}, {"album": "Hours Were the Birds", "artist": "Adrianne Lenker", "trackCount": 10, "msPlayed": 8073495}], "2025-02": [{"album": "Sharon Van Etten & The Attachment Theory", "artist": "Sharon Van Etten", "trackCount": 10, "msPlayed": 6034422}, {"album": "Maxwell's Urban Hang Suite", "artist": "Maxwell", "trackCount": 6, "msPlayed": 4998177}, {"album": "Get Up With It", "artist": "Miles Davis", "trackCount": 5, "msPlayed": 4096132}, {"album": "Het Hart Bestaat Niet En De Rest Ook Niet", "artist": "Droom Dit", "trackCount": 13, "msPlayed": 4067156}, {"album": "The Purple Bird", "artist": "Bonnie Prince Billy", "trackCount": 12, "msPlayed": 3997485}], "2025-03": [{"album": "76:14", "artist": "Global Communication", "trackCount": 9, "msPlayed": 11209380}, {"album": "Yarn!", "artist": "Ian Cleaver", "trackCount": 9, "msPlayed": 11017966}, {"album": "You Must Believe In Spring", "artist": "Bill Evans", "trackCount": 10, "msPlayed": 9752983}, {"album": "Luminescent Creatures", "artist": "Ichiko Aoba", "trackCount": 11, "msPlayed": 7758601}, {"album": "Undercurrent", "artist": "Bill Evans", "trackCount": 10, "msPlayed": 5500217}], "2025-04": [{"album": "10", "artist": "SAULT", "trackCount": 10, "msPlayed": 7554859}, {"album": "Music Can Hear Us", "artist": "DJ Koze", "trackCount": 13, "msPlayed": 4949261}, {"album": "Da Storm", "artist": "O.G.C.", "trackCount": 10, "msPlayed": 3899091}, {"album": "Under Tangled Silence", "artist": "DjRUM", "trackCount": 9, "msPlayed": 3843081}, {"album": "Waiting for the Silhouette", "artist": "Mattheis", "trackCount": 8, "msPlayed": 3809105}], "2025-05": [{"album": "Cancionera", "artist": "Natalia Lafourcade", "trackCount": 12, "msPlayed": 18458926}, {"album": "Embrya", "artist": "Maxwell", "trackCount": 12, "msPlayed": 10893561}, {"album": "Sincerely,", "artist": "Kali Uchis", "trackCount": 14, "msPlayed": 7056718}, {"album": "Weirdo", "artist": "Emma-Jean Thackray", "trackCount": 19, "msPlayed": 7004976}, {"album": "Instant Holograms On Metal Film", "artist": "Stereolab", "trackCount": 11, "msPlayed": 5025854}], "2024-04": [{"album": "Fabiana Palladino", "artist": "Fabiana Palladino", "trackCount": 10, "msPlayed": 11295426}, {"album": "De Todas las Flores", "artist": "Natalia Lafourcade", "trackCount": 11, "msPlayed": 7897510}, {"album": "Portishead", "artist": "Portishead", "trackCount": 11, "msPlayed": 7324415}, {"album": "COWBOY CARTER", "artist": "Beyoncé", "trackCount": 24, "msPlayed": 6952253}, {"album": "Touch of Time", "artist": "Arve Henriksen", "trackCount": 10, "msPlayed": 6536874}], "2024-05": [{"album": "La symphonie des éclairs", "artist": "Zaho de Sagazan", "trackCount": 12, "msPlayed": 11094952}, {"album": "Fearless Movement", "artist": "Kamasi Washington", "trackCount": 10, "msPlayed": 6937144}, {"album": "HIT ME HARD AND SOFT", "artist": "Billie Eilish", "trackCount": 10, "msPlayed": 6916678}, {"album": "Lives Outgrown", "artist": "Beth Gibbons", "trackCount": 10, "msPlayed": 6880166}, {"album": "What A Devastating Turn of Events", "artist": "Rachel Chinouriri", "trackCount": 16, "msPlayed": 6098980}], "2024-06": [{"album": "What Happened To The Heart?", "artist": "AURORA", "trackCount": 16, "msPlayed": 9919632}, {"album": "Night Reign", "artist": "Arooj Aftab", "trackCount": 9, "msPlayed": 8348598}, {"album": "Submarine", "artist": "The Marías", "trackCount": 14, "msPlayed": 6454860}, {"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 7, "msPlayed": 5199698}, {"album": "Where the Butterflies Go in the Rain", "artist": "Raveena", "trackCount": 14, "msPlayed": 5026202}], "2024-07": [{"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 9, "msPlayed": 9968660}, {"album": "Chopin: Nocturnes - Sony Classical Originals", "artist": "Frédéric Chopin", "trackCount": 19, "msPlayed": 6419728}, {"album": "Passage Du Desir", "artist": "Johnny Blue Skies", "trackCount": 8, "msPlayed": 5585891}, {"album": "When I'm Called", "artist": "Jake Xerxes Fussell", "trackCount": 9, "msPlayed": 5461277}, {"album": "Flower of the soul", "artist": "Liana Flores", "trackCount": 10, "msPlayed": 4630282}], "2024-08": [{"album": "Glass: Satyagraha", "artist": "Philip Glass", "trackCount": 8, "msPlayed": 6324459}, {"album": "Romance", "artist": "Fontaines D.C.", "trackCount": 11, "msPlayed": 6212124}, {"album": "Selected Ambient Works Volume II", "artist": "Aphex Twin", "trackCount": 17, "msPlayed": 6003070}, {"album": "And Their Refinement of the Decline", "artist": "Stars Of The Lid", "trackCount": 16, "msPlayed": 5889515}, {"album": "I LAY DOWN MY LIFE FOR YOU", "artist": "JPEGMAFIA", "trackCount": 14, "msPlayed": 5845191}], "2025-06": [{"album": "Copenhagen Dreams", "artist": "Jóhann Jóhannsson", "trackCount": 19, "msPlayed": 10918765}, {"album": "Tether", "artist": "Annahstasia", "trackCount": 11, "msPlayed": 9155966}, {"album": "Gekleed In Donker, Ze Vroegen Niks", "artist": "Meetsysteem", "trackCount": 12, "msPlayed": 8965931}, {"album": "A Paradise In The Hold", "artist": "Yazz Ahmed", "trackCount": 10, "msPlayed": 8268643}, {"album": "Lotus", "artist": "Little Simz", "trackCount": 13, "msPlayed": 5814292}], "2025-07": [{"album": "CORRE Y SUELTA A LOS PERROS", "artist": "César y su Jardín", "trackCount": 13, "msPlayed": 11002891}, {"album": "Canto Ostinato", "artist": "Simeon ten Holt", "trackCount": 11, "msPlayed": 9402262}, {"album": "The Way Of Time", "artist": "Biosphere", "trackCount": 6, "msPlayed": 7499672}, {"album": "lieve monsters", "artist": "Sef", "trackCount": 14, "msPlayed": 7069996}, {"album": "Um Mar Pra Cada Um,", "artist": "Luedji Luna", "trackCount": 11, "msPlayed": 6414508}], "2025-08": [{"album": "Canto Ostinato", "artist": "Simeon ten Holt", "trackCount": 27, "msPlayed": 9462967}, {"album": "Des visages des figures", "artist": "Noir Désir", "trackCount": 12, "msPlayed": 7355604}, {"album": "Vanisher, Horizon Scraper", "artist": "Quadeca", "trackCount": 14, "msPlayed": 7012734}, {"album": "Solitude", "artist": "Billie Holiday", "trackCount": 12, "msPlayed": 5915318}, {"album": "Forget In Mass", "artist": "Deki Alem", "trackCount": 8, "msPlayed": 5909860}], "2025-09": [{"album": "Mozart: The Piano Sonatas", "artist": "Wolfgang Amadeus Mozart", "trackCount": 29, "msPlayed": 9593441}, {"album": "Canto Ostinato", "artist": "Simeon ten Holt", "trackCount": 9, "msPlayed": 8572361}, {"album": "Glass: Akhnaten", "artist": "Philip Glass", "trackCount": 12, "msPlayed": 8047199}, {"album": "Man With A Movie Camera", "artist": "The Cinematic Orchestra", "trackCount": 14, "msPlayed": 7687969}, {"album": "Lobi Da Basi", "artist": "Typhoon", "trackCount": 12, "msPlayed": 5565813}], "2025-10": [{"album": "Mozart: The Piano Sonatas", "artist": "Wolfgang Amadeus Mozart", "trackCount": 31, "msPlayed": 10178941}, {"album": "76:14", "artist": "Global Communication", "trackCount": 9, "msPlayed": 9022549}, {"album": "Persona", "artist": "Rival Consoles", "trackCount": 12, "msPlayed": 7225972}, {"album": "Figure In Blue", "artist": "Charles Lloyd", "trackCount": 12, "msPlayed": 6665071}, {"album": "Mark Hollis", "artist": "Mark Hollis", "trackCount": 8, "msPlayed": 6566386}], "2025-11": [{"album": "LUX", "artist": "ROSALÍA", "trackCount": 15, "msPlayed": 9558805}, {"album": "Ten", "artist": "Jason Moran", "trackCount": 14, "msPlayed": 8245314}, {"album": "The Mocking Stars", "artist": "LAUSSE THE CAT", "trackCount": 12, "msPlayed": 8208107}, {"album": "Son Of Spergy", "artist": "Daniel Caesar", "trackCount": 12, "msPlayed": 7524999}, {"album": "FEMME FATALE", "artist": "Mon Laferte", "trackCount": 11, "msPlayed": 6877549}], "2025-12": [{"album": "Pearl", "artist": "Janis Joplin", "trackCount": 10, "msPlayed": 5674354}, {"album": "Baduizm", "artist": "Erykah Badu", "trackCount": 14, "msPlayed": 5225774}, {"album": "The Cosmic Tones Research Trio", "artist": "The Cosmic Tones Research Trio", "trackCount": 8, "msPlayed": 5036778}, {"album": "Tether", "artist": "Annahstasia", "trackCount": 6, "msPlayed": 4346222}, {"album": "What Color Is Love", "artist": "Terry Callier", "trackCount": 7, "msPlayed": 4082882}], "2026-01": [{"album": "Talking Book", "artist": "Stevie Wonder", "trackCount": 10, "msPlayed": 10552363}, {"album": "Chapter 1", "artist": "SAULT", "trackCount": 10, "msPlayed": 5265616}, {"album": "Moon Beams", "artist": "Bill Evans Trio", "trackCount": 7, "msPlayed": 4992524}, {"album": "Valentine", "artist": "Courtney Marie Andrews", "trackCount": 10, "msPlayed": 3916503}, {"album": "Can't Wait for Perfect", "artist": "Bob Reynolds", "trackCount": 10, "msPlayed": 3418145}], "2026-02": [{"album": "The Lighthouse", "artist": "Tessa Rose Jackson", "trackCount": 12, "msPlayed": 10295381}, {"album": "IJSLAND 2", "artist": "Abel", "trackCount": 15, "msPlayed": 9441449}, {"album": "Gospel Music", "artist": "Joel Ross", "trackCount": 16, "msPlayed": 8986597}, {"album": "To Whom This May Concern", "artist": "Jill Scott", "trackCount": 19, "msPlayed": 7802598}, {"album": "Canto Ostinato", "artist": "Simeon ten Holt", "trackCount": 8, "msPlayed": 7359521}], "2026-03": [{"album": "Asymmetrical Dot", "artist": "Stephen Emmer", "trackCount": 14, "msPlayed": 3109202}, {"album": "Nothing's About to Happen to Me", "artist": "Mitski", "trackCount": 7, "msPlayed": 1080879}]};
+
+const DUTCH_MONTHS = [
+  'januari','februari','maart','april','mei','juni',
+  'juli','augustus','september','oktober','november','december'
+];
+
+function formatPlays(n) {
+  return n.toLocaleString('nl-NL');
+}
+
+function msToMinutes(ms) {
+  return Math.round(ms / 60000);
+}
+
+// ── Build bar chart ──
+function buildBarChart() {
+  const byYear = STATS.byYear;
+  const years = Object.keys(byYear).sort();
+  const max = Math.max(...Object.values(byYear));
+  const container = document.getElementById('barChart');
+
+  years.forEach(year => {
+    const plays = byYear[year];
+    const pct = (plays / max) * 100;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.setAttribute('data-year', year);
+    row.innerHTML = `
+      <span class="bar-year-label">${year}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct.toFixed(2)}%"></div>
+      </div>
+      <span class="bar-count">${formatPlays(plays)}</span>
+    `;
+    row.addEventListener('click', () => scrollToYear(year));
+    container.appendChild(row);
+  });
+}
+
+function scrollToYear(year) {
+  const el = document.getElementById('year-' + year);
+  if (!el) return;
+  // Open year if closed
+  if (!el.classList.contains('open')) toggleYear(el);
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── Toggle helpers ──
+function toggleYear(block) {
+  const body = block.querySelector('.year-body');
+  const isOpen = block.classList.toggle('open');
+  if (isOpen) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  } else {
+    body.style.maxHeight = '0';
+  }
+}
+
+function toggleMonth(block) {
+  const body = block.querySelector('.month-body');
+  const isOpen = block.classList.toggle('open');
+  if (isOpen) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+    // Also update parent year body height
+    const yearBody = block.closest('.year-body');
+    if (yearBody) yearBody.style.maxHeight = yearBody.scrollHeight + body.scrollHeight + 'px';
+  } else {
+    body.style.maxHeight = '0';
+  }
+}
+
+// ── Build year/month blocks ──
+function buildYears() {
+  const byYear = STATS.byYear;
+  const years = Object.keys(byYear).sort().reverse();
+  const container = document.getElementById('yearsSection');
+
+  // Gather all months
+  const allMonths = Object.keys(MONTH_COUNTS).sort().reverse();
+
+  years.forEach(year => {
+    const months = allMonths.filter(m => m.startsWith(year + '-'));
+    if (months.length === 0) return;
+
+    const plays = byYear[year];
+    const block = document.createElement('div');
+    block.className = 'year-block';
+    block.id = 'year-' + year;
+
+    // Build months HTML
+    let monthsHTML = '';
+    months.forEach(monthKey => {
+      const [y, mIdx] = monthKey.split('-');
+      const monthName = DUTCH_MONTHS[parseInt(mIdx, 10) - 1];
+      const count = MONTH_COUNTS[monthKey] || 0;
+      const trackData = TRACKS[monthKey] || [];
+      const albumData = ALBUMS[monthKey] || [];
+
+      // Tracks HTML
+      let tracksHTML = '';
+      if (trackData.length > 0) {
+        const items = trackData.map((t, i) => `
+          <li class="track-item">
+            <span class="track-num">${i + 1}</span>
+            <span class="track-info">
+              <span class="track-name">${escHtml(t.track)}</span>
+              <span class="track-artist">${escHtml(t.artist)}</span>
+            </span>
+          </li>`).join('');
+        tracksHTML = `<div>
+          <div class="list-section-title">Top tracks</div>
+          <ul class="track-list">${items}</ul>
+        </div>`;
+      }
+
+      // Albums HTML
+      let albumsHTML = '';
+      if (albumData.length > 0) {
+        const items = albumData.map((a, i) => {
+          let meta = '';
+          if (a.msPlayed) {
+            meta = `<span class="album-meta">${msToMinutes(a.msPlayed)} min</span>`;
+          } else if (a.trackCount) {
+            meta = `<span class="album-meta">${a.trackCount} nummers</span>`;
+          }
+          return `<li class="album-item">
+            <span class="album-num">${i + 1}</span>
+            <span class="album-info">
+              <span class="album-name">${escHtml(a.album)}</span>
+              <span class="album-artist">${escHtml(a.artist)}</span>
+              ${meta}
+            </span>
+          </li>`;
+        }).join('');
+        albumsHTML = `<div>
+          <div class="list-section-title">Top albums</div>
+          <ul class="album-list">${items}</ul>
+        </div>`;
+      }
+
+      monthsHTML += `
+        <div class="month-block" id="month-${monthKey}">
+          <div class="month-header" onclick="toggleMonth(this.closest('.month-block'))">
+            <div class="month-header-left">
+              <span class="month-name">${monthName}</span>
+              <span class="month-count">${count} nummers</span>
+            </div>
+            <svg class="month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="6 9 12 15 18 9"/>
+            </svg>
+          </div>
+          <div class="month-body">
+            <div class="month-body-inner">
+              ${tracksHTML}
+              ${albumsHTML}
+            </div>
+          </div>
+        </div>`;
+    });
+
+    block.innerHTML = `
+      <div class="year-header" onclick="toggleYear(this.closest('.year-block'))">
+        <div class="year-header-left">
+          <span class="year-title">${year}</span>
+          <span class="year-plays">${formatPlays(plays)} afspeelbeurten</span>
+        </div>
+        <svg class="year-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <div class="year-body">
+        <div class="year-body-inner">
+          ${monthsHTML}
+        </div>
+      </div>`;
+
+    container.appendChild(block);
+  });
+}
+
+function escHtml(str) {
+  if (!str) return '';
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+// ── Open most recent year ──
+function openMostRecentYear() {
+  const allYears = Object.keys(STATS.byYear).sort().reverse();
+  for (const year of allYears) {
+    const el = document.getElementById('year-' + year);
+    if (el) {
+      toggleYear(el);
+      break;
+    }
+  }
+}
+
+// ── Live Last.fm fetching ──
+const LASTFM_USER = 'janusrvk';
+const LASTFM_API_KEY = '974614701f13a7e6fb111bd6da0fd124';
+const LASTFM_BASE = 'https://ws.audioscrobbler.com/2.0/';
+
+function monthToRange(yearStr, monthStr) {
+  const y = parseInt(yearStr, 10);
+  const m = parseInt(monthStr, 10);
+  const from = Math.floor(Date.UTC(y, m - 1, 1) / 1000);
+  // Last moment of month
+  const nextMonth = new Date(Date.UTC(y, m, 1));
+  const to = Math.floor((nextMonth.getTime() - 1) / 1000);
+  return { from, to };
+}
+
+async function fetchLastfmPage(from, to, page) {
+  const url = `${LASTFM_BASE}?method=user.getRecentTracks&user=${LASTFM_USER}&api_key=${LASTFM_API_KEY}&format=json&from=${from}&to=${to}&limit=200&page=${page}`;
+  const resp = await fetch(url);
+  if (!resp.ok) throw new Error('HTTP ' + resp.status);
+  return resp.json();
+}
+
+async function fetchMonthData(yearStr, monthStr) {
+  const { from, to } = monthToRange(yearStr, monthStr);
+  let page = 1;
+  let totalPages = 1;
+  const trackCounts = {};
+  const albumCounts = {};
+  let totalScrobbles = 0;
+
+  do {
+    const data = await fetchLastfmPage(from, to, page);
+    const rt = data.recenttracks;
+    if (!rt || !rt.track) break;
+    totalPages = parseInt(rt['@attr'].totalPages, 10) || 1;
+    const total = parseInt(rt['@attr'].total, 10) || 0;
+    if (page === 1) totalScrobbles = total;
+
+    const tracks = Array.isArray(rt.track) ? rt.track : [rt.track];
+    for (const t of tracks) {
+      // Skip nowplaying
+      if (t['@attr'] && t['@attr'].nowplaying === 'true') continue;
+      const trackName = t.name || '';
+      const artistName = (t.artist && t.artist['#text']) || '';
+      const albumName = (t.album && t.album['#text']) || '';
+      const trackKey = trackName + '\x00' + artistName;
+      if (!trackCounts[trackKey]) {
+        trackCounts[trackKey] = { track: trackName, artist: artistName, album: albumName, count: 0 };
+      }
+      trackCounts[trackKey].count++;
+      const albumKey = albumName + '\x00' + artistName;
+      if (albumName) {
+        if (!albumCounts[albumKey]) {
+          albumCounts[albumKey] = { album: albumName, artist: artistName, trackCount: 0 };
+        }
+        albumCounts[albumKey].trackCount++;
+      }
+    }
+    page++;
+  } while (page <= totalPages);
+
+  // Top 10 tracks
+  const topTracks = Object.values(trackCounts)
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 10)
+    .map(({ track, artist, album }) => ({ track, artist, album }));
+
+  // Top 10 albums
+  const topAlbums = Object.values(albumCounts)
+    .sort((a, b) => b.trackCount - a.trackCount)
+    .slice(0, 10)
+    .map(({ album, artist, trackCount }) => ({ album, artist, trackCount }));
+
+  return { topTracks, topAlbums, totalScrobbles };
+}
+
+function rerenderYearBlock(yearStr) {
+  const container = document.getElementById('yearsSection');
+  const existing = document.getElementById('year-' + yearStr);
+  const wasOpen = existing && existing.classList.contains('open');
+
+  // Remove old block
+  if (existing) existing.remove();
+
+  const byYear = STATS.byYear;
+  const allMonths = Object.keys(MONTH_COUNTS).sort().reverse();
+  const months = allMonths.filter(m => m.startsWith(yearStr + '-'));
+  if (months.length === 0) return;
+
+  const plays = byYear[yearStr] || 0;
+  const block = document.createElement('div');
+  block.className = 'year-block';
+  block.id = 'year-' + yearStr;
+
+  let monthsHTML = '';
+  months.forEach(monthKey => {
+    const [y, mIdx] = monthKey.split('-');
+    const monthName = DUTCH_MONTHS[parseInt(mIdx, 10) - 1];
+    const count = MONTH_COUNTS[monthKey] || 0;
+    const trackData = TRACKS[monthKey] || [];
+    const albumData = ALBUMS[monthKey] || [];
+
+    let tracksHTML = '';
+    if (trackData.length > 0) {
+      const items = trackData.map((t, i) => `
+        <li class="track-item">
+          <span class="track-num">${i + 1}</span>
+          <span class="track-info">
+            <span class="track-name">${escHtml(t.track)}</span>
+            <span class="track-artist">${escHtml(t.artist)}</span>
+          </span>
+        </li>`).join('');
+      tracksHTML = `<div>
+        <div class="list-section-title">Top tracks</div>
+        <ul class="track-list">${items}</ul>
+      </div>`;
+    }
+
+    let albumsHTML = '';
+    if (albumData.length > 0) {
+      const items = albumData.map((a, i) => {
+        let meta = '';
+        if (a.msPlayed) {
+          meta = `<span class="album-meta">${msToMinutes(a.msPlayed)} min</span>`;
+        } else if (a.trackCount) {
+          meta = `<span class="album-meta">${a.trackCount} nummers</span>`;
+        }
+        return `<li class="album-item">
+          <span class="album-num">${i + 1}</span>
+          <span class="album-info">
+            <span class="album-name">${escHtml(a.album)}</span>
+            <span class="album-artist">${escHtml(a.artist)}</span>
+            ${meta}
+          </span>
+        </li>`;
+      }).join('');
+      albumsHTML = `<div>
+        <div class="list-section-title">Top albums</div>
+        <ul class="album-list">${items}</ul>
+      </div>`;
+    }
+
+    monthsHTML += `
+      <div class="month-block" id="month-${monthKey}">
+        <div class="month-header" onclick="toggleMonth(this.closest('.month-block'))">
+          <div class="month-header-left">
+            <span class="month-name">${monthName}</span>
+            <span class="month-count">${count} nummers</span>
+          </div>
+          <svg class="month-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </div>
+        <div class="month-body">
+          <div class="month-body-inner">
+            ${tracksHTML}
+            ${albumsHTML}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  block.innerHTML = `
+    <div class="year-header" onclick="toggleYear(this.closest('.year-block'))">
+      <div class="year-header-left">
+        <span class="year-title">${yearStr}</span>
+        <span class="year-plays">${formatPlays(plays)} afspeelbeurten</span>
+      </div>
+      <svg class="year-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+    <div class="year-body">
+      <div class="year-body-inner">
+        ${monthsHTML}
+      </div>
+    </div>`;
+
+  // Insert in correct position (sorted descending by year)
+  const allYearBlocks = Array.from(container.querySelectorAll('.year-block'));
+  let inserted = false;
+  for (const yb of allYearBlocks) {
+    const ybYear = yb.id.replace('year-', '');
+    if (yearStr > ybYear) {
+      container.insertBefore(block, yb);
+      inserted = true;
+      break;
+    }
+  }
+  if (!inserted) container.appendChild(block);
+
+  if (wasOpen) toggleYear(block);
+}
+
+function rebuildBarChart() {
+  const byYear = STATS.byYear;
+  const years = Object.keys(byYear).sort();
+  const max = Math.max(...Object.values(byYear));
+  const container = document.getElementById('barChart');
+  container.innerHTML = '';
+  years.forEach(year => {
+    const plays = byYear[year];
+    const pct = (plays / max) * 100;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.setAttribute('data-year', year);
+    row.innerHTML = `
+      <span class="bar-year-label">${year}</span>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct.toFixed(2)}%"></div>
+      </div>
+      <span class="bar-count">${formatPlays(plays)}</span>
+    `;
+    row.addEventListener('click', () => scrollToYear(year));
+    container.appendChild(row);
+  });
+}
+
+async function fetchLiveData() {
+  // Snapshot the original byYear totals so we can correctly compute deltas
+  const originalByYear = Object.assign({}, STATS.byYear);
+
+  const now = new Date();
+  const currentYear = now.getUTCFullYear();
+  const currentMonth = now.getUTCMonth() + 1; // 1-based
+  const currentKey = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+
+  // Months already in static data
+  const staticMonths = new Set(Object.keys(MONTH_COUNTS));
+
+  // Build list of months to fetch:
+  // - Any month after the last static month up to currentKey (new months)
+  // - Always re-fetch currentKey for freshness even if already in static data
+  const sortedStatic = Object.keys(MONTH_COUNTS).sort();
+  const lastStaticKey = sortedStatic[sortedStatic.length - 1];
+
+  const monthsToFetch = [];
+  let iter = lastStaticKey;
+  while (true) {
+    const [iy, im] = iter.split('-').map(Number);
+    let ny = iy, nm = im + 1;
+    if (nm > 12) { ny++; nm = 1; }
+    iter = `${ny}-${String(nm).padStart(2, '0')}`;
+    if (iter > currentKey) break;
+    monthsToFetch.push(iter);
+  }
+  // Always include currentKey (re-fetch for fresh data)
+  if (!monthsToFetch.includes(currentKey)) {
+    monthsToFetch.push(currentKey);
+  }
+
+  if (monthsToFetch.length === 0) return;
+
+  // Show loading indicator
+  const loadingEl = document.createElement('div');
+  loadingEl.id = 'liveLoadingIndicator';
+  loadingEl.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#1a1a1a;border:1px solid #2c2c2c;border-radius:8px;padding:10px 16px;color:#1DB954;font-size:13px;font-family:Inter,sans-serif;z-index:8888;';
+  loadingEl.textContent = 'Nieuwe maanden ophalen...';
+  document.body.appendChild(loadingEl);
+
+  try {
+    // liveMonthTotals: actual scrobble count per fetched month
+    const liveMonthTotals = {};
+    const affectedYears = new Set();
+
+    for (const monthKey of monthsToFetch) {
+      const [yearStr, monthStr] = monthKey.split('-');
+      try {
+        const { topTracks, topAlbums, totalScrobbles } = await fetchMonthData(yearStr, monthStr);
+
+        TRACKS[monthKey] = topTracks;
+        ALBUMS[monthKey] = topAlbums;
+        // MONTH_COUNTS stores the display count (total scrobbles for live months)
+        MONTH_COUNTS[monthKey] = totalScrobbles;
+        liveMonthTotals[monthKey] = totalScrobbles;
+
+        affectedYears.add(yearStr);
+      } catch (err) {
+        console.warn('Last.fm fetch failed for', monthKey, err);
+      }
+    }
+
+    // Update STATS.byYear for affected years.
+    // Strategy: for each affected year, start from the original byYear total,
+    // then for each live-fetched month in that year:
+    //   - if it was a NEW month (not in original static data): add its scrobble total
+    //   - if it was already in static data (re-fetched for freshness, e.g. current month):
+    //     leave the year total unchanged (the original already accounts for it)
+    for (const yearStr of affectedYears) {
+      let delta = 0;
+      for (const [monthKey, scrobbles] of Object.entries(liveMonthTotals)) {
+        if (!monthKey.startsWith(yearStr + '-')) continue;
+        if (!staticMonths.has(monthKey)) {
+          // Genuinely new month — add its scrobbles to the year total
+          delta += scrobbles;
+        }
+        // If it was in staticMonths, the original byYear already includes its contribution
+      }
+      STATS.byYear[yearStr] = (originalByYear[yearStr] || 0) + delta;
+    }
+
+    // Re-render bar chart and affected year blocks
+    rebuildBarChart();
+    for (const yearStr of affectedYears) {
+      rerenderYearBlock(yearStr);
+    }
+  } catch (err) {
+    console.warn('fetchLiveData error:', err);
+  } finally {
+    loadingEl.remove();
+  }
+}
+
+// ── Init ──
+buildBarChart();
+buildYears();
+openMostRecentYear();
+</script>
+</body>
+</html>

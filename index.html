@@ -7,7 +7,6 @@
   <meta name="description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
   <link rel="canonical" href="https://janusrvk.com/" />
 
-  <!-- Open Graph -->
   <meta property="og:title" content="Janus van Koolwijk — Redacteur & Schrijver" />
   <meta property="og:description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
   <meta property="og:url" content="https://janusrvk.com/" />
@@ -15,18 +14,15 @@
   <meta property="og:image" content="https://janusrvk.com/brand_assets/GEZICHT.png" />
   <meta property="og:locale" content="nl_NL" />
 
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Janus van Koolwijk — Redacteur & Schrijver" />
   <meta name="twitter:description" content="Persoonlijke website van Janus van Koolwijk. Redacteur en schrijver uit Amsterdam." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cardo:ital,wght@0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Archivo+Black&family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Playfair+Display:ital,wght@0,700;0,900;1,400;1,700&family=Cardo:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="/style.css" />
 
-  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -34,310 +30,357 @@
     "name": "Janus van Koolwijk",
     "url": "https://janusrvk.com",
     "image": "https://janusrvk.com/brand_assets/GEZICHT.png",
-    "description": "Janus van Koolwijk is een freelance redacteur en schrijver uit Amsterdam. Hij werkt voor de VARAgids en studeerde European Studies aan de Universiteit van Amsterdam.",
+    "description": "Janus van Koolwijk is een freelance redacteur en schrijver uit Amsterdam.",
     "jobTitle": "Freelance Redacteur",
     "worksFor": { "@type": "Organization", "name": "VARAgids" },
     "alumniOf": { "@type": "CollegeOrUniversity", "name": "Universiteit van Amsterdam" },
     "address": { "@type": "PostalAddress", "addressLocality": "Amsterdam", "addressCountry": "NL" },
-    "email": "janusrvk@xs4all.nl",
-    "knowsAbout": ["Redactie", "Journalistiek", "European Studies", "Televisie"]
+    "email": "janusrvk@xs4all.nl"
   }
   </script>
+
+  <style>
+    :root {
+      --bg: #0E0E0E;
+      --fg: #F2EFE9;
+      --accent: #E85D1F;
+      --accent-fg: #0E0E0E;
+      --muted: color-mix(in srgb, var(--fg) 64%, transparent);
+      --rule: color-mix(in srgb, var(--fg) 14%, transparent);
+
+      /* Klassieke versie brand */
+      --klassiek-bg: #F2EFE9;
+      --klassiek-fg: #0E0E0E;
+      --klassiek-accent: #B23211;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'Archivo', 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    .splash {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: clamp(18px, 3vw, 28px);
+    }
+
+    /* ---------- Top bar ---------- */
+    .splash-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .splash-topbar-left { display: inline-flex; align-items: center; gap: 10px; }
+    .splash-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 18%, transparent);
+    }
+
+    /* ---------- Center stage ---------- */
+    .splash-stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 0;
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* Subtiele verticale deler tussen de twee versies */
+    .splash-divider {
+      position: absolute;
+      top: 10%;
+      bottom: 10%;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Gemeenschappelijke stijlen voor elke helft */
+    .choice {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(32px, 5vw, 64px) clamp(20px, 3vw, 48px);
+      text-decoration: none;
+      color: inherit;
+      overflow: hidden;
+      transition: background 0.5s ease;
+      cursor: pointer;
+    }
+    .choice::before {
+      /* zachte accent-lens die verschijnt op hover */
+      content: '';
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .choice:hover::before { opacity: 1; }
+
+    /* Klassieke helft — licht, serif */
+    .choice-klassiek {
+      background: var(--klassiek-bg);
+      color: var(--klassiek-fg);
+    }
+    .choice-klassiek::before {
+      background: radial-gradient(circle at center, color-mix(in srgb, var(--klassiek-accent) 9%, transparent) 0%, transparent 60%);
+    }
+
+    /* Nieuwe helft — donker, display */
+    .choice-nieuw {
+      background: var(--bg);
+      color: var(--fg);
+    }
+    .choice-nieuw::before {
+      background: radial-gradient(circle at center, color-mix(in srgb, var(--accent) 14%, transparent) 0%, transparent 60%);
+    }
+
+    /* ---------- Name-typography (dit is de "knop") ---------- */
+    .name {
+      display: block;
+      position: relative;
+      z-index: 2;
+      transition: transform 0.5s cubic-bezier(0.5, 0, 0.2, 1);
+      text-align: center;
+    }
+    .choice:hover .name { transform: translateY(-4px); }
+
+    /* Klassieke naam — Playfair Display italic */
+    .name-klassiek {
+      font-family: 'Playfair Display', 'Cardo', Georgia, serif;
+      font-style: italic;
+      font-weight: 700;
+      font-size: clamp(40px, 7vw, 88px);
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--klassiek-fg);
+    }
+    .name-klassiek-line-1 { display: block; }
+    .name-klassiek-line-2 {
+      display: block;
+      font-size: 0.68em;
+      margin-top: 0.12em;
+      color: color-mix(in srgb, var(--klassiek-fg) 88%, transparent);
+    }
+    .name-klassiek-sub {
+      display: block;
+      margin-top: 22px;
+      font-family: 'Lora', Georgia, serif;
+      font-style: italic;
+      font-size: clamp(13px, 1.3vw, 15px);
+      letter-spacing: 0.03em;
+      color: color-mix(in srgb, var(--klassiek-fg) 55%, transparent);
+    }
+
+    /* Nieuwe naam — Archivo Black, lowercase met ogen op OO */
+    .name-nieuw {
+      font-family: 'Archivo Black', sans-serif;
+      font-weight: 900;
+      text-transform: lowercase;
+      letter-spacing: -0.025em;
+      line-height: 0.92;
+      color: var(--fg);
+    }
+    .name-nieuw-line-1 {
+      display: block;
+      font-size: clamp(52px, 9vw, 112px);
+    }
+    .name-nieuw-line-2 {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.02em;
+      font-size: clamp(34px, 5.6vw, 66px);
+      margin-top: 0.1em;
+    }
+    .eye {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 0.82em;
+      height: 0.82em;
+      border-radius: 50%;
+      background: var(--fg);
+      position: relative;
+      margin: 0 -0.02em;
+    }
+    .eye::after {
+      content: '';
+      width: 34%;
+      height: 34%;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: transform 0.3s ease;
+    }
+    .choice-nieuw:hover .eye::after { transform: scale(1.15); }
+    .name-nieuw-sub {
+      display: block;
+      margin-top: 28px;
+      font-family: 'Archivo', sans-serif;
+      font-size: clamp(10px, 1vw, 12px);
+      letter-spacing: 0.26em;
+      text-transform: uppercase;
+      color: var(--accent);
+    }
+
+    /* ---------- Cue bij hover: kleine pijl boven de naam ---------- */
+    .choice-cue {
+      position: absolute;
+      top: clamp(24px, 4vw, 48px);
+      left: 50%;
+      transform: translateX(-50%) translateY(-6px);
+      font-family: 'Archivo Black', sans-serif;
+      font-size: 10px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 2;
+    }
+    .choice:hover .choice-cue {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .choice-klassiek .choice-cue { color: var(--klassiek-accent); }
+    .choice-nieuw .choice-cue { color: var(--accent); }
+
+    /* ---------- Bottom hint ---------- */
+    .splash-hint {
+      padding-top: 16px;
+      display: flex;
+      justify-content: center;
+      font-family: 'Archivo', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 720px) {
+      .splash-stage {
+        grid-template-columns: 1fr;
+      }
+      .splash-divider {
+        top: 50%;
+        bottom: auto;
+        left: 10%;
+        right: 10%;
+        width: auto;
+        height: 1px;
+        background: linear-gradient(to right, transparent, var(--rule) 20%, var(--rule) 80%, transparent);
+        transform: translateY(-50%);
+      }
+      .choice { padding: clamp(48px, 10vw, 80px) 20px; }
+      .name-klassiek { font-size: clamp(38px, 9vw, 56px); }
+      .name-nieuw-line-1 { font-size: clamp(46px, 11vw, 72px); }
+      .name-nieuw-line-2 { font-size: clamp(28px, 7vw, 44px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .choice, .choice::before, .name, .choice-cue, .eye::after {
+        transition: none;
+      }
+      .choice:hover .name { transform: none; }
+    }
+  </style>
 </head>
 <body>
-  <main class="main">
-    <section class="home-hero">
 
-      <!-- Masthead -->
-      <div class="masthead">
-        <div class="masthead-inner">
-          <div class="masthead-eyebrow">Redacteur &amp; Schrijver &ensp;&middot;&ensp; Amsterdam</div>
-          <h1 class="masthead-name">Janus van Koolwijk</h1>
-          <div class="masthead-subline">
-            <span>Persoonlijke website</span>
-          </div>
-        </div>
-      </div>
+  <div class="splash">
+    <header class="splash-topbar" aria-label="Versiekeuze">
+      <span class="splash-topbar-left">
+        <span class="splash-dot" aria-hidden="true"></span>
+        Janusrvk.com
+      </span>
+      <span>Twee versies · één persoon</span>
+    </header>
 
-      <!-- Drie kolommen zoals een krantenpagina -->
-      <div class="newspaper-columns">
+    <main class="splash-stage" aria-label="Kies een versie">
+      <div class="splash-divider" aria-hidden="true"></div>
 
-        <!-- Kolom 1: Bio -->
-        <aside class="newspaper-col newspaper-col-bio">
-          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="hero-avatar newspaper-avatar" />
-          <div class="mini-bio-card">
-            <div class="mini-bio-row">
-              <span class="mini-bio-label">Functie</span>
-              <span class="mini-bio-value">Freelance redacteur</span>
-            </div>
-            <div class="mini-bio-row">
-              <span class="mini-bio-label">Werkgever</span>
-              <span class="mini-bio-value">VARAgids</span>
-            </div>
-            <div class="mini-bio-row">
-              <span class="mini-bio-label">Opleiding</span>
-              <span class="mini-bio-value">MA European Studies, UvA</span>
-            </div>
-            <div class="mini-bio-row">
-              <span class="mini-bio-label">Gevestigd</span>
-              <span class="mini-bio-value">Amsterdam</span>
-            </div>
-            <div class="mini-bio-row">
-              <span class="mini-bio-label">Contact</span>
-              <span class="mini-bio-value"><a href="mailto:janusrvk@xs4all.nl">janusrvk@xs4all.nl</a></span>
-            </div>
-            <a href="/cv.pdf" target="_blank" class="mini-bio-cv btn-primary">Download CV</a>
-          </div>
-        </aside>
+      <a class="choice choice-klassiek" href="/klassiek/" aria-label="Bekijk de klassieke versie van de site">
+        <span class="choice-cue">↗ bezoek</span>
+        <span class="name name-klassiek">
+          <span class="name-klassiek-line-1">Janus</span>
+          <span class="name-klassiek-line-2">van Koolwijk</span>
+          <span class="name-klassiek-sub">Redacteur &amp; Schrijver · Amsterdam</span>
+        </span>
+      </a>
 
-        <!-- Kolom 2: Colofon + Schrijfwerk -->
-        <div class="newspaper-col newspaper-col-aside">
-          <div>
-            <div class="newspaper-col-label">Colofon</div>
-            <p class="editor-intro">Een persoonlijke website met een archief van schrijfwerk en een maandelijks overzicht van wat ik lees, kijk en luister.</p>
-          </div>
-          <hr class="newspaper-rule" />
-          <div>
-            <div class="newspaper-col-label">Schrijfwerk</div>
-            <div class="article-covers">
-            <a href="/artikel-fincher.html" class="article-cover">
-              <img src="/brand_assets/panic room .webp" alt="Staat van Perfectie" loading="lazy" />
-              <div class="article-cover-overlay">
-                <span class="article-cover-byline">VARAgids nr. 3, 2025</span>
-                <span class="article-cover-title">Staat van Perfectie</span>
-              </div>
-            </a>
-            <a href="/artikel-breitner.html" class="article-cover">
-              <img src="/brand_assets/volledige breitner.jpg" alt="Door Lens &amp; Penseel" loading="lazy" />
-              <div class="article-cover-overlay">
-                <span class="article-cover-byline">VARAgids nr. 7, 2025</span>
-                <span class="article-cover-title">Door Lens &amp; Penseel</span>
-              </div>
-            </a>
-            <a href="/artikel-groenteman.html" class="article-cover">
-              <img src="/brand_assets/een buitengewoon gesprek.jpg" alt="Bellen met Groenteman" loading="lazy" />
-              <div class="article-cover-overlay">
-                <span class="article-cover-byline">VARAgids nr. 18, 2025</span>
-                <span class="article-cover-title">Bellen met&hellip; Groenteman</span>
-              </div>
-            </a>
-            <a href="/artikel-thesis.html" class="article-cover">
-              <img src="/brand_assets/thesis-library.jpg" alt="Left Nationalism" loading="lazy" />
-              <div class="article-cover-overlay">
-                <span class="article-cover-byline">MA Thesis, 2024</span>
-                <span class="article-cover-title">Left Nationalism</span>
-              </div>
-            </a>
-            </div>
-          </div>
-        </div>
+      <a class="choice choice-nieuw" href="/nieuw.html" aria-label="Bekijk de nieuwe versie van de site">
+        <span class="choice-cue">↗ bezoek</span>
+        <span class="name name-nieuw">
+          <span class="name-nieuw-line-1">janus</span>
+          <span class="name-nieuw-line-2">
+            van&nbsp;k<span class="eye" aria-hidden="true"></span><span class="eye" aria-hidden="true"></span>lwijk
+          </span>
+          <span class="name-nieuw-sub">redacteur · schrijver · amsterdam</span>
+        </span>
+      </a>
+    </main>
 
-        <!-- Kolom 3: Geluisterd / Gekeken / Gelezen + dit jaar -->
-        <div class="newspaper-col newspaper-col-center">
-          <div class="sidebar-live">
-            <div class="sidebar-live-item">
-              <div class="sidebar-live-header">
-                <span class="sidebar-live-label">Geluisterd</span>
-                <a href="https://open.spotify.com/user/11133675526" target="_blank" rel="noopener" class="sidebar-live-icon-link">Spotify</a>
-              </div>
-              <div id="strip-music"><p class="interest-placeholder">Laden...</p></div>
-              <p class="sidebar-live-stat"><span id="stat-scrobbles">—</span> nummers dit jaar</p>
-            </div>
-            <div class="sidebar-live-item">
-              <div class="sidebar-live-header">
-                <span class="sidebar-live-label">Gekeken</span>
-                <a href="https://letterboxd.com/janusrvk" target="_blank" rel="noopener" class="sidebar-live-icon-link">Letterboxd</a>
-              </div>
-              <div id="strip-film"><p class="interest-placeholder">Laden...</p></div>
-              <p class="sidebar-live-stat"><span id="stat-films">—</span> films dit jaar</p>
-            </div>
-            <div class="sidebar-live-item">
-              <div class="sidebar-live-header">
-                <span class="sidebar-live-label">Gelezen</span>
-                <a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener" class="sidebar-live-icon-link">Goodreads</a>
-              </div>
-              <div id="strip-book"><p class="interest-placeholder">Laden...</p></div>
-              <p class="sidebar-live-stat"><span id="stat-books">—</span> boeken dit jaar</p>
-            </div>
-          </div>
-        </div>
+    <footer class="splash-hint">
+      <span>Klik op een naam om die versie te openen</span>
+    </footer>
+  </div>
 
-      </div>
-    </section>
+  <script>
+    // Pupillen in de nieuwe-versie "ogen" volgen de muis — klein speels detail
+    (function () {
+      const eyes = document.querySelectorAll('.choice-nieuw .eye');
+      if (!eyes.length) return;
+      const onMove = (e) => {
+        eyes.forEach((eye) => {
+          const r = eye.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const dx = e.clientX - cx;
+          const dy = e.clientY - cy;
+          const dist = Math.min(Math.hypot(dx, dy) / 60, 1);
+          const max = r.width * 0.18;
+          const tx = (dx / (Math.hypot(dx, dy) || 1)) * max * dist;
+          const ty = (dy / (Math.hypot(dx, dy) || 1)) * max * dist;
+          eye.style.setProperty('--px', tx + 'px');
+          eye.style.setProperty('--py', ty + 'px');
+        });
+      };
+      window.addEventListener('mousemove', onMove, { passive: true });
+    })();
+  </script>
 
-    <!-- Archief -->
-    <section class="section" id="archief">
-      <div class="section-wide">
-        <div class="archief-krantbalk">
-          <div class="archief-krantbalk-regel"></div>
-          <div class="archief-krantbalk-midden">
-            <span class="archief-krantbalk-label">Maandelijks logboek</span>
-            <h2 class="archief-krantbalk-titel">Archief</h2>
-            <span class="archief-krantbalk-sub">Elke maand mijn favoriete ontdekkingen &mdash; klik op een rij voor meer details</span>
-          </div>
-          <div class="archief-krantbalk-regel"></div>
-        </div>
+  <style>
+    .choice-nieuw .eye::after {
+      transform: translate(var(--px, 0), var(--py, 0));
+      transition: none;
+    }
+    .choice-nieuw:hover .eye::after {
+      transform: translate(var(--px, 0), var(--py, 0)) scale(1.15);
+    }
+  </style>
 
-        <div class="archief-table-wrap">
-          <table class="archief-table">
-            <thead>
-              <tr>
-                <th class="archief-th-maand">Maand</th>
-                <th>Nummer</th>
-                <th>Album</th>
-                <th>Film</th>
-                <th>Boek</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="archief-row"><td class="archief-row-month">Maart 2026</td><td class="archief-row-cell"><span class="archief-row-link">They Say I&rsquo;m Different</span><span class="archief-row-sub">Betty Davis</span></td><td class="archief-row-cell"><span class="archief-row-link">Bennie &amp; De Banaliteit Van Ons Bestaan</span><span class="archief-row-sub">Young Yello</span></td><td class="archief-row-cell"><span class="archief-row-link">Au Revoir les Enfants</span><span class="archief-row-sub">Louis Malle</span></td><td class="archief-row-cell"><span class="archief-row-link">The Story of a New Name</span><span class="archief-row-sub">Elena Ferrante</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Februari 2026</td><td class="archief-row-cell"><span class="archief-row-link">On peut comme &ccedil;a</span><span class="archief-row-sub">Zaz</span></td><td class="archief-row-cell"><span class="archief-row-link">IJsland 2</span><span class="archief-row-sub">IJsland, Abel &amp; Sef</span></td><td class="archief-row-cell"><span class="archief-row-link">Marty Supreme</span><span class="archief-row-sub">Josh Safdie</span></td><td class="archief-row-cell"><span class="archief-row-link">Levels of Life</span><span class="archief-row-sub">Julian Barnes</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Januari 2026</td><td class="archief-row-cell"><span class="archief-row-link">Lean</span><span class="archief-row-sub">Charlotte Day Wilson</span></td><td class="archief-row-cell"><span class="archief-row-link">The Lighthouse</span><span class="archief-row-sub">Tessa Rose Jackson</span></td><td class="archief-row-cell"><span class="archief-row-link">Juno</span><span class="archief-row-sub">Jason Reitman</span></td><td class="archief-row-cell"><span class="archief-row-link">Moon Palace</span><span class="archief-row-sub">Paul Auster</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">December 2025</td><td class="archief-row-cell"><span class="archief-row-link">Thorn</span><span class="archief-row-sub">Keo</span></td><td class="archief-row-cell"><span class="archief-row-link">What Color is Love</span><span class="archief-row-sub">Terry Callier</span></td><td class="archief-row-cell"><span class="archief-row-link">Sentimental Value</span><span class="archief-row-sub">Joachim Trier</span></td><td class="archief-row-cell"><span class="archief-row-link">Tonio</span><span class="archief-row-sub">A.F.Th. van der Heijden</span></td></tr>
-            </tbody>
-            <tbody id="archief-hidden" class="archief-hidden">
-              <tr class="archief-row"><td class="archief-row-month">November 2025</td><td class="archief-row-cell"><span class="archief-row-link">The Sea</span><span class="archief-row-sub">Morcheeba</span></td><td class="archief-row-cell"><span class="archief-row-link">FEMME FATALE</span><span class="archief-row-sub">Mon Laferte</span></td><td class="archief-row-cell"><span class="archief-row-link">A Man Escaped</span><span class="archief-row-sub">Robert Bresson</span></td><td class="archief-row-cell"><span class="archief-row-link">De helaasheid der dingen</span><span class="archief-row-sub">Dimitri Verhulst</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Oktober 2025</td><td class="archief-row-cell"><span class="archief-row-link">The Watershed</span><span class="archief-row-sub">Mark Hollis</span></td><td class="archief-row-cell"><span class="archief-row-link">Mark Hollis</span><span class="archief-row-sub">Mark Hollis</span></td><td class="archief-row-cell"><span class="archief-row-link">La Promesse</span><span class="archief-row-sub">Jean-Pierre &amp; Luc Dardenne</span></td><td class="archief-row-cell"><span class="archief-row-link">Imperium</span><span class="archief-row-sub">Robert Harris</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">September 2025</td><td class="archief-row-cell"><span class="archief-row-link">Als Het Donker Wordt</span><span class="archief-row-sub">Pip Lieke Lucas</span></td><td class="archief-row-cell"><span class="archief-row-link">Lieve Monsters</span><span class="archief-row-sub">Sef</span></td><td class="archief-row-cell"><span class="archief-row-link">One Battle After Another</span><span class="archief-row-sub">Paul Thomas Anderson</span></td><td class="archief-row-cell"><span class="archief-row-link">Rituelen</span><span class="archief-row-sub">Cees Nooteboom</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Augustus 2025</td><td class="archief-row-cell"><span class="archief-row-link">Fun</span><span class="archief-row-sub">Deki Alem</span></td><td class="archief-row-cell"><span class="archief-row-link">Stanley Road</span><span class="archief-row-sub">Paul Weller</span></td><td class="archief-row-cell"><span class="archief-row-link">The Big Sleep</span><span class="archief-row-sub">Howard Hawks</span></td><td class="archief-row-cell"><span class="archief-row-link">Grand Hotel Europa</span><span class="archief-row-sub">Ilja Leonard Pfeijffer</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Juli 2025</td><td class="archief-row-cell"><span class="archief-row-link">Kneel</span><span class="archief-row-sub">Nil&uuml;fer Yanya</span></td><td class="archief-row-cell"><span class="archief-row-link">Jazzmatazz: Volume II</span><span class="archief-row-sub">Guru</span></td><td class="archief-row-cell"><span class="archief-row-link">Judgment at Nuremberg</span><span class="archief-row-sub">Stanley Kramer</span></td><td class="archief-row-cell"><span class="archief-row-link">Het uur van de wolven</span><span class="archief-row-sub">Giuliano Da Empoli</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Juni 2025</td><td class="archief-row-cell"><span class="archief-row-link">Overflow</span><span class="archief-row-sub">Annahstasia</span></td><td class="archief-row-cell"><span class="archief-row-link">Tether</span><span class="archief-row-sub">Annahstasia</span></td><td class="archief-row-cell"><span class="archief-row-link">The Last Days of Disco</span><span class="archief-row-sub">Whit Stillman</span></td><td class="archief-row-cell"><span class="archief-row-link">Nooit meer slapen</span><span class="archief-row-sub">W.F. Hermans</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Mei 2025</td><td class="archief-row-cell"><span class="archief-row-link">Wild Wood</span><span class="archief-row-sub">Paul Weller</span></td><td class="archief-row-cell"><span class="archief-row-link">Cancionera</span><span class="archief-row-sub">Natalia Lafourcade</span></td><td class="archief-row-cell"><span class="archief-row-link">In a Lonely Place</span><span class="archief-row-sub">Nicholas Ray</span></td><td class="archief-row-cell"><span class="archief-row-link">Het lied van de ooievaar en de dromedaris</span><span class="archief-row-sub">Anjet Daanje</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">April 2025</td><td class="archief-row-cell"><span class="archief-row-link">Ze is pas net begonnen</span><span class="archief-row-sub">De Jeugd van Tegenwoordig</span></td><td class="archief-row-cell"><span class="archief-row-link">Da Storm</span><span class="archief-row-sub">O.G.C.</span></td><td class="archief-row-cell"><span class="archief-row-link">Jules and Jim</span><span class="archief-row-sub">Fran&ccedil;ois Truffaut</span></td><td class="archief-row-cell archief-row-empty">&mdash;</td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Maart 2025</td><td class="archief-row-cell"><span class="archief-row-link">Can&rsquo;t Feel Too Much</span><span class="archief-row-sub">Michael Ekow</span></td><td class="archief-row-cell"><span class="archief-row-link">Blonde on Blonde</span><span class="archief-row-sub">Bob Dylan</span></td><td class="archief-row-cell"><span class="archief-row-link">I&rsquo;m Still Here</span><span class="archief-row-sub">Walter Salles</span></td><td class="archief-row-cell"><span class="archief-row-link">Kafka on the Shore</span><span class="archief-row-sub">Haruki Murakami</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Februari 2025</td><td class="archief-row-cell"><span class="archief-row-link">Woes of the World</span><span class="archief-row-sub">Saba</span></td><td class="archief-row-cell"><span class="archief-row-link">EUSEXUA</span><span class="archief-row-sub">FKA Twigs</span></td><td class="archief-row-cell"><span class="archief-row-link">The Brutalist</span><span class="archief-row-sub">Brady Corbet</span></td><td class="archief-row-cell"><span class="archief-row-link">Oroppa</span><span class="archief-row-sub">Safae el Khannoussi</span></td></tr>
-              <tr class="archief-row"><td class="archief-row-month">Januari 2025</td><td class="archief-row-cell"><span class="archief-row-link">Family and Friends</span><span class="archief-row-sub">Oklou</span></td><td class="archief-row-cell"><span class="archief-row-link">Breath from Another</span><span class="archief-row-sub">Esthero</span></td><td class="archief-row-cell"><span class="archief-row-link">Hoop Dreams</span><span class="archief-row-sub">Steve James</span></td><td class="archief-row-cell archief-row-empty">&mdash;</td></tr>
-            </tbody>
-          </table>
-        </div>
-
-        <button class="archief-toggle" id="archief-toggle" onclick="const h=document.getElementById('archief-hidden'); const opening=!h.classList.contains('archief-visible'); h.classList.toggle('archief-visible'); this.textContent=opening?'Toon minder':'Toon meer'; if(!opening){document.getElementById('archief').scrollIntoView({behavior:'smooth'})}">Toon meer</button>
-
-      </div>
-    </section>
-
-    <!-- Over mij -->
-    <section class="section" id="over-mij">
-
-      <!-- Krantbalk-kop -->
-      <div class="about-section-krantbalk">
-        <div class="archief-krantbalk">
-          <div class="archief-krantbalk-regel"></div>
-          <div class="archief-krantbalk-midden">
-            <h2 class="archief-krantbalk-titel about-krantbalk-titel">Over mij</h2>
-          </div>
-          <div class="archief-krantbalk-regel"></div>
-        </div>
-      </div>
-
-      <!-- Avatar links, bio rechts -->
-      <div class="about-hero-grid">
-
-        <!-- Links: avatar -->
-        <div class="about-portrait-col">
-          <img src="/brand_assets/GEZICHT.png" alt="Janus van Koolwijk" class="about-portrait-img" loading="lazy" />
-        </div>
-
-        <!-- Rechts: bio -->
-        <div class="about-intro-col">
-          <p class="about-intro-bio">
-            Ik ben Janus van Koolwijk, redacteur en schrijver uit Amsterdam. Ik studeerde European Studies aan de Universiteit van Amsterdam (bachelor en master) en werk als freelance redacteur bij de VARAgids en als pizzabakker bij Buurman &amp; Buurman. Daarvoor werkte ik als junior vakredacteur bij Berghauser Pont. Ik ben nieuwsgierig, zorgvuldig en gewend om zelfstandig te werken binnen een redactie.
-          </p>
-        </div>
-
-      </div>
-
-      <!-- Loopbaan + Opleiding -->
-      <div class="about-cv-inner">
-        <div class="about-cv-columns">
-
-          <!-- Loopbaan -->
-          <div class="about-cv-col">
-            <div class="archief-krantbalk about-krantbalk">
-              <div class="archief-krantbalk-regel"></div>
-              <div class="archief-krantbalk-midden">
-                <h3 class="archief-krantbalk-titel about-krantbalk-titel">Loopbaan</h3>
-              </div>
-              <div class="archief-krantbalk-regel"></div>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">VARAgids</span>
-                <span class="cv-item-date">feb 2025 — heden</span>
-              </div>
-              <div class="cv-item-role">Freelance Redacteur</div>
-              <p class="cv-item-desc">Na een succesvolle stage doorgestroomd als freelance redacteur. Zelfstandig uitvoeren van schrijfopdrachten, interviews en onderzoekstaken voor de wekelijkse televisiegids.</p>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">VARAgids</span>
-                <span class="cv-item-date">nov 2024 — feb 2025</span>
-              </div>
-              <div class="cv-item-role">Stage</div>
-              <p class="cv-item-desc">Telefonische interviews met BN'ers en programmamakers, schrijven van wekelijkse programmatoelichtingen en artikelen, samenstellen van overzichten van opvallende televisiemomenten.</p>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">Buurman &amp; Buurman</span>
-                <span class="cv-item-date">feb 2024 — heden</span>
-              </div>
-              <div class="cv-item-role">Pizzabakker / Mise en Place Chef</div>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">Berghauser Pont</span>
-                <span class="cv-item-date">nov 2022 — jun 2023</span>
-              </div>
-              <div class="cv-item-role">Junior Vakredacteur</div>
-              <p class="cv-item-desc">Ontwikkelen en beheren van online leeractiviteiten en content voor themadossiers. Begeleiden van auteurs en docenten.</p>
-            </div>
-          </div>
-
-          <!-- Opleiding -->
-          <div class="about-cv-col">
-            <div class="archief-krantbalk about-krantbalk">
-              <div class="archief-krantbalk-regel"></div>
-              <div class="archief-krantbalk-midden">
-                <h3 class="archief-krantbalk-titel about-krantbalk-titel">Opleiding</h3>
-              </div>
-              <div class="archief-krantbalk-regel"></div>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">Universiteit van Amsterdam</span>
-                <span class="cv-item-date">2023 — 2024</span>
-              </div>
-              <div class="cv-item-role">Master European Studies</div>
-              <p class="cv-item-desc">Identity and Integration</p>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">Universiteit van Amsterdam</span>
-                <span class="cv-item-date">2019 — 2022</span>
-              </div>
-              <div class="cv-item-role">Bachelor European Studies</div>
-              <p class="cv-item-desc">Major European Economics</p>
-            </div>
-            <div class="cv-item">
-              <div class="cv-item-header">
-                <span class="cv-item-org">Mollerlyceum Bergen op Zoom</span>
-                <span class="cv-item-date">2013 — 2019</span>
-              </div>
-              <div class="cv-item-role">VWO Cultuur en Maatschappij</div>
-              <p class="cv-item-desc">Certificaat Europese Leerroute</p>
-            </div>
-            <a href="/cv.pdf" target="_blank" class="btn-primary about-cv-btn">Download CV</a>
-          </div>
-
-        </div>
-      </div>
-
-    </section>
-  </main>
-
-  <script type="module" src="/main.js"></script>
-  <script type="module" src="/interesses.js"></script>
-  <script src="/archief-maand.js"></script>
   <script data-goatcounter="https://janusrvk.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
