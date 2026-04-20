@@ -3,19 +3,19 @@ import { initNav } from './nav.js';
 
 initNav();
 
-
-// Brand-naam scrollanimatie — verschijnt in topbar zodra de mastheadnaam voorbijscrolt
+// Brand-naam scrollanimatie — verschijnt in topbar zodra de hero-naam voorbijscrolt
 (function initBrandScroll() {
-  const mastheadName = document.querySelector('.masthead-name');
-  if (!mastheadName) return;
+  // Werkt zowel met de nieuwe (.hero-word) als de oude (.masthead-name) opmaak
+  const heroName = document.querySelector('.hero-word:last-of-type, .hero-word, .masthead-name');
+  if (!heroName) return;
   const brandText = document.querySelector('.topbar-brand-text');
   if (!brandText) return;
 
   brandText.classList.add('brand-hidden');
   let nameVisible = false;
 
-  window.addEventListener('scroll', () => {
-    const shouldShow = mastheadName.getBoundingClientRect().bottom <= 56;
+  const onScroll = () => {
+    const shouldShow = heroName.getBoundingClientRect().bottom <= 56;
     if (shouldShow && !nameVisible) {
       nameVisible = true;
       brandText.classList.remove('brand-hidden');
@@ -23,6 +23,8 @@ initNav();
       nameVisible = false;
       brandText.classList.add('brand-hidden');
     }
-  }, { passive: true });
-})();
+  };
 
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
