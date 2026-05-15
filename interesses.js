@@ -209,18 +209,53 @@ async function fetchScrobbleCount() {
 
 
 async function fetchFilmCount() {
-  const res = await fetch('https://goodreads-proxy.janusrvk.workers.dev/letterboxd');
-  const text = await res.text();
-  const doc = new DOMParser().parseFromString(text, 'text/xml');
+  // Letterboxd RSS geeft maar ~50 items terug, dus gebruik de volledige diary-export
+  // en vul aan met nieuwere RSS-items (sinds laatste handmatige update).
   const currentYear = new Date().getFullYear();
-  const items = Array.from(doc.querySelectorAll('item')).filter((item) => {
-    // Letterboxd RSS heeft letterboxd:watchedDate of pubDate
-    const watchedDate = item.getElementsByTagName('letterboxd:watchedDate')[0]?.textContent;
-    const pubDate = item.querySelector('pubDate')?.textContent;
-    const dateStr = watchedDate || pubDate || '';
-    return new Date(dateStr).getFullYear() === currentYear;
-  });
-  return items.length;
+  const seen = new Set();
+  let count = 0;
+
+  const [diaryRes, rssRes] = await Promise.allSettled([
+    fetch('/letterboxd-diary.json'),
+    fetch('https://goodreads-proxy.janusrvk.workers.dev/letterboxd'),
+  ]);
+
+  const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const dayKey = (s) => {
+    const d = new Date(s);
+    return Number.isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10);
+  };
+
+  if (diaryRes.status === 'fulfilled' && diaryRes.value.ok) {
+    const diary = await diaryRes.value.json();
+    for (const entry of diary) {
+      const day = dayKey(entry.date);
+      if (!day || new Date(day).getFullYear() !== currentYear) continue;
+      const key = `${norm(entry.title)}|${day}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      count++;
+    }
+  }
+
+  if (rssRes.status === 'fulfilled' && rssRes.value.ok) {
+    const text = await rssRes.value.text();
+    const doc = new DOMParser().parseFromString(text, 'text/xml');
+    for (const item of doc.querySelectorAll('item')) {
+      const watchedDate = item.getElementsByTagName('letterboxd:watchedDate')[0]?.textContent;
+      const pubDate = item.querySelector('pubDate')?.textContent;
+      const day = dayKey(watchedDate || pubDate);
+      if (!day || new Date(day).getFullYear() !== currentYear) continue;
+      const rawTitle = item.querySelector('title')?.textContent || '';
+      const cleanTitle = rawTitle.replace(/,\s*\d{4}\s*-\s*★+½?/, '').replace(/,\s*\d{4}/, '').trim();
+      const key = `${norm(cleanTitle)}|${day}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      count++;
+    }
+  }
+
+  return count;
 }
 
 // Correctie: RSS telde 10 op 20 feb 2026, werkelijk aantal was 9
