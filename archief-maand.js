@@ -384,13 +384,32 @@ async function renderFilms(container, monthStart, monthEnd) {
   }
 }
 
-const GOODREADS_PROXY = 'https://goodreads-proxy.janusrvk.workers.dev';
+const GOODREADS_READ_URL = 'https://www.goodreads.com/review/list_rss/161530834?shelf=read';
+const GOODREADS_PROXIES = [
+  { build: (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, attempts: 3 },
+  { build: (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`, attempts: 1 },
+];
+
+async function fetchGoodreadsRead() {
+  for (const proxy of GOODREADS_PROXIES) {
+    for (let i = 0; i < proxy.attempts; i++) {
+      try {
+        const res = await fetch(proxy.build(GOODREADS_READ_URL));
+        if (!res.ok) continue;
+        const text = await res.text();
+        if (text.includes('<item>')) return text;
+      } catch {
+        // try again
+      }
+    }
+  }
+  return '';
+}
 
 // ---- Boeken via Goodreads ----
 async function renderBooks(container, monthStart, monthEnd) {
   try {
-    const res = await fetch(`${GOODREADS_PROXY}?shelf=read`);
-    const text = await res.text();
+    const text = await fetchGoodreadsRead();
     const parser = new DOMParser();
     const xml = parser.parseFromString(text, 'text/xml');
 

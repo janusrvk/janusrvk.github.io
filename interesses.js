@@ -123,20 +123,68 @@ fetchLetterboxd();
 
 // ---- Goodreads integration (RSS) ----
 const GOODREADS_USER_ID = '161530834';
-const GOODREADS_PROXY = 'https://goodreads-proxy.janusrvk.workers.dev';
+const GOODREADS_URL = (shelf) =>
+  `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=${shelf}`;
+// Goodreads RSS is niet CORS-vriendelijk. allorigins is wisselvallig (cache
+// miss → 522), corsproxy.io en de eigen worker krijgen CloudFront 403.
+// Strategie: probeer meerdere proxies parallel met een korte timeout en
+// gebruik de eerste die geldige RSS teruggeeft.
+const GOODREADS_PROXY_BUILDERS = [
+  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+];
+const GOODREADS_FETCH_TIMEOUT_MS = 6000;
+const goodreadsCache = new Map();
+
+function fetchWithTimeout(url, ms) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), ms);
+  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(timer));
+}
+
+async function fetchGoodreadsRss(shelf) {
+  if (goodreadsCache.has(shelf)) return goodreadsCache.get(shelf);
+  const url = GOODREADS_URL(shelf);
+  const attempts = GOODREADS_PROXY_BUILDERS.map(async (build) => {
+    const res = await fetchWithTimeout(build(url), GOODREADS_FETCH_TIMEOUT_MS);
+    if (!res.ok) throw new Error('proxy not ok');
+    const text = await res.text();
+    if (!text.includes('<item>')) throw new Error('no items');
+    return text;
+  });
+  try {
+    const text = await Promise.any(attempts);
+    goodreadsCache.set(shelf, text);
+    return text;
+  } catch {
+    // allorigins is flaky genoeg dat een tweede ronde vaak wel werkt
+    try {
+      const retry = GOODREADS_PROXY_BUILDERS.map(async (build) => {
+        const res = await fetchWithTimeout(build(url), GOODREADS_FETCH_TIMEOUT_MS);
+        if (!res.ok) throw new Error('proxy not ok');
+        const text = await res.text();
+        if (!text.includes('<item>')) throw new Error('no items');
+        return text;
+      });
+      const text = await Promise.any(retry);
+      goodreadsCache.set(shelf, text);
+      return text;
+    } catch {
+      return '';
+    }
+  }
+}
 
 async function fetchGoodreads() {
   const container = document.getElementById('strip-book');
   try {
-    const res = await fetch(`${GOODREADS_PROXY}?shelf=currently-reading`);
-    const text = await res.text();
     const parser = new DOMParser();
+    const text = await fetchGoodreadsRss('currently-reading');
     const xml = parser.parseFromString(text, 'text/xml');
     const items = Array.from(xml.querySelectorAll('item')).slice(0, 1);
 
     if (items.length === 0) {
-      const res2 = await fetch(`${GOODREADS_PROXY}?shelf=read`);
-      const text2 = await res2.text();
+      const text2 = await fetchGoodreadsRss('read');
       const xml2 = parser.parseFromString(text2, 'text/xml');
       const items2 = Array.from(xml2.querySelectorAll('item')).slice(0, 1);
 
@@ -262,8 +310,7 @@ async function fetchFilmCount() {
 const BOOK_COUNT_OFFSET = -1;
 
 async function fetchBookCount() {
-  const res = await fetch(`${GOODREADS_PROXY}?shelf=read`);
-  const text = await res.text();
+  const text = await fetchGoodreadsRss('read');
   const doc = new DOMParser().parseFromString(text, 'text/xml');
   const currentYear = new Date().getFullYear();
   const items = Array.from(doc.querySelectorAll('item')).filter((item) => {
