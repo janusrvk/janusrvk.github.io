@@ -384,39 +384,23 @@ async function renderFilms(container, monthStart, monthEnd) {
   }
 }
 
-const GOODREADS_READ_URL = 'https://www.goodreads.com/review/list_rss/161530834?shelf=read';
-const GOODREADS_PROXIES = [
-  { build: (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`, attempts: 3 },
-  { build: (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`, attempts: 1 },
-];
-
-async function fetchGoodreadsRead() {
-  for (const proxy of GOODREADS_PROXIES) {
-    for (let i = 0; i < proxy.attempts; i++) {
-      try {
-        const res = await fetch(proxy.build(GOODREADS_READ_URL));
-        if (!res.ok) continue;
-        const text = await res.text();
-        if (text.includes('<item>')) return text;
-      } catch {
-        // try again
-      }
-    }
+// ---- Boeken via statische goodreads.json (dagelijks ververst door GitHub Action) ----
+let goodreadsArchiefPromise = null;
+function loadGoodreadsArchief() {
+  if (!goodreadsArchiefPromise) {
+    goodreadsArchiefPromise = fetch('/goodreads.json')
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .catch(() => ({ shelves: { read: [] } }));
   }
-  return '';
+  return goodreadsArchiefPromise;
 }
 
-// ---- Boeken via Goodreads ----
 async function renderBooks(container, monthStart, monthEnd) {
   try {
-    const text = await fetchGoodreadsRead();
-    const parser = new DOMParser();
-    const xml = parser.parseFromString(text, 'text/xml');
-
-    const items = Array.from(xml.querySelectorAll('item')).filter((item) => {
-      const readAt = item.querySelector('user_read_at')?.textContent;
-      const pubDate = item.querySelector('pubDate')?.textContent;
-      const dateStr = readAt || pubDate || '';
+    const data = await loadGoodreadsArchief();
+    const read = data.shelves?.read || [];
+    const items = read.filter((b) => {
+      const dateStr = b.dateRead || b.dateAdded || '';
       if (!dateStr) return false;
       const d = new Date(dateStr);
       return d >= monthStart && d < monthEnd;
@@ -427,25 +411,15 @@ async function renderBooks(container, monthStart, monthEnd) {
       return;
     }
 
-    container.innerHTML = items.map((item) => {
-      const title = item.querySelector('title')?.textContent || '';
-      const link = item.querySelector('link')?.textContent || '#';
-      const author = item.querySelector('author_name')?.textContent || '';
-      const description = item.querySelector('description')?.textContent || '';
-      const descDoc = parser.parseFromString(description, 'text/html');
-      const coverSrc = descDoc.querySelector('img')?.getAttribute('src') || '';
-      const hiResCover = coverSrc.replace(/\._\w+\d+_/, '._SX100_');
-
-      return `
-        <a href="${link}" target="_blank" rel="noopener" class="feed-item">
-          ${hiResCover ? `<img src="${hiResCover}" alt="${title}" class="feed-art feed-art-book" />` : '<div class="feed-art feed-art-empty"></div>'}
-          <div class="feed-info">
-            <span class="feed-title">${title}</span>
-            <span class="feed-meta">${author}</span>
-          </div>
-        </a>
-      `;
-    }).join('');
+    container.innerHTML = items.map((b) => `
+      <a href="${b.link || '#'}" target="_blank" rel="noopener" class="feed-item">
+        ${b.image ? `<img src="${b.image}" alt="${b.title}" class="feed-art feed-art-book" />` : '<div class="feed-art feed-art-empty"></div>'}
+        <div class="feed-info">
+          <span class="feed-title">${b.title || ''}</span>
+          <span class="feed-meta">${b.author || ''}</span>
+        </div>
+      </a>
+    `).join('');
   } catch {
     container.innerHTML = '<p class="interest-placeholder"><a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener">Bekijk op Goodreads →</a></p>';
   }

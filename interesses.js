@@ -121,111 +121,50 @@ async function fetchLetterboxd() {
 
 fetchLetterboxd();
 
-// ---- Goodreads integration (RSS) ----
-const GOODREADS_USER_ID = '161530834';
-const GOODREADS_URL = (shelf) =>
-  `https://www.goodreads.com/review/list_rss/${GOODREADS_USER_ID}?shelf=${shelf}`;
-// Goodreads RSS is niet CORS-vriendelijk. allorigins is wisselvallig (cache
-// miss → 522), corsproxy.io en de eigen worker krijgen CloudFront 403.
-// Strategie: probeer meerdere proxies parallel met een korte timeout en
-// gebruik de eerste die geldige RSS teruggeeft.
-const GOODREADS_PROXY_BUILDERS = [
-  (url) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
-  (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-];
-const GOODREADS_FETCH_TIMEOUT_MS = 6000;
-const goodreadsCache = new Map();
-
-function fetchWithTimeout(url, ms) {
-  const ctrl = new AbortController();
-  const timer = setTimeout(() => ctrl.abort(), ms);
-  return fetch(url, { signal: ctrl.signal }).finally(() => clearTimeout(timer));
-}
-
-async function fetchGoodreadsRss(shelf) {
-  if (goodreadsCache.has(shelf)) return goodreadsCache.get(shelf);
-  const url = GOODREADS_URL(shelf);
-  const attempts = GOODREADS_PROXY_BUILDERS.map(async (build) => {
-    const res = await fetchWithTimeout(build(url), GOODREADS_FETCH_TIMEOUT_MS);
-    if (!res.ok) throw new Error('proxy not ok');
-    const text = await res.text();
-    if (!text.includes('<item>')) throw new Error('no items');
-    return text;
-  });
-  try {
-    const text = await Promise.any(attempts);
-    goodreadsCache.set(shelf, text);
-    return text;
-  } catch {
-    // allorigins is flaky genoeg dat een tweede ronde vaak wel werkt
-    try {
-      const retry = GOODREADS_PROXY_BUILDERS.map(async (build) => {
-        const res = await fetchWithTimeout(build(url), GOODREADS_FETCH_TIMEOUT_MS);
-        if (!res.ok) throw new Error('proxy not ok');
-        const text = await res.text();
-        if (!text.includes('<item>')) throw new Error('no items');
-        return text;
-      });
-      const text = await Promise.any(retry);
-      goodreadsCache.set(shelf, text);
-      return text;
-    } catch {
-      return '';
-    }
+// ---- Goodreads integration (statische JSON, dagelijks ververst door GitHub Action) ----
+// Voorheen werden CORS-proxies gebruikt; die zijn te onbetrouwbaar gebleken
+// (allorigins down, corsproxy + worker krijgen CloudFront 403). De JSON wordt
+// nu gegenereerd door scripts/fetch-goodreads.py via .github/workflows/goodreads.yml.
+let goodreadsDataPromise = null;
+function loadGoodreads() {
+  if (!goodreadsDataPromise) {
+    goodreadsDataPromise = fetch('/goodreads.json')
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .catch(() => ({ shelves: { 'currently-reading': [], read: [] } }));
   }
+  return goodreadsDataPromise;
 }
 
 async function fetchGoodreads() {
   const container = document.getElementById('strip-book');
   try {
-    const parser = new DOMParser();
-    const text = await fetchGoodreadsRss('currently-reading');
-    const xml = parser.parseFromString(text, 'text/xml');
-    const items = Array.from(xml.querySelectorAll('item')).slice(0, 1);
+    const data = await loadGoodreads();
+    const currentlyReading = data.shelves?.['currently-reading'] || [];
+    const readShelf = data.shelves?.read || [];
+    const book = currentlyReading[0] || readShelf[0];
 
-    if (items.length === 0) {
-      const text2 = await fetchGoodreadsRss('read');
-      const xml2 = parser.parseFromString(text2, 'text/xml');
-      const items2 = Array.from(xml2.querySelectorAll('item')).slice(0, 1);
-
-      if (items2.length === 0) {
-        container.innerHTML = '<p class="interest-placeholder">Geen boeken gevonden.</p>';
-        return;
-      }
-      renderBooks(container, items2, parser, 'Gelezen');
+    if (!book) {
+      container.innerHTML = '<p class="interest-placeholder">Geen boeken gevonden.</p>';
       return;
     }
 
-    renderBooks(container, items, parser, 'Aan het lezen');
+    renderBookCard(container, book);
   } catch (err) {
     container.innerHTML = '<p class="interest-placeholder"><a href="https://www.goodreads.com/user/show/161530834" target="_blank" rel="noopener">Bekijk op Goodreads →</a></p>';
   }
 }
 
-function renderBooks(container, items, parser, shelfLabel) {
-  const html = items.map((item) => {
-    const title = item.querySelector('title')?.textContent || '';
-    const link = item.querySelector('link')?.textContent || '#';
-    const author = item.querySelector('author_name')?.textContent || '';
-    const description = item.querySelector('description')?.textContent || '';
-
-    const descDoc = parser.parseFromString(description, 'text/html');
-    const img = descDoc.querySelector('img');
-    const coverSrc = img?.getAttribute('src') || '';
-    const hiResCover = coverSrc.replace(/\._\w+\d+_/, '._SX100_');
-
-    return `
-      <a href="${link}" target="_blank" rel="noopener" class="feed-item">
-        ${hiResCover ? `<img src="${hiResCover}" alt="${title}" class="feed-art feed-art-book" />` : '<div class="feed-art feed-art-empty"></div>'}
-        <div class="feed-info">
-          <span class="feed-title">${title}</span>
-          <span class="feed-meta">${author}</span>
-        </div>
-      </a>
-    `;
-  }).join('');
-
-  container.innerHTML = html;
+function renderBookCard(container, book) {
+  const cover = book.image || '';
+  container.innerHTML = `
+    <a href="${book.link || '#'}" target="_blank" rel="noopener" class="feed-item">
+      ${cover ? `<img src="${cover}" alt="${book.title}" class="feed-art feed-art-book" />` : '<div class="feed-art feed-art-empty"></div>'}
+      <div class="feed-info">
+        <span class="feed-title">${book.title || ''}</span>
+        <span class="feed-meta">${book.author || ''}</span>
+      </div>
+    </a>
+  `;
 }
 
 fetchGoodreads();
@@ -310,14 +249,12 @@ async function fetchFilmCount() {
 const BOOK_COUNT_OFFSET = -1;
 
 async function fetchBookCount() {
-  const text = await fetchGoodreadsRss('read');
-  const doc = new DOMParser().parseFromString(text, 'text/xml');
+  const data = await loadGoodreads();
   const currentYear = new Date().getFullYear();
-  const items = Array.from(doc.querySelectorAll('item')).filter((item) => {
-    const readAt = item.querySelector('user_read_at')?.textContent;
-    const pubDate = item.querySelector('pubDate')?.textContent;
-    const dateStr = readAt || pubDate || '';
-    return dateStr && new Date(dateStr).getFullYear() === currentYear;
+  const read = data.shelves?.read || [];
+  const items = read.filter((b) => {
+    const date = b.dateRead || b.dateAdded || '';
+    return date.startsWith(String(currentYear));
   });
   return Math.max(0, items.length + BOOK_COUNT_OFFSET);
 }

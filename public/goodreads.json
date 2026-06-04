@@ -1,0 +1,808 @@
+{
+  "updated": "2026-06-04T13:00:35+00:00",
+  "shelves": {
+    "currently-reading": [],
+    "read": [
+      {
+        "title": "Montaigne",
+        "author": "Stefan Zweig",
+        "link": "https://www.goodreads.com/review/show/8654205486",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1178886035l/849052.jpg",
+        "dateRead": "2026-06-02",
+        "dateAdded": "2026-06-02"
+      },
+      {
+        "title": "White Teeth",
+        "author": "Zadie Smith",
+        "link": "https://www.goodreads.com/review/show/8649917244",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1374739885l/3711.jpg",
+        "dateRead": "2026-06-01",
+        "dateAdded": "2026-06-01"
+      },
+      {
+        "title": "Kaas",
+        "author": "Willem Elsschot",
+        "link": "https://www.goodreads.com/review/show/8621798849",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1763310482l/1059967.jpg",
+        "dateRead": "2026-05-22",
+        "dateAdded": "2026-05-22"
+      },
+      {
+        "title": "The Years",
+        "author": "Annie Ernaux",
+        "link": "https://www.goodreads.com/review/show/8616604126",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1682913153l/145625252.jpg",
+        "dateRead": "2026-05-20",
+        "dateAdded": "2026-05-20"
+      },
+      {
+        "title": "Mijn naam is Legioen",
+        "author": "Menno Wigman",
+        "link": "https://www.goodreads.com/review/show/8615319770",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327227074l/13420586.jpg",
+        "dateRead": "2026-05-20",
+        "dateAdded": "2026-05-19"
+      },
+      {
+        "title": "Raise High the Roof Beam, Carpenters & Seymour: An Introduction",
+        "author": "J.D. Salinger",
+        "link": "https://www.goodreads.com/review/show/8602766910",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390770647l/5114.jpg",
+        "dateRead": "2026-05-15",
+        "dateAdded": "2026-05-15"
+      },
+      {
+        "title": "Nine Stories",
+        "author": "J.D. Salinger",
+        "link": "https://www.goodreads.com/review/show/8593092479",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1554892563l/4009.jpg",
+        "dateRead": "2026-05-11",
+        "dateAdded": "2026-05-11"
+      },
+      {
+        "title": "Small Things Like These",
+        "author": "Claire Keegan",
+        "link": "https://www.goodreads.com/review/show/8584855520",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734631773l/58662236.jpg",
+        "dateRead": "",
+        "dateAdded": "2026-05-08"
+      },
+      {
+        "title": "Normal People",
+        "author": "Sally Rooney",
+        "link": "https://www.goodreads.com/review/show/8579820981",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1571423190l/41057294.jpg",
+        "dateRead": "2026-05-06",
+        "dateAdded": "2026-05-06"
+      },
+      {
+        "title": "De violist",
+        "author": "Ingrid de Vries",
+        "link": "https://www.goodreads.com/review/show/8570341213",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1759528824l/229281775.jpg",
+        "dateRead": "2026-05-03",
+        "dateAdded": "2026-05-02"
+      },
+      {
+        "title": "Dit gaat niet over grasmaaien",
+        "author": "Ellen Deckwitz",
+        "link": "https://www.goodreads.com/review/show/8546457911",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1600946064l/55441892.jpg",
+        "dateRead": "2026-04-24",
+        "dateAdded": "2026-04-23"
+      },
+      {
+        "title": "Olijven moet je leren lezen",
+        "author": "Ellen Deckwitz",
+        "link": "https://www.goodreads.com/review/show/8545110835",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1465549467l/30486172.jpg",
+        "dateRead": "2026-04-23",
+        "dateAdded": "2026-04-23"
+      },
+      {
+        "title": "Het gore lef",
+        "author": "Sarah Arnolds",
+        "link": "https://www.goodreads.com/review/show/8537457162",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1750203082l/236762685.jpg",
+        "dateRead": "2026-04-20",
+        "dateAdded": "2026-04-20"
+      },
+      {
+        "title": "Perfume: The Story of a Murderer",
+        "author": "Patrick Süskind",
+        "link": "https://www.goodreads.com/review/show/8531458433",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1409112276l/343.jpg",
+        "dateRead": "2026-04-18",
+        "dateAdded": "2026-04-18"
+      },
+      {
+        "title": "Franny and Zooey",
+        "author": "J.D. Salinger",
+        "link": "https://www.goodreads.com/review/show/8522844303",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1355037988l/5113.jpg",
+        "dateRead": "2026-04-14",
+        "dateAdded": "2026-04-14"
+      },
+      {
+        "title": "The Book of Illusions",
+        "author": "Paul Auster",
+        "link": "https://www.goodreads.com/review/show/8510911964",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1391954093l/50618.jpg",
+        "dateRead": "2026-04-10",
+        "dateAdded": "2026-04-10"
+      },
+      {
+        "title": "Tegen verkiezingen",
+        "author": "David Van Reybrouck",
+        "link": "https://www.goodreads.com/review/show/8494405561",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1381352493l/18657726.jpg",
+        "dateRead": "2026-04-04",
+        "dateAdded": "2026-04-04"
+      },
+      {
+        "title": "Invisible (Rough Cut)",
+        "author": "Paul Auster",
+        "link": "https://www.goodreads.com/review/show/8485583005",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1317063578l/6345193.jpg",
+        "dateRead": "2026-04-01",
+        "dateAdded": "2026-04-01"
+      },
+      {
+        "title": "The Story of the Lost Child (Neapolitan Novels, #4)",
+        "author": "Elena Ferrante",
+        "link": "https://www.goodreads.com/review/show/8476972374",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1582072522l/25242224.jpg",
+        "dateRead": "2026-03-29",
+        "dateAdded": "2026-03-29"
+      },
+      {
+        "title": "Those Who Leave and Those Who Stay (Neapolitan Novels, #3)",
+        "author": "Elena Ferrante",
+        "link": "https://www.goodreads.com/review/show/8444518468",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1411338052l/23156040.jpg",
+        "dateRead": "2026-03-17",
+        "dateAdded": "2026-03-17"
+      },
+      {
+        "title": "The Story of a New Name (Neapolitan Novels, #2)",
+        "author": "Elena Ferrante",
+        "link": "https://www.goodreads.com/review/show/8423077722",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641699224l/17465515.jpg",
+        "dateRead": "2026-03-09",
+        "dateAdded": "2026-03-09"
+      },
+      {
+        "title": "Godverdomse dagen op een godverdomse bol",
+        "author": "Dimitri Verhulst",
+        "link": "https://www.goodreads.com/review/show/8400328698",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1243416489l/4763107.jpg",
+        "dateRead": "2026-03-01",
+        "dateAdded": "2026-03-01"
+      },
+      {
+        "title": "Levels of Life",
+        "author": "Julian Barnes",
+        "link": "https://www.goodreads.com/review/show/8386990828",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1363837006l/17262198.jpg",
+        "dateRead": "2026-02-24",
+        "dateAdded": "2026-02-24"
+      },
+      {
+        "title": "De kellner en de levenden",
+        "author": "Simon Vestdijk",
+        "link": "https://www.goodreads.com/review/show/8383985666",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1267978236l/1696465.jpg",
+        "dateRead": "2026-02-23",
+        "dateAdded": "2026-02-23"
+      },
+      {
+        "title": "Flaubert's Parrot",
+        "author": "Julian Barnes",
+        "link": "https://www.goodreads.com/review/show/8360431335",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400866083l/2176.jpg",
+        "dateRead": "2026-02-15",
+        "dateAdded": "2026-02-15"
+      },
+      {
+        "title": "American Pastoral",
+        "author": "Philip Roth",
+        "link": "https://www.goodreads.com/review/show/8348699881",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1504801263l/11650.jpg",
+        "dateRead": "2026-02-11",
+        "dateAdded": "2026-02-10"
+      },
+      {
+        "title": "Moon Palace",
+        "author": "Paul Auster",
+        "link": "https://www.goodreads.com/review/show/8317302085",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1390616212l/447.jpg",
+        "dateRead": "2026-01-31",
+        "dateAdded": "2026-01-31"
+      },
+      {
+        "title": "The Sellout",
+        "author": "Paul Beatty",
+        "link": "https://www.goodreads.com/review/show/8306588670",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1403430899l/22237161.jpg",
+        "dateRead": "2026-01-28",
+        "dateAdded": "2026-01-27"
+      },
+      {
+        "title": "Waiting for the Barbarians",
+        "author": "J.M. Coetzee",
+        "link": "https://www.goodreads.com/review/show/8284702371",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1330879044l/6194.jpg",
+        "dateRead": "2026-01-21",
+        "dateAdded": "2026-01-21"
+      },
+      {
+        "title": "Het leven is verrukkuluk",
+        "author": "Remco Campert",
+        "link": "https://www.goodreads.com/review/show/6140436665",
+        "image": "https://s.gr-assets.com/assets/nophoto/book/111x148-675b3b2743c83e96e2540d2929d5f4d2.png",
+        "dateRead": "",
+        "dateAdded": "2026-01-17"
+      },
+      {
+        "title": "The Sense of an Ending",
+        "author": "Julian Barnes",
+        "link": "https://www.goodreads.com/review/show/8261295522",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1311704453l/10746542.jpg",
+        "dateRead": "2026-01-14",
+        "dateAdded": "2026-01-14"
+      },
+      {
+        "title": "Mevrouw Verona daalt de heuvel af",
+        "author": "Dimitri Verhulst",
+        "link": "https://www.goodreads.com/review/show/8257374243",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1202291164l/1890245.jpg",
+        "dateRead": "2026-01-13",
+        "dateAdded": "2026-01-13"
+      },
+      {
+        "title": "The Only Story",
+        "author": "Julian Barnes",
+        "link": "https://www.goodreads.com/review/show/8250679905",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508254530l/35570812.jpg",
+        "dateRead": "2026-01-11",
+        "dateAdded": "2026-01-11"
+      },
+      {
+        "title": "Stoner",
+        "author": "John  Williams",
+        "link": "https://www.goodreads.com/review/show/8241985168",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742326950l/166997.jpg",
+        "dateRead": "",
+        "dateAdded": "2026-01-09"
+      },
+      {
+        "title": "Dit zijn de namen",
+        "author": "Tommy Wieringa",
+        "link": "https://www.goodreads.com/review/show/8173524443",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1349198911l/16061061.jpg",
+        "dateRead": "2025-12-25",
+        "dateAdded": "2025-12-25"
+      },
+      {
+        "title": "Steppenwolf",
+        "author": "Hermann Hesse",
+        "link": "https://www.goodreads.com/review/show/8155775692",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1389332672l/16631.jpg",
+        "dateRead": "2025-12-18",
+        "dateAdded": "2025-12-18"
+      },
+      {
+        "title": "De pianoman",
+        "author": "J. Bernlef",
+        "link": "https://www.goodreads.com/review/show/8125462335",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1205422176l/3007575.jpg",
+        "dateRead": "2025-12-06",
+        "dateAdded": "2025-12-06"
+      },
+      {
+        "title": "Tonio: een requiemroman",
+        "author": "A.F.Th. van der Heijden",
+        "link": "https://www.goodreads.com/review/show/8120699911",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306410457l/11465053.jpg",
+        "dateRead": "2025-12-04",
+        "dateAdded": "2025-12-04"
+      },
+      {
+        "title": "My Brilliant Friend (Neapolitan Novels, #1)",
+        "author": "Elena Ferrante",
+        "link": "https://www.goodreads.com/review/show/8102976459",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1493655783l/35036409.jpg",
+        "dateRead": "2025-11-27",
+        "dateAdded": "2025-11-27"
+      },
+      {
+        "title": "V13: Chronicle of a Trial",
+        "author": "Emmanuel Carrère",
+        "link": "https://www.goodreads.com/review/show/8096068847",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1718824599l/207375697.jpg",
+        "dateRead": "2025-11-24",
+        "dateAdded": "2025-11-24"
+      },
+      {
+        "title": "HHhH",
+        "author": "Laurent Binet",
+        "link": "https://www.goodreads.com/review/show/8089508954",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1688508993l/17118721.jpg",
+        "dateRead": "2025-11-21",
+        "dateAdded": "2025-11-21"
+      },
+      {
+        "title": "Tirza",
+        "author": "Arnon Grunberg",
+        "link": "https://www.goodreads.com/review/show/8083403044",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1275378412l/6066864.jpg",
+        "dateRead": "2025-11-19",
+        "dateAdded": "2025-11-19"
+      },
+      {
+        "title": "Philip en de anderen",
+        "author": "Cees Nooteboom",
+        "link": "https://www.goodreads.com/review/show/8072964189",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1264684795l/2327351.jpg",
+        "dateRead": "2025-11-15",
+        "dateAdded": "2025-11-15"
+      },
+      {
+        "title": "Summertime (Scenes from Provincial Life #3)",
+        "author": "J.M. Coetzee",
+        "link": "https://www.goodreads.com/review/show/8067639639",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1320563255l/6337163.jpg",
+        "dateRead": "2025-11-13",
+        "dateAdded": "2025-11-13"
+      },
+      {
+        "title": "Youth (Scenes from Provincial Life #2)",
+        "author": "J.M. Coetzee",
+        "link": "https://www.goodreads.com/review/show/8065297921",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388190659l/6200.jpg",
+        "dateRead": "2025-11-12",
+        "dateAdded": "2025-11-12"
+      },
+      {
+        "title": "De wetten",
+        "author": "Connie Palmen",
+        "link": "https://www.goodreads.com/review/show/8060296802",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1306591249l/1041398.jpg",
+        "dateRead": "2025-11-10",
+        "dateAdded": "2025-11-10"
+      },
+      {
+        "title": "The Elementary Particles",
+        "author": "Michel Houellebecq",
+        "link": "https://www.goodreads.com/review/show/8052210458",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1604164454l/58314.jpg",
+        "dateRead": "2025-11-07",
+        "dateAdded": "2025-11-07"
+      },
+      {
+        "title": "De helaasheid der dingen",
+        "author": "Dimitri Verhulst",
+        "link": "https://www.goodreads.com/review/show/8044964668",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1202326734l/1078784.jpg",
+        "dateRead": "2025-11-04",
+        "dateAdded": "2025-11-04"
+      },
+      {
+        "title": "Dictator (Cicero, #3)",
+        "author": "Robert   Harris",
+        "link": "https://www.goodreads.com/review/show/8038755746",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442418779l/25488982.jpg",
+        "dateRead": "2025-11-02",
+        "dateAdded": "2025-11-02"
+      },
+      {
+        "title": "Lustrum (Cicero, #2)",
+        "author": "Robert   Harris",
+        "link": "https://www.goodreads.com/review/show/8015611615",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1295465776l/3588825.jpg",
+        "dateRead": "2025-10-23",
+        "dateAdded": "2025-10-23"
+      },
+      {
+        "title": "Imperium (Cicero, #1)",
+        "author": "Robert   Harris",
+        "link": "https://www.goodreads.com/review/show/8004049975",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1442657816l/243601.jpg",
+        "dateRead": "2025-10-19",
+        "dateAdded": "2025-10-19"
+      },
+      {
+        "title": "Boyhood (Scenes from Provincial Life #1)",
+        "author": "J.M. Coetzee",
+        "link": "https://www.goodreads.com/review/show/7992236839",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1388190656l/6198.jpg",
+        "dateRead": "2025-10-14",
+        "dateAdded": "2025-10-14"
+      },
+      {
+        "title": "Madame Bovary",
+        "author": "Gustave Flaubert",
+        "link": "https://www.goodreads.com/review/show/7974162790",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1741368185l/2175.jpg",
+        "dateRead": "2025-10-07",
+        "dateAdded": "2025-10-07"
+      },
+      {
+        "title": "Het satijnen hart",
+        "author": "Remco Campert",
+        "link": "https://www.goodreads.com/review/show/7946001881",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1410767288l/6585406.jpg",
+        "dateRead": "2025-09-26",
+        "dateAdded": "2025-09-26"
+      },
+      {
+        "title": "De dief en de honden",
+        "author": "Naguib Mahfouz",
+        "link": "https://www.goodreads.com/review/show/7940057412",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1384073233l/6097192.jpg",
+        "dateRead": "2025-09-24",
+        "dateAdded": "2025-09-24"
+      },
+      {
+        "title": "Rituelen",
+        "author": "Cees Nooteboom",
+        "link": "https://www.goodreads.com/review/show/7930623417",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1201360061l/2667367.jpg",
+        "dateRead": "2025-09-21",
+        "dateAdded": "2025-09-20"
+      },
+      {
+        "title": "The Goldfinch",
+        "author": "Donna Tartt",
+        "link": "https://www.goodreads.com/review/show/7919707313",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1378710146l/17333223.jpg",
+        "dateRead": "2025-09-16",
+        "dateAdded": "2025-09-16"
+      },
+      {
+        "title": "De dood van Murat Idrissi",
+        "author": "Tommy Wieringa",
+        "link": "https://www.goodreads.com/review/show/7891561180",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1488562785l/34456082.jpg",
+        "dateRead": "2025-09-05",
+        "dateAdded": "2025-09-05"
+      },
+      {
+        "title": "The Master and Margarita",
+        "author": "Mikhail Bulgakov",
+        "link": "https://www.goodreads.com/review/show/7871814130",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1327867963l/117833.jpg",
+        "dateRead": "2025-08-29",
+        "dateAdded": "2025-08-29"
+      },
+      {
+        "title": "Red Notice: A True Story of High Finance, Murder, and One Man's Fight for Justice",
+        "author": "Bill Browder",
+        "link": "https://www.goodreads.com/review/show/7839542795",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1422848658l/22609522.jpg",
+        "dateRead": "2025-08-18",
+        "dateAdded": "2025-08-18"
+      },
+      {
+        "title": "La Superba",
+        "author": "Ilja Leonard Pfeijffer",
+        "link": "https://www.goodreads.com/review/show/7822710126",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1419798320l/17453021.jpg",
+        "dateRead": "2025-08-12",
+        "dateAdded": "2025-08-12"
+      },
+      {
+        "title": "Grand Hotel Europa",
+        "author": "Ilja Leonard Pfeijffer",
+        "link": "https://www.goodreads.com/review/show/7802878675",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1535212387l/41456850.jpg",
+        "dateRead": "2025-08-05",
+        "dateAdded": "2025-08-05"
+      },
+      {
+        "title": "Waardenloze politiek",
+        "author": "Tom van der Meer",
+        "link": "https://www.goodreads.com/review/show/7783024621",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1710878206l/210151987.jpg",
+        "dateRead": "2025-07-29",
+        "dateAdded": "2025-07-29"
+      },
+      {
+        "title": "Het Brusselse moeras",
+        "author": "Tijn Sadée",
+        "link": "https://www.goodreads.com/review/show/7756011277",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1641305767l/59728057.jpg",
+        "dateRead": "2025-07-20",
+        "dateAdded": "2025-07-20"
+      },
+      {
+        "title": "The Shape of Water (Inspector Montalbano, #1)",
+        "author": "Andrea Camilleri",
+        "link": "https://www.goodreads.com/review/show/7749252777",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386924101l/163166.jpg",
+        "dateRead": "2025-07-18",
+        "dateAdded": "2025-07-18"
+      },
+      {
+        "title": "The Hour of the Predator",
+        "author": "Giuliano da Empoli",
+        "link": "https://www.goodreads.com/review/show/7747867786",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1748938920l/230207121.jpg",
+        "dateRead": "2025-07-17",
+        "dateAdded": "2025-07-17"
+      },
+      {
+        "title": "Mythos - The Greek Myths Retold (Stephen Fry's Great Mythology, #1)",
+        "author": "Stephen Fry",
+        "link": "https://www.goodreads.com/review/show/7718461980",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1502518360l/35074096.jpg",
+        "dateRead": "2025-07-07",
+        "dateAdded": "2025-07-07"
+      },
+      {
+        "title": "The Wizard of the Kremlin",
+        "author": "Giuliano da Empoli",
+        "link": "https://www.goodreads.com/review/show/7672470609",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1684784766l/125082593.jpg",
+        "dateRead": "2025-06-21",
+        "dateAdded": "2025-06-21"
+      },
+      {
+        "title": "Nooit meer slapen",
+        "author": "Willem Frederik Hermans",
+        "link": "https://www.goodreads.com/review/show/7635896596",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1496479086l/466518.jpg",
+        "dateRead": "2025-06-07",
+        "dateAdded": "2025-06-07"
+      },
+      {
+        "title": "Letters to a Young Poet",
+        "author": "Rainer Maria Rilke",
+        "link": "https://www.goodreads.com/review/show/7623960307",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1321994947l/46199.jpg",
+        "dateRead": "2025-06-03",
+        "dateAdded": "2025-06-03"
+      },
+      {
+        "title": "Het lied van ooievaar en dromedaris",
+        "author": "Anjet Daanje",
+        "link": "https://www.goodreads.com/review/show/7569449016",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1639043468l/59780041.jpg",
+        "dateRead": "2025-05-14",
+        "dateAdded": "2025-05-14"
+      },
+      {
+        "title": "Against Interpretation and Other Essays",
+        "author": "Susan Sontag",
+        "link": "https://www.goodreads.com/review/show/7407498878",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436152896l/52374.jpg",
+        "dateRead": "2025-03-16",
+        "dateAdded": "2025-03-16"
+      },
+      {
+        "title": "Kafka on the Shore",
+        "author": "Haruki Murakami",
+        "link": "https://www.goodreads.com/review/show/7407355866",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1429638085l/4929.jpg",
+        "dateRead": "2025-03-15",
+        "dateAdded": "2025-03-16"
+      },
+      {
+        "title": "Oroppa",
+        "author": "Safae el Khannoussi",
+        "link": "https://www.goodreads.com/review/show/7318079181",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742230652l/218271233.jpg",
+        "dateRead": "2025-02-13",
+        "dateAdded": "2025-02-13"
+      },
+      {
+        "title": "Intermezzo",
+        "author": "Sally Rooney",
+        "link": "https://www.goodreads.com/review/show/7004573797",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716387455l/208931300.jpg",
+        "dateRead": "2024-11-14",
+        "dateAdded": "2024-11-14"
+      },
+      {
+        "title": "Co-Intelligence: Living and Working with AI",
+        "author": "Ethan Mollick",
+        "link": "https://www.goodreads.com/review/show/6963341412",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709537279l/198678736.jpg",
+        "dateRead": "2024-10-29",
+        "dateAdded": "2024-10-29"
+      },
+      {
+        "title": "The Secret History",
+        "author": "Donna Tartt",
+        "link": "https://www.goodreads.com/review/show/6950664159",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1751820530l/29044.jpg",
+        "dateRead": "2024-10-24",
+        "dateAdded": "2024-10-24"
+      },
+      {
+        "title": "Leugen & waarheid",
+        "author": "Bas Heijne",
+        "link": "https://www.goodreads.com/review/show/6878818064",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612564750l/56963571.jpg",
+        "dateRead": "2024-09-26",
+        "dateAdded": "2024-09-29"
+      },
+      {
+        "title": "Bechamel Mucho",
+        "author": "Dimitri Verhulst",
+        "link": "https://www.goodreads.com/review/show/6859182455",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714749829l/212693230.jpg",
+        "dateRead": "2024-09-19",
+        "dateAdded": "2024-09-19"
+      },
+      {
+        "title": "Setting the Table: The Transforming Power of Hospitality in Business",
+        "author": "Danny  Meyer",
+        "link": "https://www.goodreads.com/review/show/6848981165",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723686415l/217479967.jpg",
+        "dateRead": "2024-09-15",
+        "dateAdded": "2024-09-15"
+      },
+      {
+        "title": "The Examined Life: How We Lose and Find Ourselves",
+        "author": "Stephen Grosz",
+        "link": "https://www.goodreads.com/review/show/6832786193",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400887195l/18378023.jpg",
+        "dateRead": "2024-09-09",
+        "dateAdded": "2024-09-09"
+      },
+      {
+        "title": "Garlic and Sapphires: The Secret Life of a Critic in Disguise",
+        "author": "Ruth Reichl",
+        "link": "https://www.goodreads.com/review/show/6824199159",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436980266l/80642.jpg",
+        "dateRead": "2024-09-06",
+        "dateAdded": "2024-09-06"
+      },
+      {
+        "title": "Het zijn net mensen: Beelden uit het Midden-Oosten",
+        "author": "Joris Luyendijk",
+        "link": "https://www.goodreads.com/review/show/6812675055",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1213828583l/3477772.jpg",
+        "dateRead": "2024-09-02",
+        "dateAdded": "2024-09-02"
+      },
+      {
+        "title": "Rebels on the Backlot: Six Maverick Directors and How They Conquered the Hollywood Studio System – The Daring Films and Careers of Tarantino, Fincher, and Soderbergh (P.S.)",
+        "author": "Sharon Waxman",
+        "link": "https://www.goodreads.com/review/show/6800767733",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365986741l/105701.jpg",
+        "dateRead": "",
+        "dateAdded": "2024-08-29"
+      },
+      {
+        "title": "Kim Jiyoung, Born 1982",
+        "author": "Cho Nam-Joo",
+        "link": "https://www.goodreads.com/review/show/6781627215",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587128688l/46041199.jpg",
+        "dateRead": "2024-08-22",
+        "dateAdded": "2024-08-22"
+      },
+      {
+        "title": "Yellowface",
+        "author": "R.F. Kuang",
+        "link": "https://www.goodreads.com/review/show/6772194211",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671336608l/62047984.jpg",
+        "dateRead": "2024-08-19",
+        "dateAdded": "2024-08-19"
+      },
+      {
+        "title": "The World of Yesterday",
+        "author": "Stefan Zweig",
+        "link": "https://www.goodreads.com/review/show/6743810078",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347696322l/629429.jpg",
+        "dateRead": "2024-08-09",
+        "dateAdded": "2024-08-09"
+      },
+      {
+        "title": "Chess Story",
+        "author": "Stefan Zweig",
+        "link": "https://www.goodreads.com/review/show/6720152700",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657549823l/59151.jpg",
+        "dateRead": "",
+        "dateAdded": "2024-08-01"
+      },
+      {
+        "title": "Een liefde in Parijs",
+        "author": "Remco Campert",
+        "link": "https://www.goodreads.com/review/show/6700961937",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1219926425l/1929420.jpg",
+        "dateRead": "2024-07-25",
+        "dateAdded": "2024-07-25"
+      },
+      {
+        "title": "Create Dangerously",
+        "author": "Albert Camus",
+        "link": "https://www.goodreads.com/review/show/6669463803",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647293218l/36436073.jpg",
+        "dateRead": "2024-07-14",
+        "dateAdded": "2024-07-14"
+      },
+      {
+        "title": "Turks Fruit",
+        "author": "Jan Wolkers",
+        "link": "https://www.goodreads.com/review/show/6657617061",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1241777087l/1451403.jpg",
+        "dateRead": "2024-07-10",
+        "dateAdded": "2024-07-10"
+      },
+      {
+        "title": "Het diner",
+        "author": "Herman Koch",
+        "link": "https://www.goodreads.com/review/show/6654581595",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1777508653l/6279562.jpg",
+        "dateRead": "2024-07-09",
+        "dateAdded": "2024-07-09"
+      },
+      {
+        "title": "I Jan Cremer",
+        "author": "Jan Cremer",
+        "link": "https://www.goodreads.com/review/show/6651570601",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589371764l/1183406.jpg",
+        "dateRead": "2024-07-08",
+        "dateAdded": "2024-07-08"
+      },
+      {
+        "title": "Klara and the Sun",
+        "author": "Kazuo Ishiguro",
+        "link": "https://www.goodreads.com/review/show/6619001603",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603206535l/54120408.jpg",
+        "dateRead": "2024-06-26",
+        "dateAdded": "2024-06-26"
+      },
+      {
+        "title": "The New York Trilogy (New York Trilogy, #1-3)",
+        "author": "Paul Auster",
+        "link": "https://www.goodreads.com/review/show/6507821319",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386924429l/431.jpg",
+        "dateRead": "2024-05-19",
+        "dateAdded": "2024-05-23"
+      },
+      {
+        "title": "Songbook",
+        "author": "Nick Hornby",
+        "link": "https://www.goodreads.com/review/show/6458674179",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417984618l/4261.jpg",
+        "dateRead": "2024-04-26",
+        "dateAdded": "2024-04-26"
+      },
+      {
+        "title": "Never Let Me Go",
+        "author": "Kazuo Ishiguro",
+        "link": "https://www.goodreads.com/review/show/6440486812",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353048590l/6334.jpg",
+        "dateRead": "2024-04-19",
+        "dateAdded": "2024-04-19"
+      },
+      {
+        "title": "Conversations with Friends",
+        "author": "Sally Rooney",
+        "link": "https://www.goodreads.com/review/show/6406814681",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638729263l/32187419.jpg",
+        "dateRead": "2024-04-06",
+        "dateAdded": "2024-04-06"
+      },
+      {
+        "title": "Survival in Auschwitz",
+        "author": "Primo Levi",
+        "link": "https://www.goodreads.com/review/show/6398710121",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414374949l/6174.jpg",
+        "dateRead": "2024-04-03",
+        "dateAdded": "2024-04-03"
+      },
+      {
+        "title": "On Tyranny: Twenty Lessons from the Twentieth Century",
+        "author": "Timothy Snyder",
+        "link": "https://www.goodreads.com/review/show/6355104569",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484763736l/33917107.jpg",
+        "dateRead": "2024-03-19",
+        "dateAdded": "2024-03-18"
+      }
+    ]
+  }
+}
