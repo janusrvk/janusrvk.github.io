@@ -1,0 +1,35 @@
+name: Refresh Goodreads
+
+on:
+  schedule:
+    # Elke dag om 06:00 UTC (~08:00 NL zomer / 07:00 winter)
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-goodreads
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch Goodreads RSS
+        run: python3 scripts/fetch-goodreads.py
+
+      - name: Commit if changed
+        run: |
+          if [[ -n "$(git status --porcelain goodreads.json public/goodreads.json)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add goodreads.json public/goodreads.json
+            git commit -m "Refresh goodreads.json"
+            git push
+          else
+            echo "No changes."
+          fi
