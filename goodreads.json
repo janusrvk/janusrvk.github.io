@@ -1,8 +1,24 @@
 {
-  "updated": "2026-06-06T08:20:08+00:00",
+  "updated": "2026-06-07T08:41:05+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Slordig met geluk",
+        "author": "Menno Wigman",
+        "link": "https://www.goodreads.com/review/show/8664867931",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1454340499l/28815218.jpg",
+        "dateRead": "2026-06-07",
+        "dateAdded": "2026-06-06"
+      },
+      {
+        "title": "Bonjour tristesse",
+        "author": "Françoise Sagan",
+        "link": "https://www.goodreads.com/review/show/8663388936",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1346107613l/61672.jpg",
+        "dateRead": "2026-06-06",
+        "dateAdded": "2026-06-06"
+      },
       {
         "title": "Montaigne",
         "author": "Stefan Zweig",
@@ -786,22 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638729263l/32187419.jpg",
         "dateRead": "2024-04-06",
         "dateAdded": "2024-04-06"
-      },
-      {
-        "title": "Survival in Auschwitz",
-        "author": "Primo Levi",
-        "link": "https://www.goodreads.com/review/show/6398710121",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1414374949l/6174.jpg",
-        "dateRead": "2024-04-03",
-        "dateAdded": "2024-04-03"
-      },
-      {
-        "title": "On Tyranny: Twenty Lessons from the Twentieth Century",
-        "author": "Timothy Snyder",
-        "link": "https://www.goodreads.com/review/show/6355104569",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1484763736l/33917107.jpg",
-        "dateRead": "2024-03-19",
-        "dateAdded": "2024-03-18"
       }
     ]
   }
