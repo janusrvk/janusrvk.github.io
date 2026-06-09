@@ -1,8 +1,16 @@
 {
-  "updated": "2026-06-08T10:11:13+00:00",
+  "updated": "2026-06-09T08:54:31+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Transcription",
+        "author": "Ben Lerner",
+        "link": "https://www.goodreads.com/review/show/8669031646",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1754068063l/231387262.jpg",
+        "dateRead": "2026-06-08",
+        "dateAdded": "2026-06-08"
+      },
       {
         "title": "Slordig met geluk",
         "author": "Menno Wigman",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353048590l/6334.jpg",
         "dateRead": "2024-04-19",
         "dateAdded": "2024-04-19"
-      },
-      {
-        "title": "Conversations with Friends",
-        "author": "Sally Rooney",
-        "link": "https://www.goodreads.com/review/show/6406814681",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1638729263l/32187419.jpg",
-        "dateRead": "2024-04-06",
-        "dateAdded": "2024-04-06"
       }
     ]
   }
