@@ -1,8 +1,16 @@
 {
-  "updated": "2026-06-09T08:54:31+00:00",
+  "updated": "2026-06-10T09:35:54+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Overgave op commando",
+        "author": "Nadia de Vries",
+        "link": "https://www.goodreads.com/review/show/8674523970",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742665991l/230198731.jpg",
+        "dateRead": "2026-06-10",
+        "dateAdded": "2026-06-10"
+      },
       {
         "title": "Transcription",
         "author": "Ben Lerner",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417984618l/4261.jpg",
         "dateRead": "2024-04-26",
         "dateAdded": "2024-04-26"
-      },
-      {
-        "title": "Never Let Me Go",
-        "author": "Kazuo Ishiguro",
-        "link": "https://www.goodreads.com/review/show/6440486812",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1353048590l/6334.jpg",
-        "dateRead": "2024-04-19",
-        "dateAdded": "2024-04-19"
       }
     ]
   }
