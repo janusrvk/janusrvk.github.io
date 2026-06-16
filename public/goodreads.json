@@ -1,8 +1,16 @@
 {
-  "updated": "2026-06-15T11:38:47+00:00",
+  "updated": "2026-06-16T10:48:49+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "The Hours",
+        "author": "Michael Cunningham",
+        "link": "https://www.goodreads.com/review/show/8688023967",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1479663379l/11899.jpg",
+        "dateRead": "2026-06-15",
+        "dateAdded": "2026-06-15"
+      },
       {
         "title": "Overgave op commando",
         "author": "Nadia de Vries",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386924429l/431.jpg",
         "dateRead": "2024-05-19",
         "dateAdded": "2024-05-23"
-      },
-      {
-        "title": "Songbook",
-        "author": "Nick Hornby",
-        "link": "https://www.goodreads.com/review/show/6458674179",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1417984618l/4261.jpg",
-        "dateRead": "2024-04-26",
-        "dateAdded": "2024-04-26"
       }
     ]
   }
