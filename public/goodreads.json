@@ -1,8 +1,16 @@
 {
-  "updated": "2026-06-17T10:21:19+00:00",
+  "updated": "2026-06-18T10:01:05+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "De laatkomer",
+        "author": "Dimitri Verhulst",
+        "link": "https://www.goodreads.com/review/show/8693646029",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365709719l/17792095.jpg",
+        "dateRead": "2026-06-17",
+        "dateAdded": "2026-06-17"
+      },
       {
         "title": "The Hours",
         "author": "Michael Cunningham",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603206535l/54120408.jpg",
         "dateRead": "2024-06-26",
         "dateAdded": "2024-06-26"
-      },
-      {
-        "title": "The New York Trilogy (New York Trilogy, #1-3)",
-        "author": "Paul Auster",
-        "link": "https://www.goodreads.com/review/show/6507821319",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1386924429l/431.jpg",
-        "dateRead": "2024-05-19",
-        "dateAdded": "2024-05-23"
       }
     ]
   }
