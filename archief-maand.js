@@ -311,7 +311,7 @@ async function renderTracks(container, monthStart, monthEnd) {
   }
 }
 
-// ---- Films via lokale Letterboxd diary ----
+// ---- Films via lokale Letterboxd diary + live RSS aanvulling ----
 let letterboxdCache = null;
 
 async function getLetterboxdDiary() {
@@ -324,6 +324,50 @@ async function getLetterboxdDiary() {
   } catch {
     letterboxdCache = [];
     return [];
+  }
+}
+
+// ---- Live Letterboxd RSS (vult de statische diary aan met recente films) ----
+const LETTERBOXD_RSS = 'https://goodreads-proxy.janusrvk.workers.dev/letterboxd';
+let letterboxdRssCache = null;
+
+async function getLetterboxdRss() {
+  if (letterboxdRssCache !== null) return letterboxdRssCache;
+  try {
+    const res = await fetch(LETTERBOXD_RSS);
+    if (!res.ok) { letterboxdRssCache = []; return []; }
+    const text = await res.text();
+    const doc = new DOMParser().parseFromString(text, 'text/xml');
+    const descParser = new DOMParser();
+    letterboxdRssCache = Array.from(doc.querySelectorAll('item')).map((item) => {
+      const rawTitle = item.querySelector('title')?.textContent || '';
+      const description = item.querySelector('description')?.textContent || '';
+      const poster = descParser.parseFromString(description, 'text/html').querySelector('img')?.getAttribute('src') || '';
+      const rating = rawTitle.match(/★+½?/)?.[0] || '';
+      const title = rawTitle.replace(/,\s*\d{4}\s*-\s*★+½?/, '').replace(/,\s*\d{4}/, '').trim();
+      const year = rawTitle.match(/,\s*(\d{4})/)?.[1] || '';
+      const date = item.getElementsByTagName('letterboxd:watchedDate')[0]?.textContent
+        || item.querySelector('pubDate')?.textContent || '';
+      return {
+        title, year, rating, poster, date,
+        link: item.querySelector('link')?.textContent || '#',
+        tmdbId: item.getElementsByTagName('tmdb:movieId')[0]?.textContent || '',
+      };
+    });
+    return letterboxdRssCache;
+  } catch {
+    letterboxdRssCache = [];
+    return [];
+  }
+}
+
+async function fetchDirectorByTmdbId(tmdbId) {
+  try {
+    const res = await fetch(`https://api.themoviedb.org/3/movie/${tmdbId}/credits?api_key=${TMDB_KEY}`);
+    const data = await res.json();
+    return data.crew?.find((c) => c.job === 'Director')?.name || '';
+  } catch {
+    return '';
   }
 }
 
@@ -354,20 +398,51 @@ async function fetchTmdbByTitle(title, year) {
 
 async function renderFilms(container, monthStart, monthEnd) {
   try {
-    const diary = await getLetterboxdDiary();
-    const items = diary.filter((entry) => {
-      const d = new Date(entry.date);
-      return d >= monthStart && d < monthEnd;
-    });
+    const [diary, rss] = await Promise.all([getLetterboxdDiary(), getLetterboxdRss()]);
 
-    if (items.length === 0) {
+    const inMonth = (dateStr) => {
+      const d = new Date(dateStr);
+      return d >= monthStart && d < monthEnd;
+    };
+    const norm = (s) => (s || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const dayKey = (s) => {
+      const d = new Date(s);
+      return Number.isNaN(d.getTime()) ? '' : d.toISOString().slice(0, 10);
+    };
+
+    const seen = new Set();
+    const merged = [];
+
+    // Statische diary-export eerst (bevat rating als getal)
+    for (const entry of diary) {
+      if (!inMonth(entry.date)) continue;
+      const key = `${norm(entry.title)}|${dayKey(entry.date)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push({ source: 'diary', title: entry.title, year: entry.year, link: entry.uri, rating: entry.rating });
+    }
+
+    // Aanvullen met live RSS: recente films die nog niet in de diary-export staan
+    for (const item of rss) {
+      if (!inMonth(item.date)) continue;
+      const key = `${norm(item.title)}|${dayKey(item.date)}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      merged.push({ source: 'rss', title: item.title, year: item.year, link: item.link, rating: item.rating, poster: item.poster, tmdbId: item.tmdbId });
+    }
+
+    if (merged.length === 0) {
       container.innerHTML = '<p class="interest-placeholder">Geen films gevonden.</p>';
       return;
     }
 
-    const filmData = await Promise.all(items.map(async (entry) => {
-      const { poster, director } = await fetchTmdbByTitle(entry.title, entry.year);
-      return { title: entry.title, year: entry.year, link: entry.uri, poster, director, rating: toStars(entry.rating) };
+    const filmData = await Promise.all(merged.map(async (m) => {
+      if (m.source === 'rss') {
+        const director = m.tmdbId ? await fetchDirectorByTmdbId(m.tmdbId) : '';
+        return { title: m.title, year: m.year, link: m.link, poster: m.poster, director, rating: m.rating };
+      }
+      const { poster, director } = await fetchTmdbByTitle(m.title, m.year);
+      return { title: m.title, year: m.year, link: m.link, poster, director, rating: toStars(m.rating) };
     }));
 
     container.innerHTML = filmData.map((f) => `
