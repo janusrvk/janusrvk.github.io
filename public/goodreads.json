@@ -1,8 +1,16 @@
 {
-  "updated": "2026-07-25T07:46:11+00:00",
+  "updated": "2026-07-26T08:01:34+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "The Magic Mountain",
+        "author": "Thomas Mann",
+        "link": "https://www.goodreads.com/review/show/8799689831",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1645738968l/88077.jpg",
+        "dateRead": "2026-07-25",
+        "dateAdded": "2026-07-25"
+      },
       {
         "title": "De laatkomer",
         "author": "Dimitri Verhulst",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589371764l/1183406.jpg",
         "dateRead": "2024-07-08",
         "dateAdded": "2024-07-08"
-      },
-      {
-        "title": "Klara and the Sun",
-        "author": "Kazuo Ishiguro",
-        "link": "https://www.goodreads.com/review/show/6619001603",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1603206535l/54120408.jpg",
-        "dateRead": "2024-06-26",
-        "dateAdded": "2024-06-26"
       }
     ]
   }
