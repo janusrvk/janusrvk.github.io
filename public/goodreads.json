@@ -1,8 +1,16 @@
 {
-  "updated": "2026-07-28T08:09:19+00:00",
+  "updated": "2026-07-29T08:13:20+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Uit het leven van een hond",
+        "author": "Sander Kollaard",
+        "link": "https://www.goodreads.com/review/show/8809351808",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1550585348l/44064249.jpg",
+        "dateRead": "2026-07-28",
+        "dateAdded": "2026-07-28"
+      },
       {
         "title": "The Magic Mountain",
         "author": "Thomas Mann",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1777508653l/6279562.jpg",
         "dateRead": "2024-07-09",
         "dateAdded": "2024-07-09"
-      },
-      {
-        "title": "I Jan Cremer",
-        "author": "Jan Cremer",
-        "link": "https://www.goodreads.com/review/show/6651570601",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1589371764l/1183406.jpg",
-        "dateRead": "2024-07-08",
-        "dateAdded": "2024-07-08"
       }
     ]
   }
