@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-06T08:09:39+00:00",
+  "updated": "2026-08-07T06:55:56+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "On Beauty",
+        "author": "Zadie Smith",
+        "link": "https://www.goodreads.com/review/show/8836636296",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1598196388l/3679.jpg",
+        "dateRead": "2026-08-06",
+        "dateAdded": "2026-08-06"
+      },
       {
         "title": "Uit het leven van een hond",
         "author": "Sander Kollaard",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1241777087l/1451403.jpg",
         "dateRead": "2024-07-10",
         "dateAdded": "2024-07-10"
-      },
-      {
-        "title": "Het diner",
-        "author": "Herman Koch",
-        "link": "https://www.goodreads.com/review/show/6654581595",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1777508653l/6279562.jpg",
-        "dateRead": "2024-07-09",
-        "dateAdded": "2024-07-09"
       }
     ]
   }
