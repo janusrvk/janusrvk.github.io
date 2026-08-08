@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-07T06:55:56+00:00",
+  "updated": "2026-08-08T06:29:05+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Flesh",
+        "author": "David Szalay",
+        "link": "https://www.goodreads.com/review/show/8839367065",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1717908661l/214152261.jpg",
+        "dateRead": "2026-08-07",
+        "dateAdded": "2026-08-07"
+      },
       {
         "title": "On Beauty",
         "author": "Zadie Smith",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647293218l/36436073.jpg",
         "dateRead": "2024-07-14",
         "dateAdded": "2024-07-14"
-      },
-      {
-        "title": "Turks Fruit",
-        "author": "Jan Wolkers",
-        "link": "https://www.goodreads.com/review/show/6657617061",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1241777087l/1451403.jpg",
-        "dateRead": "2024-07-10",
-        "dateAdded": "2024-07-10"
       }
     ]
   }
