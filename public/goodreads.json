@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-10T07:02:19+00:00",
+  "updated": "2026-08-11T06:41:42+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "What We Talk About When We Talk About Love",
+        "author": "Raymond Carver",
+        "link": "https://www.goodreads.com/review/show/8847652617",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1475474209l/11438.jpg",
+        "dateRead": "2026-08-10",
+        "dateAdded": "2026-08-10"
+      },
       {
         "title": "Flesh",
         "author": "David Szalay",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1219926425l/1929420.jpg",
         "dateRead": "2024-07-25",
         "dateAdded": "2024-07-25"
-      },
-      {
-        "title": "Create Dangerously",
-        "author": "Albert Camus",
-        "link": "https://www.goodreads.com/review/show/6669463803",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1647293218l/36436073.jpg",
-        "dateRead": "2024-07-14",
-        "dateAdded": "2024-07-14"
       }
     ]
   }
