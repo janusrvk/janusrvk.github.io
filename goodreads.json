@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-11T06:41:42+00:00",
+  "updated": "2026-08-12T07:02:04+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Ongevraagd advies",
+        "author": "Ester Naomi Perquin",
+        "link": "https://www.goodreads.com/review/show/8850036563",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1665596447l/62977277.jpg",
+        "dateRead": "2026-08-11",
+        "dateAdded": "2026-08-11"
+      },
       {
         "title": "What We Talk About When We Talk About Love",
         "author": "Raymond Carver",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657549823l/59151.jpg",
         "dateRead": "",
         "dateAdded": "2024-08-01"
-      },
-      {
-        "title": "Een liefde in Parijs",
-        "author": "Remco Campert",
-        "link": "https://www.goodreads.com/review/show/6700961937",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1219926425l/1929420.jpg",
-        "dateRead": "2024-07-25",
-        "dateAdded": "2024-07-25"
       }
     ]
   }
