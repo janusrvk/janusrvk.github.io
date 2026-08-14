@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-13T07:05:40+00:00",
+  "updated": "2026-08-14T07:02:55+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Tot alles in beweging komt",
+        "author": "Ester Naomi Perquin",
+        "link": "https://www.goodreads.com/review/show/8856385767",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1760729587l/242914775.jpg",
+        "dateRead": "2026-08-13",
+        "dateAdded": "2026-08-13"
+      },
       {
         "title": "Ongevraagd advies",
         "author": "Ester Naomi Perquin",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347696322l/629429.jpg",
         "dateRead": "2024-08-09",
         "dateAdded": "2024-08-09"
-      },
-      {
-        "title": "Chess Story",
-        "author": "Stefan Zweig",
-        "link": "https://www.goodreads.com/review/show/6720152700",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1657549823l/59151.jpg",
-        "dateRead": "",
-        "dateAdded": "2024-08-01"
       }
     ]
   }
