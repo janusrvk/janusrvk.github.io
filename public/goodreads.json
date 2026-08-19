@@ -1,8 +1,24 @@
 {
-  "updated": "2026-08-18T06:19:49+00:00",
+  "updated": "2026-08-19T06:20:54+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Leaving the Atocha Station",
+        "author": "Ben Lerner",
+        "link": "https://www.goodreads.com/review/show/8870600102",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1358349946l/11100788.jpg",
+        "dateRead": "2026-08-08",
+        "dateAdded": "2026-08-18"
+      },
+      {
+        "title": "The Topeka School",
+        "author": "Ben Lerner",
+        "link": "https://www.goodreads.com/review/show/8870587224",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1555088207l/43565369.jpg",
+        "dateRead": "2026-08-18",
+        "dateAdded": "2026-08-18"
+      },
       {
         "title": "Tot alles in beweging komt",
         "author": "Ester Naomi Perquin",
@@ -786,22 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587128688l/46041199.jpg",
         "dateRead": "2024-08-22",
         "dateAdded": "2024-08-22"
-      },
-      {
-        "title": "Yellowface",
-        "author": "R.F. Kuang",
-        "link": "https://www.goodreads.com/review/show/6772194211",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1671336608l/62047984.jpg",
-        "dateRead": "2024-08-19",
-        "dateAdded": "2024-08-19"
-      },
-      {
-        "title": "The World of Yesterday",
-        "author": "Stefan Zweig",
-        "link": "https://www.goodreads.com/review/show/6743810078",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1347696322l/629429.jpg",
-        "dateRead": "2024-08-09",
-        "dateAdded": "2024-08-09"
       }
     ]
   }
