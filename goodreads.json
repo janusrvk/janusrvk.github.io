@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-21T06:22:07+00:00",
+  "updated": "2026-08-22T06:17:10+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "De avond is ongemak",
+        "author": "Lucas Rijneveld",
+        "link": "https://www.goodreads.com/review/show/8878812093",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1517735904l/38344150.jpg",
+        "dateRead": "2026-08-21",
+        "dateAdded": "2026-08-21"
+      },
       {
         "title": "Leaving the Atocha Station",
         "author": "Ben Lerner",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365986741l/105701.jpg",
         "dateRead": "",
         "dateAdded": "2024-08-29"
-      },
-      {
-        "title": "Kim Jiyoung, Born 1982",
-        "author": "Cho Nam-Joo",
-        "link": "https://www.goodreads.com/review/show/6781627215",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1587128688l/46041199.jpg",
-        "dateRead": "2024-08-22",
-        "dateAdded": "2024-08-22"
       }
     ]
   }
