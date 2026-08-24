@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-23T06:18:34+00:00",
+  "updated": "2026-08-24T06:30:28+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Niemand in de stad",
+        "author": "Philip Huff",
+        "link": "https://www.goodreads.com/review/show/8883765028",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1408560544l/13420552.jpg",
+        "dateRead": "2026-08-23",
+        "dateAdded": "2026-08-23"
+      },
       {
         "title": "De avond is ongemak",
         "author": "Lucas Rijneveld",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1213828583l/3477772.jpg",
         "dateRead": "2024-09-02",
         "dateAdded": "2024-09-02"
-      },
-      {
-        "title": "Rebels on the Backlot: Six Maverick Directors and How They Conquered the Hollywood Studio System – The Daring Films and Careers of Tarantino, Fincher, and Soderbergh (P.S.)",
-        "author": "Sharon Waxman",
-        "link": "https://www.goodreads.com/review/show/6800767733",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1365986741l/105701.jpg",
-        "dateRead": "",
-        "dateAdded": "2024-08-29"
       }
     ]
   }
