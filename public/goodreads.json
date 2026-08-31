@@ -1,8 +1,16 @@
 {
-  "updated": "2026-08-30T10:47:08+00:00",
+  "updated": "2026-08-31T11:56:46+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Contrapposto",
+        "author": "Dave Eggers",
+        "link": "https://www.goodreads.com/review/show/8903059540",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1768245055l/243315571.jpg",
+        "dateRead": "2026-08-30",
+        "dateAdded": "2026-08-30"
+      },
       {
         "title": "Niemand in de stad",
         "author": "Philip Huff",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436980266l/80642.jpg",
         "dateRead": "2024-09-06",
         "dateAdded": "2024-09-06"
-      },
-      {
-        "title": "Het zijn net mensen: Beelden uit het Midden-Oosten",
-        "author": "Joris Luyendijk",
-        "link": "https://www.goodreads.com/review/show/6812675055",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1213828583l/3477772.jpg",
-        "dateRead": "2024-09-02",
-        "dateAdded": "2024-09-02"
       }
     ]
   }
