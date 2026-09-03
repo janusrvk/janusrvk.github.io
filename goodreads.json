@@ -1,8 +1,16 @@
 {
-  "updated": "2026-09-02T10:01:08+00:00",
+  "updated": "2026-09-03T10:11:58+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Fahrenheit 451",
+        "author": "Ray Bradbury",
+        "link": "https://www.goodreads.com/review/show/8913157957",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1383718290l/13079982.jpg",
+        "dateRead": "2026-09-02",
+        "dateAdded": "2026-09-02"
+      },
       {
         "title": "Contrapposto",
         "author": "Dave Eggers",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400887195l/18378023.jpg",
         "dateRead": "2024-09-09",
         "dateAdded": "2024-09-09"
-      },
-      {
-        "title": "Garlic and Sapphires: The Secret Life of a Critic in Disguise",
-        "author": "Ruth Reichl",
-        "link": "https://www.goodreads.com/review/show/6824199159",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1436980266l/80642.jpg",
-        "dateRead": "2024-09-06",
-        "dateAdded": "2024-09-06"
       }
     ]
   }
