@@ -1,8 +1,24 @@
 {
-  "updated": "2026-09-05T09:31:19+00:00",
+  "updated": "2026-09-06T09:45:31+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Small Things Like These",
+        "author": "Claire Keegan",
+        "link": "https://www.goodreads.com/review/show/8584855520",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734631773l/58662236.jpg",
+        "dateRead": "2026-05-08",
+        "dateAdded": "2026-09-05"
+      },
+      {
+        "title": "Stoner",
+        "author": "John  Williams",
+        "link": "https://www.goodreads.com/review/show/8241985168",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742326950l/166997.jpg",
+        "dateRead": "2026-01-09",
+        "dateAdded": "2026-09-05"
+      },
       {
         "title": "Fahrenheit 451",
         "author": "Ray Bradbury",
@@ -212,14 +228,6 @@
         "dateAdded": "2026-05-11"
       },
       {
-        "title": "Small Things Like These",
-        "author": "Claire Keegan",
-        "link": "https://www.goodreads.com/review/show/8584855520",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1734631773l/58662236.jpg",
-        "dateRead": "",
-        "dateAdded": "2026-05-08"
-      },
-      {
         "title": "Normal People",
         "author": "Sally Rooney",
         "link": "https://www.goodreads.com/review/show/8579820981",
@@ -418,14 +426,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1508254530l/35570812.jpg",
         "dateRead": "2026-01-11",
         "dateAdded": "2026-01-11"
-      },
-      {
-        "title": "Stoner",
-        "author": "John  Williams",
-        "link": "https://www.goodreads.com/review/show/8241985168",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742326950l/166997.jpg",
-        "dateRead": "",
-        "dateAdded": "2026-01-09"
       },
       {
         "title": "Dit zijn de namen",
