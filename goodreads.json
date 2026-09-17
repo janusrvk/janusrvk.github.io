@@ -1,8 +1,16 @@
 {
-  "updated": "2026-09-16T10:21:52+00:00",
+  "updated": "2026-09-17T10:31:19+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Wees onzichtbaar",
+        "author": "Murat Isik",
+        "link": "https://www.goodreads.com/review/show/8950852920",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1491555443l/34816341.jpg",
+        "dateRead": "2026-09-16",
+        "dateAdded": "2026-09-16"
+      },
       {
         "title": "Small Things Like These",
         "author": "Claire Keegan",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723686415l/217479967.jpg",
         "dateRead": "2024-09-15",
         "dateAdded": "2024-09-15"
-      },
-      {
-        "title": "The Examined Life: How We Lose and Find Ourselves",
-        "author": "Stephen Grosz",
-        "link": "https://www.goodreads.com/review/show/6832786193",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1400887195l/18378023.jpg",
-        "dateRead": "2024-09-09",
-        "dateAdded": "2024-09-09"
       }
     ]
   }
