@@ -1,8 +1,16 @@
 {
-  "updated": "2026-09-18T10:07:37+00:00",
+  "updated": "2026-09-19T09:48:42+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Man maakt stuk",
+        "author": "Maurits de Bruijn",
+        "link": "https://www.goodreads.com/review/show/8956073726",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1712312100l/210880022.jpg",
+        "dateRead": "2026-09-18",
+        "dateAdded": "2026-09-18"
+      },
       {
         "title": "Wees onzichtbaar",
         "author": "Murat Isik",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714749829l/212693230.jpg",
         "dateRead": "2024-09-19",
         "dateAdded": "2024-09-19"
-      },
-      {
-        "title": "Setting the Table: The Transforming Power of Hospitality in Business",
-        "author": "Danny  Meyer",
-        "link": "https://www.goodreads.com/review/show/6848981165",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1723686415l/217479967.jpg",
-        "dateRead": "2024-09-15",
-        "dateAdded": "2024-09-15"
       }
     ]
   }
