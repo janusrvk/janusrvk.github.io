@@ -1,8 +1,16 @@
 {
-  "updated": "2026-09-25T10:39:03+00:00",
+  "updated": "2026-09-26T10:22:44+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "The Noise of Time",
+        "author": "Julian Barnes",
+        "link": "https://www.goodreads.com/review/show/8973462721",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1449890438l/25912206.jpg",
+        "dateRead": "2026-09-25",
+        "dateAdded": "2026-09-25"
+      },
       {
         "title": "Man maakt stuk",
         "author": "Maurits de Bruijn",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612564750l/56963571.jpg",
         "dateRead": "2024-09-26",
         "dateAdded": "2024-09-29"
-      },
-      {
-        "title": "Bechamel Mucho",
-        "author": "Dimitri Verhulst",
-        "link": "https://www.goodreads.com/review/show/6859182455",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1714749829l/212693230.jpg",
-        "dateRead": "2024-09-19",
-        "dateAdded": "2024-09-19"
       }
     ]
   }
