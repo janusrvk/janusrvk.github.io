@@ -1,8 +1,16 @@
 {
-  "updated": "2026-09-29T11:39:25+00:00",
+  "updated": "2026-09-30T11:26:36+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Gimmick!",
+        "author": "Joost Zwagerman",
+        "link": "https://www.goodreads.com/review/show/8984289767",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1300538617l/619078.jpg",
+        "dateRead": "2026-09-29",
+        "dateAdded": "2026-09-29"
+      },
       {
         "title": "The Noise of Time",
         "author": "Julian Barnes",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1751820530l/29044.jpg",
         "dateRead": "2024-10-24",
         "dateAdded": "2024-10-24"
-      },
-      {
-        "title": "Leugen & waarheid",
-        "author": "Bas Heijne",
-        "link": "https://www.goodreads.com/review/show/6878818064",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1612564750l/56963571.jpg",
-        "dateRead": "2024-09-26",
-        "dateAdded": "2024-09-29"
       }
     ]
   }
