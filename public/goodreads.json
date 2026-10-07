@@ -1,8 +1,16 @@
 {
-  "updated": "2026-10-06T12:17:09+00:00",
+  "updated": "2026-10-07T12:08:31+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Just Kids",
+        "author": "Patti Smith",
+        "link": "https://www.goodreads.com/review/show/9003911702",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1706691407l/206318521.jpg",
+        "dateRead": "2026-10-06",
+        "dateAdded": "2026-10-06"
+      },
       {
         "title": "Gimmick!",
         "author": "Joost Zwagerman",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709537279l/198678736.jpg",
         "dateRead": "2024-10-29",
         "dateAdded": "2024-10-29"
-      },
-      {
-        "title": "The Secret History",
-        "author": "Donna Tartt",
-        "link": "https://www.goodreads.com/review/show/6950664159",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1751820530l/29044.jpg",
-        "dateRead": "2024-10-24",
-        "dateAdded": "2024-10-24"
       }
     ]
   }
