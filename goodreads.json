@@ -1,8 +1,16 @@
 {
-  "updated": "2026-10-14T10:42:32+00:00",
+  "updated": "2026-10-15T10:25:44+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "Blauwe maandagen",
+        "author": "Arnon Grunberg",
+        "link": "https://www.goodreads.com/review/show/9025738045",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1245883343l/44094.jpg",
+        "dateRead": "2026-10-14",
+        "dateAdded": "2026-10-14"
+      },
       {
         "title": "Just Kids",
         "author": "Patti Smith",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716387455l/208931300.jpg",
         "dateRead": "2024-11-14",
         "dateAdded": "2024-11-14"
-      },
-      {
-        "title": "Co-Intelligence: Living and Working with AI",
-        "author": "Ethan Mollick",
-        "link": "https://www.goodreads.com/review/show/6963341412",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1709537279l/198678736.jpg",
-        "dateRead": "2024-10-29",
-        "dateAdded": "2024-10-29"
       }
     ]
   }
