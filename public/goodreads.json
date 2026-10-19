@@ -1,8 +1,16 @@
 {
-  "updated": "2026-10-18T09:59:17+00:00",
+  "updated": "2026-10-19T11:22:00+00:00",
   "shelves": {
     "currently-reading": [],
     "read": [
+      {
+        "title": "The Prime of Miss Jean Brodie",
+        "author": "Muriel Spark",
+        "link": "https://www.goodreads.com/review/show/9034934884",
+        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1752170700l/517188.jpg",
+        "dateRead": "2026-10-18",
+        "dateAdded": "2026-10-18"
+      },
       {
         "title": "Blauwe maandagen",
         "author": "Arnon Grunberg",
@@ -794,14 +802,6 @@
         "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1742230652l/218271233.jpg",
         "dateRead": "2025-02-13",
         "dateAdded": "2025-02-13"
-      },
-      {
-        "title": "Intermezzo",
-        "author": "Sally Rooney",
-        "link": "https://www.goodreads.com/review/show/7004573797",
-        "image": "https://i.gr-assets.com/images/S/compressed.photo.goodreads.com/books/1716387455l/208931300.jpg",
-        "dateRead": "2024-11-14",
-        "dateAdded": "2024-11-14"
       }
     ]
   }
